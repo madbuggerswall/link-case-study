@@ -6,7 +6,6 @@ namespace Core.Grids {
 	public class CircleGrid<T> : Grid<T> where T : CircleCell {
 		private readonly CircleGridNeighborHelper<T> neighborHelper;
 
-		// IDEA Rename gridSizeInCells to gridSize, and gridSize to gridSizeInLength
 		public CircleGrid(CellFactory<T> cellFactory, Vector2Int gridSizeInCells, float cellDiameter) {
 			this.cellDiameter = cellDiameter;
 			this.gridSizeInCells = gridSizeInCells;
@@ -60,19 +59,6 @@ namespace Core.Grids {
 
 		public T[] GetNeighbors(T cell) {
 			return neighborHelper.GetCellNeighbors(cell);
-		}
-
-		// Grid
-		public override T GetCell(Vector2Int index) {
-			bool isEvenRow = index.y % 2 == 0;
-			int clampedX = Mathf.Clamp(index.x, 0, gridSizeInCells.x - 1);
-			int clampedY = Mathf.Clamp(index.y, 0, gridSizeInCells.y - (isEvenRow ? 1 : 2));
-
-			// Odd rows has 1 cell less than even rows, because of centering strategy
-			Vector2Int clampedIndex = new Vector2Int(clampedX, clampedY);
-			int oddRowCount = Mathf.FloorToInt(index.y / 2f);
-
-			return cells[clampedIndex.x + clampedIndex.y * gridSizeInCells.x - oddRowCount] as T;
 		}
 	}
 }

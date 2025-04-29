@@ -50,14 +50,5 @@ namespace Core.Grids {
 		public T[] GetNeighbors(T cell) {
 			return neighborHelper.GetCellNeighbors(cell);
 		}
-
-		// Grid
-		public override T GetCell(Vector2Int index) {
-			int clampedX = Mathf.Clamp(index.x, 0, gridSizeInCells.x - 1);
-			int clampedY = Mathf.Clamp(index.y, 0, gridSizeInCells.y - 1);
-			Vector2Int clampedIndex = new Vector2Int(clampedX, clampedY);
-
-			return cells[clampedIndex.x + clampedIndex.y * gridSizeInCells.x];
-		}
 	}
 }
