@@ -49,7 +49,7 @@ namespace Core.Grids.NeighborHelpers {
 		private T[] GetSelectedCellNeighbors(T[] cells, int cellIndex, params int[] selectedIndices) {
 			int capacity = edgesOnly ? GetEdgeNeighborIndexCount(selectedIndices) : selectedIndices.Length;
 			T[] selectedCellNeighbors = new T[capacity];
-			
+
 			for (int i = 0, j = 0; i < selectedIndices.Length && j < capacity; i++) {
 				if (edgesOnly && selectedIndices[i] % 2 != 0)
 					continue;
