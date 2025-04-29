@@ -1,10 +1,8 @@
-using Frolics.Pooling;
 using UnityEngine;
-using Mono = UnityEngine.MonoBehaviour;
 
-namespace Frolics.Utilities.Pooling {
+namespace Frolics.Pooling {
 
-	public class ObjectPool : Mono {
+	public class ObjectPool : MonoBehaviour {
 		private MonoBehaviourPool monoBehaviourPool;
 		private GameObjectPool gameObjectPool;
 
@@ -14,23 +12,23 @@ namespace Frolics.Utilities.Pooling {
 		}
 
 		// MonoBehaviourPool
-		public T Spawn<T>(T prefab, Vector3 position) where T : Mono {
+		public T Spawn<T>(T prefab, Vector3 position) where T : MonoBehaviour {
 			return monoBehaviourPool.Spawn(prefab, position);
 		}
 
-		public T Spawn<T>(T prefab) where T : Mono {
+		public T Spawn<T>(T prefab) where T : MonoBehaviour {
 			return monoBehaviourPool.Spawn(prefab);
 		}
 
-		public T Spawn<T>(T prefab, Transform parent) where T : Mono {
+		public T Spawn<T>(T prefab, Transform parent) where T : MonoBehaviour {
 			return monoBehaviourPool.Spawn(prefab, parent);
 		}
 
-		public T Spawn<T>(T prefab, Transform parent, Vector3 position) where T : Mono {
+		public T Spawn<T>(T prefab, Transform parent, Vector3 position) where T : MonoBehaviour {
 			return monoBehaviourPool.Spawn(prefab, parent, position);
 		}
 
-		public void Despawn<T>(T spawnedObject) where T : Mono {
+		public void Despawn<T>(T spawnedObject) where T : MonoBehaviour {
 			monoBehaviourPool.Despawn(spawnedObject);
 		}
 

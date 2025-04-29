@@ -1,5 +1,5 @@
 using Core.Contexts;
-using Frolics.Utilities.Pooling;
+using Frolics.Pooling;
 using UnityEngine;
 
 // NOTE Possibly not a MonoBehaviour

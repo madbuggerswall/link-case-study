@@ -11,10 +11,4 @@ namespace Core.PuzzleGrids {
 			cellDiameter
 		) { }
 	}
-
-	public class PuzzleCellFactory : SquareCellFactory<PuzzleCell> {
-		public override PuzzleCell Create(Vector2 cellPosition, float diameter) {
-			return new PuzzleCell(cellPosition, diameter);
-		}
-	}
 }

@@ -1,6 +1,6 @@
 using System;
 using Core.Contexts;
-using Frolics.Utilities.Pooling;
+using Frolics.Pooling;
 using UnityEngine;
 
 namespace Core.PuzzleGrids {

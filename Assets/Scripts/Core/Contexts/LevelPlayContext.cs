@@ -1,7 +1,7 @@
 using Core.DataTransfer.Definitions;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
-using Frolics.Utilities.Pooling;
+using Frolics.Pooling;
 using UnityEngine;
 using UnityEngine.Serialization;
 
