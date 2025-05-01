@@ -19,11 +19,11 @@ namespace Frolics.Pooling {
 		}
 
 		private T GetObject<T>(T prefab) where T : MonoBehaviour {
-			if (poolDictionary.TryGetValue(typeof(T), out Stack<MonoBehaviour> pool))
+			if (poolDictionary.TryGetValue(prefab.GetType(), out Stack<MonoBehaviour> pool))
 				return pool.Count > 0 ? pool.Pop() as T : AddObject(prefab, pool);
 
 			Stack<MonoBehaviour> createdPool = new();
-			poolDictionary.Add(typeof(T), createdPool);
+			poolDictionary.Add(prefab.GetType(), createdPool);
 			return AddObject(prefab, createdPool);
 		}
 
@@ -56,11 +56,11 @@ namespace Frolics.Pooling {
 			spawnedObject.gameObject.SetActive(false);
 			spawnedObject.transform.SetParent(parent);
 
-			if (poolDictionary.TryGetValue(typeof(T), out Stack<MonoBehaviour> pool))
+			if (poolDictionary.TryGetValue(spawnedObject.GetType(), out Stack<MonoBehaviour> pool))
 				pool.Push(spawnedObject);
 			else {
 				Stack<MonoBehaviour> createdPool = new();
-				poolDictionary.Add(typeof(T), createdPool);
+				poolDictionary.Add(spawnedObject.GetType(), createdPool);
 				createdPool.Push(spawnedObject);
 			}
 		}
