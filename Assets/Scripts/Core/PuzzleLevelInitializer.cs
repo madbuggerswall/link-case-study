@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Core.Contexts;
 using Core.DataTransfer.Definitions;
 using Core.PuzzleElements;
@@ -63,68 +61,4 @@ namespace Core {
 				cellBehaviourFactory.Create(puzzleCells[i], cellsParent);
 		}
 	}
-}
-
-public class MatchManager {
-	private readonly PuzzleGrid puzzleGrid;
-	private readonly Dictionary<PuzzleElement, PuzzleMatch> matchesByItem;
-
-	public MatchManager(PuzzleGrid puzzleGrid) {
-		this.puzzleGrid = puzzleGrid;
-
-		int maxMatchCount = GetMaxMatchCount(puzzleGrid);
-		this.matchesByItem = new Dictionary<PuzzleElement, PuzzleMatch>(maxMatchCount);
-	}
-
-	private void FindMatches() {
-		PuzzleCell[] puzzleCells = puzzleGrid.GetCells();
-
-		for (int i = 0; i < puzzleCells.Length; i++) {
-			PuzzleElement currentItem = puzzleCells[i].GetPuzzleElement();
-			PuzzleCell[] neighborCells = puzzleGrid.GetNeighbors(puzzleCells[i]);
-
-			for (int j = 0; j < neighborCells.Length; j++) {
-				PuzzleElement neighborItem = neighborCells[j].GetPuzzleElement();
-				if (currentItem.GetDefinition() != neighborItem.GetDefinition())
-					continue;
-
-				if (matchesByItem.TryGetValue(currentItem, out PuzzleMatch formerMatch)) {
-					if (formerMatch.Add(neighborItem))
-						matchesByItem.Add(neighborItem, formerMatch);
-				} else {
-					PuzzleMatch puzzleMatch = new(currentItem, neighborItem);
-					matchesByItem.Add(currentItem, puzzleMatch);
-					matchesByItem.Add(neighborItem, puzzleMatch);
-				}
-			}
-		}
-	}
-
-	private static int GetMaxMatchCount(PuzzleGrid puzzleGrid) {
-		Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
-		int cellCount = gridSize.x * gridSize.y;
-		int maxMatchCount = cellCount / 2;
-
-		return maxMatchCount;
-	}
-}
-
-public class PuzzleMatch : IEnumerable<PuzzleElement> {
-	private readonly HashSet<PuzzleElement> puzzleElements;
-
-	public PuzzleMatch() {
-		puzzleElements = new HashSet<PuzzleElement>();
-	}
-
-	public PuzzleMatch(PuzzleElement current, PuzzleElement neighbor) {
-		puzzleElements = new HashSet<PuzzleElement> { current, neighbor };
-	}
-
-	public bool Add(PuzzleElement puzzleElement) {
-		return puzzleElements.Add(puzzleElement);
-	}
-
-	// Make it iterable
-	public IEnumerator<PuzzleElement> GetEnumerator() => puzzleElements.GetEnumerator();
-	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

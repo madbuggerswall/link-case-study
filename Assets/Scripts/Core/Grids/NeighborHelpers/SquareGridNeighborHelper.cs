@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Core.Grids.NeighborHelpers {
 	public class SquareGridNeighborHelper<T> where T : SquareCell {

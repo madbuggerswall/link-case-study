@@ -1,6 +1,4 @@
-using UnityEngine;
 using System.Collections.Generic;
-using System.Text;
 
 ///<summary>
 /// Mutable String class, optimized for speed and memory allocations while retrieving the final result as a string.

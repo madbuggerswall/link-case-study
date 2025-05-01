@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce43eba021457f6c4834880e4f118a8c, type: 3}
   m_Name: GreenChip
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
-  sprite: {fileID: 0}
+  prefab: {fileID: 8921173388257968365, guid: 74bf78e166d70d42d9c4f9942462960b, type: 3}
+  sprite: {fileID: 21300000, guid: 8d9264e453bfa56e79cf4756f942c080, type: 3}

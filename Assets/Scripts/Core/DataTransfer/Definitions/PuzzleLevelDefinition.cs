@@ -1,6 +1,5 @@
 using Core.DataTransfer.Definitions;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Core.DataTransfer.Definitions {
 	[CreateAssetMenu(fileName = Filename, menuName = MenuName)]

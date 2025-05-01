@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace Core.PuzzleElements {
 	public class PuzzleElementBehaviourFactory : MonoBehaviour {
-		[Header("Color Cube Definitions")]
-		[SerializeField] private ColorChipDefinition[] colorCubeDefinitions;
+		[Header("Color Chip Definitions")]
+		[SerializeField] private ColorChipDefinition[] colorChipDefinitions;
 
 		[Header("Core")]
 		[SerializeField] private Transform elementsParent;
@@ -20,8 +20,8 @@ namespace Core.PuzzleElements {
 		}
 
 		public PuzzleElementBehaviour CreateRandomColorChip(PuzzleCell puzzleCell) {
-			int randomIndex = Random.Range(0, colorCubeDefinitions.Length);
-			ColorChipDefinition definition = colorCubeDefinitions[randomIndex];
+			int randomIndex = Random.Range(0, colorChipDefinitions.Length);
+			ColorChipDefinition definition = colorChipDefinitions[randomIndex];
 
 			return Create(definition, puzzleCell);
 		}

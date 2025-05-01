@@ -1,5 +1,4 @@
 using Core.PuzzleElements;
-using Core.PuzzleGrids;
 using UnityEngine;
 
 namespace Core.DataTransfer.Definitions {

@@ -1,6 +1,4 @@
-using System;
 using Core.Grids;
-using Core.Grids.NeighborHelpers;
 using UnityEngine;
 
 namespace Core.PuzzleGrids {
