@@ -1,5 +1,6 @@
 using Core.PuzzleGrids;
 using Frolics.Tween;
+using Frolics.Utilities;
 using UnityEngine;
 
 namespace Core {
@@ -39,6 +40,10 @@ namespace Core {
 
 		public void FitProjectionSizeToGrid(PuzzleGrid puzzleGrid, float margin = 1f) {
 			camera.orthographicSize = GetFittingOrthographicSize(puzzleGrid, margin);
+		}
+
+		public Vector3 ScreenPositionToWorldSpace(Vector2 screenPosition) {
+			return camera.ScreenToWorldPoint(screenPosition.WithZ(camera.nearClipPlane));
 		}
 
 		private float GetFittingOrthographicSize(PuzzleGrid puzzleGrid, float margin) {
