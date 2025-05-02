@@ -32,16 +32,13 @@ namespace Core {
 					return;
 
 				PuzzleElementBehaviour elementBehaviour = elementBehaviourFactory.GetPuzzleElementBehaviour(puzzleElement);
-				elementBehaviour.transform.localScale = Vector3.one;
+				elementBehaviour.PlayScaleTween(1f);
 			}
 
 			for (int index = 0; index < puzzleElements.Count; index++) {
 				PuzzleElement puzzleElement = puzzleElements[index];
 				PuzzleElementBehaviour elementBehaviour = elementBehaviourFactory.GetPuzzleElementBehaviour(puzzleElement);
-
-				TransformTween tween = new TransformTween(elementBehaviour.transform, 1f);
-				tween.SetLocalScale(Vector3.one * 1.2f);
-				tween.Play();
+				elementBehaviour.PlayScaleTween(1.5f);
 			}
 		}
 

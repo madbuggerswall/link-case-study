@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using Core.Contexts;
 using Core.Input;
+using Core.PuzzleElements;
 using Core.PuzzleGrids;
 using Frolics.Utilities;
 using UnityEngine;
@@ -57,13 +57,26 @@ namespace Core {
 			if (!puzzleGrid.TryGetPuzzleCell(dragPosition, out PuzzleCell puzzleCell))
 				return;
 
+			if (!puzzleCell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
+				return;
+
 			if (puzzleCells.Count == 0) {
 				puzzleCells.TryAdd(puzzleCell);
 				OnCellsChanged.Invoke();
+				return;
 			}
 
 			PuzzleCell lastAddedCell = puzzleCells[^1];
 			if (!IsCellsAdjacent(lastAddedCell, puzzleCell))
+				return;
+
+			if (puzzleCells.Count > 1 && puzzleCell == puzzleCells[^2]) {
+				puzzleCells.TryRemove(lastAddedCell);
+				OnCellsChanged.Invoke();
+			}
+
+			lastAddedCell.TryGetPuzzleElement(out PuzzleElement lastAddedElement);
+			if (lastAddedElement.GetDefinition() != puzzleElement.GetDefinition())
 				return;
 
 			if (puzzleCells.TryAdd(puzzleCell))
@@ -80,12 +93,12 @@ namespace Core {
 			isDragging = false;
 		}
 
-		private void ApplyDragThreshold() {
-			float sqrMagnitude = Vector2.SqrMagnitude(pressPosition.GetXY() - dragPosition.GetXY());
-			bool aboveDragThreshold = sqrMagnitude > (DragThreshold * DragThreshold);
-			if (aboveDragThreshold)
-				isDragging = true;
-		}
+		// private void ApplyDragThreshold() {
+		// 	float sqrMagnitude = Vector2.SqrMagnitude(pressPosition.GetXY() - dragPosition.GetXY());
+		// 	bool aboveDragThreshold = sqrMagnitude > (DragThreshold * DragThreshold);
+		// 	if (aboveDragThreshold)
+		// 		isDragging = true;
+		// }
 
 		private bool IsCellsAdjacent(PuzzleCell centerCell, PuzzleCell cell) {
 			PuzzleCell[] cellNeighbors = puzzleGrid.GetNeighbors(centerCell);
