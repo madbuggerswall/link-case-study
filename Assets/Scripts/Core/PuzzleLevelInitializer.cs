@@ -15,6 +15,9 @@ namespace Core {
 		private PuzzleElementBehaviourFactory elementBehaviourFactory;
 		private CameraController cameraController;
 
+		private PuzzleGrid puzzleGrid;
+		public PuzzleGrid PuzzleGrid => puzzleGrid;
+
 		public void Initialize() {
 			gridBehaviourFactory = SceneContext.GetInstance().Get<PuzzleGridBehaviourFactory>();
 			cellBehaviourFactory = SceneContext.GetInstance().Get<PuzzleCellBehaviourFactory>();
@@ -26,7 +29,8 @@ namespace Core {
 			Vector2Int gridSize = levelDefinition.GetGridSize();
 
 			PuzzleGridBehaviour gridBehaviour = gridBehaviourFactory.Create(gridSize, cellDiameter);
-			PuzzleGrid puzzleGrid = gridBehaviour.GetPuzzleGrid();
+			puzzleGrid = gridBehaviour.GetPuzzleGrid();
+			
 			SpawnCellBehaviours(gridBehaviour);
 
 			// Puzzle Elements - Fill with random color chips

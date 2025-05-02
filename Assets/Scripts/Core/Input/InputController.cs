@@ -18,5 +18,9 @@ namespace Core.Input {
 		private void Update() {
 			InputHandler.HandleInput();
 		}
+
+		public Vector3 ScreenPositionToWorldSpace(Vector2 screenPosition) {
+			return cameraController.ScreenPositionToWorldSpace(screenPosition);
+		}
 	}
 }

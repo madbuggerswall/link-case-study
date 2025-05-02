@@ -33,17 +33,13 @@ namespace Core.Input {
 		}
 
 		private void ReadTouchInput(in Touch touch) {
+			PointerPosition = touch.screenPosition;
 			if (touch.began) {
-				PressPosition = touch.screenPosition;
-				DragPosition = PressPosition;
-				ReleasePosition = PressPosition;
-
-				PressEvent.Invoke(new PressData(PressPosition));
+				PressEvent.Invoke(new PointerPressData(PointerPosition));
 			} else if (touch.inProgress) {
-				DragPosition = touch.screenPosition;
+				
 			} else if (touch.ended) {
-				ReleasePosition = touch.screenPosition;
-				ReleaseEvent.Invoke(new ReleaseData(ReleasePosition));
+				ReleaseEvent.Invoke(new PointerReleaseData(PointerPosition));
 			}
 		}
 	}

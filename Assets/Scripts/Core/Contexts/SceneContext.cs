@@ -24,7 +24,7 @@ namespace Core.Contexts {
 				return contextItem as T;
 
 			// This can be an exception as dependent systems would be broken already
-			Debug.LogWarning($"Context item {typeof(T)} cannot be found on current context");
+			Debug.LogError($"Context item {typeof(T)} cannot be found on current context");
 			return null;
 		}
 

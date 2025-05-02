@@ -18,6 +18,11 @@ namespace Core.PuzzleGrids {
 
 		public PuzzleElement GetPuzzleElement() => puzzleElement;
 
+		public bool TryGetPuzzleElement(out PuzzleElement puzzleElement) {
+			puzzleElement = this.puzzleElement;
+			return !isEmpty;
+		}
+		
 		public bool IsEmpty() => isEmpty;
 	}
 }

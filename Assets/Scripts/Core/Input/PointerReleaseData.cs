@@ -1,10 +1,10 @@
 using UnityEngine;
 
 namespace Core.Input {
-	public struct ReleaseData {
+	public struct PointerReleaseData {
 		public Vector2 ReleasePosition { get; private set; }
 
-		public ReleaseData(Vector2 releasePosition) {
+		public PointerReleaseData(Vector2 releasePosition) {
 			this.ReleasePosition = releasePosition;
 		}
 	}

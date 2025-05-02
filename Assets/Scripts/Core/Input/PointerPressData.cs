@@ -1,10 +1,10 @@
 using UnityEngine;
 
 namespace Core.Input {
-	public struct PressData {
+	public struct PointerPressData {
 		public Vector2 PressPosition { get; private set; }
 
-		public PressData(Vector2 pressPosition) {
+		public PointerPressData(Vector2 pressPosition) {
 			this.PressPosition = pressPosition;
 		}
 	}

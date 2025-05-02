@@ -18,16 +18,14 @@ namespace Core.Input {
 			bool isPressHeld = buttonControl.isPressed;
 			bool pressReleased = buttonControl.wasReleasedThisFrame;
 
+			PointerPosition = Mouse.current.position.ReadValue();
+			
 			if (pressStarted) {
-				PressPosition = Mouse.current.position.ReadValue();
-				DragPosition = PressPosition;
-				ReleasePosition = PressPosition;
-				PressEvent.Invoke(new PressData(PressPosition));
+				PressEvent.Invoke(new PointerPressData(PointerPosition));
 			} else if (isPressHeld) {
-				DragPosition = Mouse.current.position.ReadValue();
+				
 			} else if (pressReleased) {
-				ReleasePosition = Mouse.current.position.ReadValue();
-				ReleaseEvent.Invoke(new ReleaseData(ReleasePosition));
+				ReleaseEvent.Invoke(new PointerReleaseData(PointerPosition));
 			}
 		}
 	}

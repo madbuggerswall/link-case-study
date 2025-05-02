@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Core.Contexts;
 using Core.DataTransfer.Definitions;
 using Core.PuzzleGrids;
@@ -14,6 +15,8 @@ namespace Core.PuzzleElements {
 		[Header("Core")]
 		[SerializeField] private Transform elementsParent;
 
+		private Dictionary<PuzzleElement, PuzzleElementBehaviour> elementBehaviours = new();
+		
 		// Dependencies
 		private ObjectPool objectPool;
 
@@ -35,11 +38,16 @@ namespace Core.PuzzleElements {
 			PuzzleElementBehaviour puzzleElementBehaviour = objectPool.Spawn(definition.GetPrefab(), elementsParent);
 			puzzleElementBehaviour.Initialize(definition, puzzleCell);
 
+			elementBehaviours.Add(puzzleElement, puzzleElementBehaviour);
 			return puzzleElementBehaviour;
 		}
 
 		public void Despawn(PuzzleElementBehaviour puzzleElementBehaviour) {
 			objectPool.Despawn(puzzleElementBehaviour.GetPuzzleElement().GetDefinition().GetPrefab());
+		}
+
+		public PuzzleElementBehaviour GetPuzzleElementBehaviour(PuzzleElement puzzleElement) {
+			return elementBehaviours[puzzleElement];
 		}
 	}
 }
