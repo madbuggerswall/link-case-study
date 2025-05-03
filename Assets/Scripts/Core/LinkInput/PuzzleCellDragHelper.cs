@@ -2,10 +2,11 @@ using Core.Contexts;
 using Core.Input;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
+using Core.PuzzleLevels;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Core {
+namespace Core.LinkInput {
 	public class PuzzleCellDragHelper : MonoBehaviour {
 		private InputController inputController;
 		private InputHandler inputHandler;
@@ -19,9 +20,9 @@ namespace Core {
 
 		private PuzzleGrid puzzleGrid;
 		private readonly HashList<PuzzleCell> puzzleCells = new();
-		public HashList<PuzzleCell> PuzzleCells => puzzleCells;
+		public HashList<PuzzleCell> GetPuzzleCells() => puzzleCells;
 
-		public UnityEvent OnCellsChanged { get; } = new();
+		public UnityEvent OnCellSelectionChanged { get; } = new();
 		public UnityEvent OnCellsSelected { get; } = new();
 
 
@@ -90,12 +91,12 @@ namespace Core {
 		// Helper methods
 		private void SelectCell(PuzzleCell puzzleCell) {
 			if (puzzleCells.TryAdd(puzzleCell))
-				OnCellsChanged.Invoke();
+				OnCellSelectionChanged.Invoke();
 		}
 
 		private void DeselectCell(PuzzleCell lastAddedCell) {
 			if (puzzleCells.TryRemove(lastAddedCell))
-				OnCellsChanged.Invoke();
+				OnCellSelectionChanged.Invoke();
 		}
 
 		private bool IsCellsAdjacent(PuzzleCell centerCell, PuzzleCell cell) {

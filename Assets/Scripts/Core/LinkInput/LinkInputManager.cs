@@ -1,14 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Windows.Input;
 using Core.Commands;
 using Core.Contexts;
+using Core.Links;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
-using Frolics.Tween;
+using Core.PuzzleLevels;
 using UnityEngine;
 
-namespace Core {
+namespace Core.LinkInput {
 	public class LinkInputManager : MonoBehaviour {
 		private readonly HashList<PuzzleElement> puzzleElements = new();
 
@@ -26,7 +24,7 @@ namespace Core {
 			levelInitializer = sceneContext.Get<PuzzleLevelInitializer>();
 			commandInvoker = sceneContext.Get<CommandInvoker>();
 
-			dragHelper.OnCellsChanged.AddListener(OnCellsChanged);
+			dragHelper.OnCellSelectionChanged.AddListener(OnCellsChanged);
 			dragHelper.OnCellsSelected.AddListener(OnCellsSelected);
 		}
 
@@ -59,7 +57,7 @@ namespace Core {
 		}
 
 		private void GetSelectedElements() {
-			HashList<PuzzleCell> selectedCells = dragHelper.PuzzleCells;
+			HashList<PuzzleCell> selectedCells = dragHelper.GetPuzzleCells();
 			puzzleElements.Clear();
 
 			for (int index = 0; index < selectedCells.Count; index++) {

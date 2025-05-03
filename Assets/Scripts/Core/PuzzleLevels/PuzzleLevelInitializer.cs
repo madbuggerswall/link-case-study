@@ -1,12 +1,10 @@
-using System;
 using Core.Contexts;
 using Core.DataTransfer.Definitions;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-namespace Core {
+namespace Core.PuzzleLevels {
 	// NOTE Rename this to PuzzleLevelLoader
 	// NOTE Initializer initializes vanilla object. ViewController/ViewManager spawns behaviours
 	public class PuzzleLevelInitializer : MonoBehaviour {

@@ -1,3 +1,5 @@
+using Core.Links;
+
 namespace Core.Commands {
 	public class ExplodeLinkCommand : Command {
 		private readonly Link link;

@@ -4,7 +4,7 @@ using Core.PuzzleElements;
 using Core.PuzzleGrids;
 using UnityEngine;
 
-namespace Core {
+namespace Core.PuzzleLevels {
 	public class PuzzleLevelViewController : MonoBehaviour {
 		private readonly Dictionary<PuzzleElement, PuzzleElementBehaviour> elementBehaviours = new();
 		private readonly Dictionary<PuzzleGrid, PuzzleGridBehaviour> gridBehaviours = new();

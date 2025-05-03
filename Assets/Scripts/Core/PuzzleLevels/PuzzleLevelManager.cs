@@ -2,7 +2,7 @@ using Core.Contexts;
 using Core.PuzzleGrids;
 using UnityEngine;
 
-namespace Core {
+namespace Core.PuzzleLevels {
 	public class PuzzleLevelManager : MonoBehaviour {
 		// Dependencies
 		private PuzzleLevelInitializer levelInitializer;

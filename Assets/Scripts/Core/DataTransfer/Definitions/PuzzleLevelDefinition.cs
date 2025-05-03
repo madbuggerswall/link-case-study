@@ -1,4 +1,3 @@
-using Core.DataTransfer.Definitions;
 using UnityEngine;
 
 namespace Core.DataTransfer.Definitions {
@@ -17,22 +16,22 @@ namespace Core.DataTransfer.Definitions {
 		public GoalDTO[] GetGoals() => goals;
 		public ElementPlacementDTO[] GetElementPlacements() => elementPlacements;
 	}
-}
 
-[System.Serializable]
-public class GoalDTO {
-	[SerializeField] private PuzzleElementDefinition puzzleElementDefinition;
-	[SerializeField] private int amount;
+	[System.Serializable]
+	public class GoalDTO {
+		[SerializeField] private PuzzleElementDefinition puzzleElementDefinition;
+		[SerializeField] private int amount;
 
-	public PuzzleElementDefinition GetPuzzleElementDefinition() => puzzleElementDefinition;
-	public int GetAmount() => amount;
-}
+		public PuzzleElementDefinition GetPuzzleElementDefinition() => puzzleElementDefinition;
+		public int GetAmount() => amount;
+	}
 
-[System.Serializable]
-public class ElementPlacementDTO {
-	[SerializeField] private PuzzleElementDefinition puzzleElementDefinition;
-	[SerializeField] private int positionIndex;
+	[System.Serializable]
+	public class ElementPlacementDTO {
+		[SerializeField] private PuzzleElementDefinition puzzleElementDefinition;
+		[SerializeField] private int positionIndex;
 
-	public PuzzleElementDefinition GetPuzzleElementDefinition() => puzzleElementDefinition;
-	public int GetPositionIndex() => positionIndex;
+		public PuzzleElementDefinition GetPuzzleElementDefinition() => puzzleElementDefinition;
+		public int GetPositionIndex() => positionIndex;
+	}
 }

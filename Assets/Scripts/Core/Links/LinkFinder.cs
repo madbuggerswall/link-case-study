@@ -3,7 +3,7 @@ using Core.PuzzleElements;
 using Core.PuzzleGrids;
 using UnityEngine;
 
-namespace Core {
+namespace Core.Links {
 	// For hints
 	public class LinkFinder {
 		private readonly PuzzleGrid puzzleGrid;

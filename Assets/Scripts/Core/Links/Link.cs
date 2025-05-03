@@ -1,7 +1,7 @@
 using Core.DataTransfer.Definitions;
 using Core.PuzzleElements;
 
-namespace Core {
+namespace Core.Links {
 	public class Link {
 		private readonly HashList<PuzzleElement> puzzleElements;
 		private readonly PuzzleElementDefinition elementDefinition;
