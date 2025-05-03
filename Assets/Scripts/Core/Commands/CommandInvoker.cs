@@ -1,0 +1,33 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Core.Commands {
+	public class CommandInvoker : MonoBehaviour {
+		private readonly Queue<Command> commands = new();
+		private bool isRunning = false;
+
+		public void Initialize() { }
+
+		public void Enqueue(Command command) {
+			commands.Enqueue(command);
+			TryExecuteNextCommand();
+		}
+
+		private void TryExecuteNextCommand() {
+			if (isRunning || commands.Count == 0)
+				return;
+
+			isRunning = true;
+			Command currentCommand = commands.Dequeue();
+
+			currentCommand.SubscribeToOnComplete(OnCommandCompleted);
+			currentCommand.Execute();
+		}
+
+		private void OnCommandCompleted(Command command) {
+			isRunning = false;
+			command.UnSubscribeFromOnComplete(OnCommandCompleted);
+			TryExecuteNextCommand();
+		}
+	}
+}

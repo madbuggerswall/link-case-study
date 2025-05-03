@@ -1,3 +1,5 @@
+using Core.Commands;
+using Core.DataTransfer.Definitions;
 using Core.Input;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
@@ -7,7 +9,9 @@ namespace Core.Contexts {
 	public class LevelPlayContext : SceneContext {
 		protected override void ResolveContext() {
 			Resolve<ObjectPool>();
+			Resolve<ChipDefinitionManager>();
 			Resolve<InputController>();
+			Resolve<CommandInvoker>();
 			Resolve<CameraController>();
 			Resolve<PuzzleCellBehaviourFactory>();
 			Resolve<PuzzleGridBehaviourFactory>();
@@ -19,7 +23,9 @@ namespace Core.Contexts {
 
 		protected override void InitializeContext() {
 			Get<ObjectPool>().Initialize();
+			Get<ChipDefinitionManager>().Initialize();
 			Get<InputController>().Initialize();
+			Get<CommandInvoker>().Initialize();
 			Get<CameraController>().Initialize();
 			Get<PuzzleCellBehaviourFactory>().Initialize();
 			Get<PuzzleGridBehaviourFactory>().Initialize();

@@ -1,68 +1,79 @@
+using System;
 using Core.Contexts;
 using Core.DataTransfer.Definitions;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Core {
-	// NOTE Rename this to PuzzleLevelManager
+	// NOTE Rename this to PuzzleLevelLoader
+	// NOTE Initializer initializes vanilla object. ViewController/ViewManager spawns behaviours
 	public class PuzzleLevelInitializer : MonoBehaviour {
 		[SerializeField] private PuzzleLevelDefinition levelDefinition;
-
+		
 		// Dependencies
-		private PuzzleGridBehaviourFactory gridBehaviourFactory;
-		private PuzzleCellBehaviourFactory cellBehaviourFactory;
-		private PuzzleElementBehaviourFactory elementBehaviourFactory;
+		private ChipDefinitionManager chipDefinitionManager;
 		private CameraController cameraController;
 
+		// Fields
 		private PuzzleGrid puzzleGrid;
-		public PuzzleGrid PuzzleGrid => puzzleGrid;
+
+		// TODO Initialize Targets
+		// TODO Initialize TurnCount
 
 		public void Initialize() {
-			gridBehaviourFactory = SceneContext.GetInstance().Get<PuzzleGridBehaviourFactory>();
-			cellBehaviourFactory = SceneContext.GetInstance().Get<PuzzleCellBehaviourFactory>();
-			elementBehaviourFactory = SceneContext.GetInstance().Get<PuzzleElementBehaviourFactory>();
+			chipDefinitionManager = SceneContext.GetInstance().Get<ChipDefinitionManager>();
 			cameraController = SceneContext.GetInstance().Get<CameraController>();
 
 			// Puzzle Grid
-			float cellDiameter = 1f;
-			Vector2Int gridSize = levelDefinition.GetGridSize();
-
-			PuzzleGridBehaviour gridBehaviour = gridBehaviourFactory.Create(gridSize, cellDiameter);
-			puzzleGrid = gridBehaviour.GetPuzzleGrid();
-			
-			SpawnCellBehaviours(gridBehaviour);
-
-			// Puzzle Elements - Fill with random color chips
-			PuzzleCell[] puzzleCells = puzzleGrid.GetCells();
-			for (int i = 0; i < puzzleCells.Length; i++) {
-				PuzzleElementBehaviour elementBehaviour = elementBehaviourFactory.CreateRandomColorChip(puzzleCells[i]);
-				elementBehaviour.SetSortingOrder(i);
-			}
-
-			// Puzzle Elements - Manually placed elements
-			ElementPlacementDTO[] elementPlacements = levelDefinition.GetElementPlacements();
-			for (int i = 0; i < elementPlacements.Length; i++) {
-				int cellIndex = elementPlacements[i].GetPositionIndex();
-				PuzzleElementDefinition definition = elementPlacements[i].GetPuzzleElementDefinition();
-				PuzzleCell puzzleCell = puzzleCells[cellIndex];
-
-				PuzzleElementBehaviour elementBehaviour = elementBehaviourFactory.Create(definition, puzzleCell);
-				elementBehaviour.SetSortingOrder(cellIndex);
-			}
+			InitializeGrid();
+			InitializeElements();
+			InitializePlacedElements();
 
 			// Camera Controller
 			cameraController.CenterCameraToGrid(puzzleGrid);
 			cameraController.AdjustOrthographicSizeToFit(puzzleGrid);
 		}
 
-		private void SpawnCellBehaviours(PuzzleGridBehaviour puzzleGridBehaviour) {
-			PuzzleGrid puzzleGrid = puzzleGridBehaviour.GetPuzzleGrid();
-			Transform cellsParent = puzzleGridBehaviour.GetCellsParent();
+		private void InitializeGrid() {
+			float cellDiameter = 1f;
+
+			Vector2Int gridSize = levelDefinition.GetGridSize();
+			puzzleGrid = new PuzzleGrid(gridSize, cellDiameter);
+		}
+
+		private void InitializeElements() {
 			PuzzleCell[] puzzleCells = puzzleGrid.GetCells();
 
-			for (int i = 0; i < puzzleCells.Length; i++)
-				cellBehaviourFactory.Create(puzzleCells[i], cellsParent);
+			for (int index = 0; index < puzzleCells.Length; index++) {
+				PuzzleCell puzzleCell = puzzleCells[index];
+				PuzzleElement colorChip = CreateRandomColorChip();
+				puzzleCell.SetPuzzleElement(colorChip);
+			}
 		}
+
+		private void InitializePlacedElements() {
+			ElementPlacementDTO[] elementPlacements = levelDefinition.GetElementPlacements();
+			PuzzleCell[] puzzleCells = puzzleGrid.GetCells();
+
+			for (int i = 0; i < elementPlacements.Length; i++) {
+				int cellIndex = elementPlacements[i].GetPositionIndex();
+				PuzzleElementDefinition definition = elementPlacements[i].GetPuzzleElementDefinition();
+				PuzzleElement puzzleElement = definition.CreateElement();
+
+				PuzzleCell puzzleCell = puzzleCells[cellIndex];
+				puzzleCell.SetPuzzleElement(puzzleElement);
+			}
+		}
+
+		private PuzzleElement CreateRandomColorChip() {
+			ColorChipDefinition colorChipDefinition = chipDefinitionManager.GetRandomColorChipDefinition();
+			ColorChip colorChip = new ColorChip(colorChipDefinition);
+
+			return colorChip;
+		}
+		
+		public PuzzleGrid GetPuzzleGrid() => puzzleGrid;
 	}
 }

@@ -8,8 +8,8 @@ namespace Core.PuzzleElements {
 			this.definition = definition;
 		}
 
-		protected abstract void Explode();
-		protected abstract void OnAdjacentExplode();
+		public abstract void Explode();
+		public abstract void OnAdjacentExplode();
 
 		public PuzzleElementDefinition GetDefinition() => definition;
 	}
@@ -17,11 +17,11 @@ namespace Core.PuzzleElements {
 	public class ColorChip : PuzzleElement {
 		public ColorChip(ColorChipDefinition definition) : base(definition) { }
 
-		protected override void Explode() {
+		public override void Explode() {
 			throw new System.NotImplementedException();
 		}
 
-		protected override void OnAdjacentExplode() {
+		public override void OnAdjacentExplode() {
 			throw new System.NotImplementedException();
 		}
 	}
@@ -29,11 +29,11 @@ namespace Core.PuzzleElements {
 	public class Balloon : PuzzleElement {
 		public Balloon(BalloonDefinition definition) : base(definition) { }
 
-		protected override void Explode() {
+		public override void Explode() {
 			throw new System.NotImplementedException();
 		}
 
-		protected override void OnAdjacentExplode() {
+		public override void OnAdjacentExplode() {
 			throw new System.NotImplementedException();
 		}
 	}
@@ -41,11 +41,11 @@ namespace Core.PuzzleElements {
 	public class Duck : PuzzleElement {
 		public Duck(DuckDefinition definition) : base(definition) { }
 
-		protected override void Explode() {
+		public override void Explode() {
 			throw new System.NotImplementedException();
 		}
 
-		protected override void OnAdjacentExplode() {
+		public override void OnAdjacentExplode() {
 			throw new System.NotImplementedException();
 		}
 	}
@@ -53,11 +53,11 @@ namespace Core.PuzzleElements {
 	public class Rocket : PuzzleElement {
 		public Rocket(RocketDefinition definition) : base(definition) { }
 
-		protected override void Explode() {
+		public override void Explode() {
 			throw new System.NotImplementedException();
 		}
 
-		protected override void OnAdjacentExplode() {
+		public override void OnAdjacentExplode() {
 			throw new System.NotImplementedException();
 		}
 	}

@@ -2,7 +2,6 @@ using Core.Contexts;
 using Core.Input;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
-using Frolics.Utilities;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -29,7 +28,7 @@ namespace Core {
 		public void Initialize() {
 			SceneContext sceneContext = SceneContext.GetInstance();
 			inputController = sceneContext.Get<InputController>();
-			puzzleGrid = sceneContext.Get<PuzzleLevelInitializer>().PuzzleGrid;
+			puzzleGrid = sceneContext.Get<PuzzleLevelInitializer>().GetPuzzleGrid();
 
 			inputHandler = inputController.InputHandler;
 			inputHandler.PressEvent.AddListener(OnPress);
@@ -39,7 +38,6 @@ namespace Core {
 		private void Update() {
 			dragPosition = inputController.ScreenPositionToWorldSpace(inputHandler.PointerPosition);
 
-			// ApplyDragThreshold();
 			if (isDragging)
 				OnDrag();
 		}
@@ -47,10 +45,6 @@ namespace Core {
 		private void OnPress(PointerPressData pressData) {
 			pressPosition = inputController.ScreenPositionToWorldSpace(pressData.PressPosition);
 			isDragging = true;
-			// if (!puzzleGrid.TryGetPuzzleCell(pressPosition, out PuzzleCell puzzleCell))
-			// 	return;
-			//
-			// puzzleCells.TryAdd(puzzleCell);
 		}
 
 		private void OnDrag() {
@@ -60,27 +54,27 @@ namespace Core {
 			if (!puzzleCell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
 				return;
 
+			// Add first cell
 			if (puzzleCells.Count == 0) {
-				puzzleCells.TryAdd(puzzleCell);
-				OnCellsChanged.Invoke();
+				SelectCell(puzzleCell);
 				return;
 			}
 
+			// Reject non-adjacent cell
 			PuzzleCell lastAddedCell = puzzleCells[^1];
 			if (!IsCellsAdjacent(lastAddedCell, puzzleCell))
 				return;
 
+			// Handle backtracking (player dragging back one step)	
 			if (puzzleCells.Count > 1 && puzzleCell == puzzleCells[^2]) {
-				puzzleCells.TryRemove(lastAddedCell);
-				OnCellsChanged.Invoke();
+				DeselectCell(lastAddedCell);
+				return;
 			}
 
+			// Select cell if it definitions match
 			lastAddedCell.TryGetPuzzleElement(out PuzzleElement lastAddedElement);
-			if (lastAddedElement.GetDefinition() != puzzleElement.GetDefinition())
-				return;
-
-			if (puzzleCells.TryAdd(puzzleCell))
-				OnCellsChanged.Invoke();
+			if (lastAddedElement.GetDefinition() == puzzleElement.GetDefinition())
+				SelectCell(puzzleCell);
 		}
 
 		private void OnRelease(PointerReleaseData releaseData) {
@@ -93,12 +87,16 @@ namespace Core {
 			isDragging = false;
 		}
 
-		// private void ApplyDragThreshold() {
-		// 	float sqrMagnitude = Vector2.SqrMagnitude(pressPosition.GetXY() - dragPosition.GetXY());
-		// 	bool aboveDragThreshold = sqrMagnitude > (DragThreshold * DragThreshold);
-		// 	if (aboveDragThreshold)
-		// 		isDragging = true;
-		// }
+		// Helper methods
+		private void SelectCell(PuzzleCell puzzleCell) {
+			if (puzzleCells.TryAdd(puzzleCell))
+				OnCellsChanged.Invoke();
+		}
+
+		private void DeselectCell(PuzzleCell lastAddedCell) {
+			if (puzzleCells.TryRemove(lastAddedCell))
+				OnCellsChanged.Invoke();
+		}
 
 		private bool IsCellsAdjacent(PuzzleCell centerCell, PuzzleCell cell) {
 			PuzzleCell[] cellNeighbors = puzzleGrid.GetNeighbors(centerCell);

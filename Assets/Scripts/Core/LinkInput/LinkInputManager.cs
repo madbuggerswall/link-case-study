@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Windows.Input;
+using Core.Commands;
 using Core.Contexts;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
@@ -10,43 +14,51 @@ namespace Core {
 
 		private PuzzleCellDragHelper dragHelper;
 		private PuzzleElementBehaviourFactory elementBehaviourFactory;
-		private PuzzleLevelInitializer puzzleLevelInitializer;
+		private PuzzleLevelInitializer levelInitializer;
+		private PuzzleLevelViewController viewController;
+		private CommandInvoker commandInvoker;
+		
 
 		public void Initialize() {
 			SceneContext sceneContext = SceneContext.GetInstance();
 			dragHelper = sceneContext.Get<PuzzleCellDragHelper>();
 			elementBehaviourFactory = sceneContext.Get<PuzzleElementBehaviourFactory>();
-			puzzleLevelInitializer = sceneContext.Get<PuzzleLevelInitializer>();
+			levelInitializer = sceneContext.Get<PuzzleLevelInitializer>();
+			commandInvoker = sceneContext.Get<CommandInvoker>();
 
 			dragHelper.OnCellsChanged.AddListener(OnCellsChanged);
 			dragHelper.OnCellsSelected.AddListener(OnCellsSelected);
 		}
 
 		private void OnCellsChanged() {
-			EvaluateSelectedCells();
-			
-			PuzzleCell[] puzzleCells = puzzleLevelInitializer.PuzzleGrid.GetCells();
+			GetSelectedElements();
+
+			PuzzleCell[] puzzleCells = levelInitializer.GetPuzzleGrid().GetCells();
 			for (int index = 0; index < puzzleCells.Length; index++) {
 				PuzzleCell puzzleCell = puzzleCells[index];
-				if(!puzzleCell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
+				if (!puzzleCell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
 					return;
 
-				PuzzleElementBehaviour elementBehaviour = elementBehaviourFactory.GetPuzzleElementBehaviour(puzzleElement);
+				PuzzleElementBehaviour elementBehaviour = viewController.GetPuzzleElementBehaviour(puzzleElement);
 				elementBehaviour.PlayScaleTween(1f);
 			}
 
 			for (int index = 0; index < puzzleElements.Count; index++) {
 				PuzzleElement puzzleElement = puzzleElements[index];
-				PuzzleElementBehaviour elementBehaviour = elementBehaviourFactory.GetPuzzleElementBehaviour(puzzleElement);
+				PuzzleElementBehaviour elementBehaviour = viewController.GetPuzzleElementBehaviour(puzzleElement);
 				elementBehaviour.PlayScaleTween(1.5f);
 			}
 		}
 
 		private void OnCellsSelected() {
-	
+			GetSelectedElements();
+
+			Link link = new(puzzleElements);
+			ExplodeLinkCommand command = new ExplodeLinkCommand(link);
+			commandInvoker.Enqueue(command);
 		}
 
-		private void EvaluateSelectedCells() {
+		private void GetSelectedElements() {
 			HashList<PuzzleCell> selectedCells = dragHelper.PuzzleCells;
 			puzzleElements.Clear();
 
@@ -66,4 +78,6 @@ namespace Core {
 			}
 		}
 	}
+
+	// TODO Rename PuzzleElement to Chip/PuzzleChip
 }

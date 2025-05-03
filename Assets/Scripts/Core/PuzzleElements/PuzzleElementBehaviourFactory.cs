@@ -15,7 +15,6 @@ namespace Core.PuzzleElements {
 		[Header("Core")]
 		[SerializeField] private Transform elementsParent;
 
-		private Dictionary<PuzzleElement, PuzzleElementBehaviour> elementBehaviours = new();
 		
 		// Dependencies
 		private ObjectPool objectPool;
@@ -23,14 +22,7 @@ namespace Core.PuzzleElements {
 		public void Initialize() {
 			this.objectPool = SceneContext.GetInstance().Get<ObjectPool>();
 		}
-
-		public PuzzleElementBehaviour CreateRandomColorChip(PuzzleCell puzzleCell) {
-			int randomIndex = Random.Range(0, colorChipDefinitions.Length);
-			ColorChipDefinition definition = colorChipDefinitions[randomIndex];
-
-			return Create(definition, puzzleCell);
-		}
-
+		
 		public PuzzleElementBehaviour Create(PuzzleElementDefinition definition, PuzzleCell puzzleCell) {
 			PuzzleElement puzzleElement = definition.CreateElement();
 			puzzleCell.SetPuzzleElement(puzzleElement);
@@ -38,16 +30,16 @@ namespace Core.PuzzleElements {
 			PuzzleElementBehaviour puzzleElementBehaviour = objectPool.Spawn(definition.GetPrefab(), elementsParent);
 			puzzleElementBehaviour.Initialize(definition, puzzleCell);
 
-			elementBehaviours.Add(puzzleElement, puzzleElementBehaviour);
 			return puzzleElementBehaviour;
 		}
 
-		public void Despawn(PuzzleElementBehaviour puzzleElementBehaviour) {
-			objectPool.Despawn(puzzleElementBehaviour.GetPuzzleElement().GetDefinition().GetPrefab());
-		}
+		public PuzzleElementBehaviour Create(PuzzleElement puzzleElement, PuzzleCell puzzleCell) {
+			PuzzleElementDefinition elementDefinition = puzzleElement.GetDefinition();
+			PuzzleElementBehaviour puzzleElementBehaviour = objectPool.Spawn(elementDefinition.GetPrefab(), elementsParent);
+			puzzleElementBehaviour.Initialize(elementDefinition, puzzleCell);
 
-		public PuzzleElementBehaviour GetPuzzleElementBehaviour(PuzzleElement puzzleElement) {
-			return elementBehaviours[puzzleElement];
+			puzzleCell.SetPuzzleElement(puzzleElement);
+			return puzzleElementBehaviour;
 		}
 	}
 }

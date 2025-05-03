@@ -20,5 +20,11 @@ namespace Core.PuzzleGrids {
 			puzzleGridBehaviour.Initialize(puzzleGrid);
 			return puzzleGridBehaviour;
 		}
+
+		public PuzzleGridBehaviour Create(PuzzleGrid puzzleGrid) {
+			PuzzleGridBehaviour puzzleGridBehaviour = objectPool.Spawn(puzzleGridBehaviourPrefab, puzzleGridRoot);
+			puzzleGridBehaviour.Initialize(puzzleGrid);
+			return puzzleGridBehaviour;
+		}
 	}
 }
