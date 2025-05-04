@@ -1,9 +1,10 @@
 using Core.Contexts;
-using Frolics.Utilities;
 using UnityEngine;
 
 namespace Core.Input {
 	[DefaultExecutionOrder(-32)]
+	
+	// NOTE Can be renamed to InputManager
 	public class InputController : MonoBehaviour {
 		public InputHandler InputHandler { get; private set; }
 

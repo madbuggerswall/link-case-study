@@ -14,13 +14,6 @@ namespace Core.PuzzleGrids {
 			this.objectPool = SceneContext.GetInstance().Get<ObjectPool>();
 		}
 
-		public PuzzleGridBehaviour Create(Vector2Int gridSizeInCells, float cellDiameter) {
-			PuzzleGrid puzzleGrid = new PuzzleGrid(gridSizeInCells, cellDiameter);
-			PuzzleGridBehaviour puzzleGridBehaviour = objectPool.Spawn(puzzleGridBehaviourPrefab, puzzleGridRoot);
-			puzzleGridBehaviour.Initialize(puzzleGrid);
-			return puzzleGridBehaviour;
-		}
-
 		public PuzzleGridBehaviour Create(PuzzleGrid puzzleGrid) {
 			PuzzleGridBehaviour puzzleGridBehaviour = objectPool.Spawn(puzzleGridBehaviourPrefab, puzzleGridRoot);
 			puzzleGridBehaviour.Initialize(puzzleGrid);

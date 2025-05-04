@@ -4,7 +4,7 @@ using Core.PuzzleGrids;
 using UnityEngine;
 
 namespace Core.Links {
-	// For hints
+	// NOTE For hints (HintManager)
 	public class LinkFinder {
 		private readonly PuzzleGrid puzzleGrid;
 		private readonly Dictionary<PuzzleElement, Link> linksByItem;

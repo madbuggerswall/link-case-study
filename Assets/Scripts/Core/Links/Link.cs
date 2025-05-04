@@ -44,6 +44,7 @@ namespace Core.Links {
 			return true;
 		}
 
+		// NOTE Explode should be called via LinkManager.Explode(Link)
 		public void Explode() {
 			for (int index = 0; index < puzzleElements.Count; index++) {
 				PuzzleElement puzzleElement = puzzleElements[index];

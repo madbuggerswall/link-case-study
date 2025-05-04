@@ -1,4 +1,5 @@
 using Core.Contexts;
+using Core.Links;
 using Core.PuzzleGrids;
 using UnityEngine;
 
@@ -19,9 +20,21 @@ namespace Core.PuzzleLevels {
 		public PuzzleGrid GetPuzzleGrid() => this.puzzleGrid;
 	}
 
+	// TODO Implement and utilize LinkManager
 	public class LinkManager {
 		public LinkManager() { }
 
 		public void EvaluateLink() { }
+
+		public void Explode(Link link) {
+			
+		}
+	}
+	public class TargetManager {
+		
+	}
+
+	public class TurnManager {
+		
 	}
 }

@@ -10,53 +10,35 @@ namespace Core.LinkInput {
 	public class LinkInputManager : MonoBehaviour {
 		private readonly HashList<PuzzleElement> puzzleElements = new();
 
+		// Dependencies
 		private PuzzleCellDragHelper dragHelper;
-		private PuzzleElementBehaviourFactory elementBehaviourFactory;
-		private PuzzleLevelInitializer levelInitializer;
 		private PuzzleLevelViewController viewController;
 		private CommandInvoker commandInvoker;
-		
+
 
 		public void Initialize() {
-			SceneContext sceneContext = SceneContext.GetInstance();
-			dragHelper = sceneContext.Get<PuzzleCellDragHelper>();
-			elementBehaviourFactory = sceneContext.Get<PuzzleElementBehaviourFactory>();
-			levelInitializer = sceneContext.Get<PuzzleLevelInitializer>();
-			commandInvoker = sceneContext.Get<CommandInvoker>();
+			dragHelper = SceneContext.GetInstance().Get<PuzzleCellDragHelper>();
+			commandInvoker = SceneContext.GetInstance().Get<CommandInvoker>();
 
-			dragHelper.OnCellSelectionChanged.AddListener(OnCellsChanged);
-			dragHelper.OnCellsSelected.AddListener(OnCellsSelected);
+			dragHelper.CellSelectionChangeAction += OnCellsSelectionChanged;
+			dragHelper.CellSelectionAcceptedAction += OnCellSelectionAccepted;
 		}
 
-		private void OnCellsChanged() {
-			GetSelectedElements();
-
-			PuzzleCell[] puzzleCells = levelInitializer.GetPuzzleGrid().GetCells();
-			for (int index = 0; index < puzzleCells.Length; index++) {
-				PuzzleCell puzzleCell = puzzleCells[index];
-				if (!puzzleCell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
-					return;
-
-				PuzzleElementBehaviour elementBehaviour = viewController.GetPuzzleElementBehaviour(puzzleElement);
-				elementBehaviour.PlayScaleTween(1f);
-			}
-
-			for (int index = 0; index < puzzleElements.Count; index++) {
-				PuzzleElement puzzleElement = puzzleElements[index];
-				PuzzleElementBehaviour elementBehaviour = viewController.GetPuzzleElementBehaviour(puzzleElement);
-				elementBehaviour.PlayScaleTween(1.5f);
-			}
+		private void OnCellsSelectionChanged() {
+			UpdateSelectedElements();
+			viewController.ScaleDownUnselectedElements(puzzleElements);
+			viewController.ScaleUpSelectedElements(puzzleElements);
 		}
 
-		private void OnCellsSelected() {
-			GetSelectedElements();
+		private void OnCellSelectionAccepted() {
+			UpdateSelectedElements();
 
 			Link link = new(puzzleElements);
 			ExplodeLinkCommand command = new ExplodeLinkCommand(link);
 			commandInvoker.Enqueue(command);
 		}
 
-		private void GetSelectedElements() {
+		private void UpdateSelectedElements() {
 			HashList<PuzzleCell> selectedCells = dragHelper.GetPuzzleCells();
 			puzzleElements.Clear();
 
@@ -66,6 +48,7 @@ namespace Core.LinkInput {
 				if (!selectedCell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
 					break;
 
+				// NOTE This part seems very similar to DragHelper.OnDrag, maybe it can be accessed by LinkManager
 				if (puzzleElements.Count == 0)
 					puzzleElements.TryAdd(puzzleElement);
 
@@ -76,6 +59,4 @@ namespace Core.LinkInput {
 			}
 		}
 	}
-
-	// TODO Rename PuzzleElement to Chip/PuzzleChip
 }

@@ -2,7 +2,6 @@ using Core.Contexts;
 using Frolics.Pooling;
 using UnityEngine;
 
-// NOTE Possibly not a MonoBehaviour
 namespace Core.PuzzleGrids {
 	public class PuzzleCellBehaviourFactory : MonoBehaviour {
 		[SerializeField] private PuzzleCellBehaviour puzzleCellBehaviourPrefab;

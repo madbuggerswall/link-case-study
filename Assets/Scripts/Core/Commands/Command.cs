@@ -2,18 +2,18 @@ using System;
 
 namespace Core.Commands {
 	public abstract class Command {
-		private Action<Command> onComplete = delegate { };
+		private Action<Command> completionHandlers = delegate { };
 		public abstract void Execute();
 
-		public void SubscribeToOnComplete(Action<Command> onComplete) {
-			this.onComplete += onComplete;
+		public void RegisterCompletionHandler(Action<Command> handler) {
+			this.completionHandlers += handler;
 		}
-		public void UnSubscribeFromOnComplete(Action<Command> onComplete) {
-			this.onComplete -= onComplete;
+		public void DeregisterCompletionHandler(Action<Command> handler) {
+			this.completionHandlers -= handler;
 		}
 
-		public void InvokeOnComplete() {
-			onComplete(this);
+		public void InvokeCompletionHandlers() {
+			completionHandlers(this);
 		}
 	}
 }

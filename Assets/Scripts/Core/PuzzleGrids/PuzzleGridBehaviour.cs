@@ -10,6 +10,7 @@ namespace Core.PuzzleGrids {
 		public void Initialize(PuzzleGrid puzzleGrid) {
 			this.puzzleGrid = puzzleGrid;
 			InitializeBackground(backgroundImage, puzzleGrid);
+			// TODO Initialize mask
 		}
 
 		private void InitializeBackground(SpriteRenderer background, PuzzleGrid puzzleGrid) {

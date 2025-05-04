@@ -23,7 +23,7 @@ namespace Core.PuzzleGrids {
 			return false;
 		}
 
-		public bool TryGetPuzzleElement(PuzzleElement puzzleElement, out PuzzleCell puzzleCell) {
+		public bool TryGetPuzzleCell(PuzzleElement puzzleElement, out PuzzleCell puzzleCell) {
 			for (int i = 0; i < cells.Length; i++) {
 				if (cells[i].GetPuzzleElement() != puzzleElement)
 					continue;

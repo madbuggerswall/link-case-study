@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
 using Core.Contexts;
 using Core.DataTransfer.Definitions;
 using Core.PuzzleGrids;
 using Frolics.Pooling;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Core.PuzzleElements {
 	public class PuzzleElementBehaviourFactory : MonoBehaviour {
@@ -21,16 +18,6 @@ namespace Core.PuzzleElements {
 
 		public void Initialize() {
 			this.objectPool = SceneContext.GetInstance().Get<ObjectPool>();
-		}
-		
-		public PuzzleElementBehaviour Create(PuzzleElementDefinition definition, PuzzleCell puzzleCell) {
-			PuzzleElement puzzleElement = definition.CreateElement();
-			puzzleCell.SetPuzzleElement(puzzleElement);
-
-			PuzzleElementBehaviour puzzleElementBehaviour = objectPool.Spawn(definition.GetPrefab(), elementsParent);
-			puzzleElementBehaviour.Initialize(definition, puzzleCell);
-
-			return puzzleElementBehaviour;
 		}
 
 		public PuzzleElementBehaviour Create(PuzzleElement puzzleElement, PuzzleCell puzzleCell) {

@@ -18,16 +18,18 @@ namespace Core.Commands {
 				return;
 
 			isRunning = true;
+			
 			Command currentCommand = commands.Dequeue();
-
-			currentCommand.SubscribeToOnComplete(OnCommandCompleted);
+			currentCommand.RegisterCompletionHandler(OnCommandCompleted);
 			currentCommand.Execute();
 		}
 
 		private void OnCommandCompleted(Command command) {
 			isRunning = false;
-			command.UnSubscribeFromOnComplete(OnCommandCompleted);
-			TryExecuteNextCommand();
+			command.DeregisterCompletionHandler(OnCommandCompleted);
+		
+			// NOTE Clear the queue instead
+			// TryExecuteNextCommand();
 		}
 	}
 }

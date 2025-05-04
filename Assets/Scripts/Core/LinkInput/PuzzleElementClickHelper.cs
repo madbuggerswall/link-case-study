@@ -1,9 +1,9 @@
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
-using Frolics.Signals;
 using UnityEngine;
 
 namespace Core.LinkInput {
+	// Rename to LinkClickHelper
 	public class PuzzleElementClickHelper {
 		// private readonly MergeGridContainer mergeGridContainer;
 		// private readonly MergeItemBehaviourFactory mergeItemBehaviourFactory;

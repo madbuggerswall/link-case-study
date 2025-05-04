@@ -1,12 +1,15 @@
+using System;
 using Core.Contexts;
 using Core.Input;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
 using Core.PuzzleLevels;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Core.LinkInput {
+	
+	// NOTE Rename to LinkDragHelper
+	// NOTE This should be a vanilla class initialized by LinkInputManager
 	public class PuzzleCellDragHelper : MonoBehaviour {
 		private InputController inputController;
 		private InputHandler inputHandler;
@@ -22,8 +25,8 @@ namespace Core.LinkInput {
 		private readonly HashList<PuzzleCell> puzzleCells = new();
 		public HashList<PuzzleCell> GetPuzzleCells() => puzzleCells;
 
-		public UnityEvent OnCellSelectionChanged { get; } = new();
-		public UnityEvent OnCellsSelected { get; } = new();
+		public Action CellSelectionChangeAction { get; set; } = delegate { };
+		public Action CellSelectionAcceptedAction { get; set; } = delegate { };
 
 
 		public void Initialize() {
@@ -72,7 +75,7 @@ namespace Core.LinkInput {
 				return;
 			}
 
-			// Select cell if it definitions match
+			// Select cell if its definitions match
 			lastAddedCell.TryGetPuzzleElement(out PuzzleElement lastAddedElement);
 			if (lastAddedElement.GetDefinition() == puzzleElement.GetDefinition())
 				SelectCell(puzzleCell);
@@ -82,7 +85,7 @@ namespace Core.LinkInput {
 			releasePosition = inputController.ScreenPositionToWorldSpace(releaseData.ReleasePosition);
 			pressPosition = releasePosition;
 
-			OnCellsSelected.Invoke();
+			CellSelectionAcceptedAction();
 			puzzleCells.Clear();
 
 			isDragging = false;
@@ -91,12 +94,12 @@ namespace Core.LinkInput {
 		// Helper methods
 		private void SelectCell(PuzzleCell puzzleCell) {
 			if (puzzleCells.TryAdd(puzzleCell))
-				OnCellSelectionChanged.Invoke();
+				CellSelectionChangeAction.Invoke();
 		}
 
 		private void DeselectCell(PuzzleCell lastAddedCell) {
 			if (puzzleCells.TryRemove(lastAddedCell))
-				OnCellSelectionChanged.Invoke();
+				CellSelectionChangeAction.Invoke();
 		}
 
 		private bool IsCellsAdjacent(PuzzleCell centerCell, PuzzleCell cell) {

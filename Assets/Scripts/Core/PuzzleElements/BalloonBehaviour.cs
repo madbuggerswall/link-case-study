@@ -4,6 +4,7 @@ using Core.PuzzleGrids;
 using UnityEngine;
 
 namespace Core.PuzzleElements {
+	// NOTE Rename it to VaseBehaviour
 	public class BalloonBehaviour : PuzzleElementBehaviour {
 		[SerializeField] private SpriteRenderer spriteRenderer;
 
@@ -27,4 +28,6 @@ namespace Core.PuzzleElements {
 		public override PuzzleElement GetPuzzleElement() => balloon;
 		public override void SetSortingOrder(int sortingOrder) => spriteRenderer.sortingOrder = sortingOrder;
 	}
+	
+	// NOTE Also create a CrateBehaviour
 }

@@ -26,6 +26,7 @@ namespace Core.PuzzleElements {
 		}
 	}
 
+	// Rename it to Vase
 	public class Balloon : PuzzleElement {
 		public Balloon(BalloonDefinition definition) : base(definition) { }
 

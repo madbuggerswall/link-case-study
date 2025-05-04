@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Core.PuzzleLevels {
 	// NOTE Rename this to PuzzleLevelLoader
-	// NOTE Initializer initializes vanilla object. ViewController/ViewManager spawns behaviours
 	public class PuzzleLevelInitializer : MonoBehaviour {
 		[SerializeField] private PuzzleLevelDefinition levelDefinition;
 		

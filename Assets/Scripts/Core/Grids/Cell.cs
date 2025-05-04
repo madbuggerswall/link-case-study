@@ -3,6 +3,7 @@ using UnityEngine;
 // This could be a MonoBehaviour
 namespace Core.Grids {
 	public abstract class Cell {
+		// NOTE This should be local position
 		protected Vector3 worldPosition;
 		protected float diameter;
 

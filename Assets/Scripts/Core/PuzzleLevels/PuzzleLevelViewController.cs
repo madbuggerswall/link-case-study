@@ -16,25 +16,29 @@ namespace Core.PuzzleLevels {
 		private PuzzleCellBehaviourFactory cellBehaviourFactory;
 		private PuzzleLevelInitializer levelInitializer;
 
+		private ScaledViewHelper scaledViewHelper;
+
 		public void Initialize() {
 			this.elementBehaviourFactory = SceneContext.GetInstance().Get<PuzzleElementBehaviourFactory>();
 			this.gridBehaviourFactory = SceneContext.GetInstance().Get<PuzzleGridBehaviourFactory>();
 			this.cellBehaviourFactory = SceneContext.GetInstance().Get<PuzzleCellBehaviourFactory>();
 			this.levelInitializer = SceneContext.GetInstance().Get<PuzzleLevelInitializer>();
 
-			
 			// PuzzleGridBehaviours
 			PuzzleGrid puzzleGrid = levelInitializer.GetPuzzleGrid();
 			SpawnGridBehaviour(puzzleGrid);
-			
+
 			// PuzzleCellBehaviours
 			PuzzleGridBehaviour gridBehaviour = GetPuzzleGridBehaviour(puzzleGrid);
 			SpawnCellBehaviours(gridBehaviour);
-			
+
 			// PuzzleElementBehaviours
 			SpawnElements(puzzleGrid);
+
+			scaledViewHelper = new ScaledViewHelper(this);
 		}
 
+		// Initializer methods
 		private void SpawnGridBehaviour(PuzzleGrid puzzleGrid) {
 			PuzzleGridBehaviour gridBehaviour = gridBehaviourFactory.Create(puzzleGrid);
 			gridBehaviours.Add(puzzleGrid, gridBehaviour);
@@ -66,7 +70,19 @@ namespace Core.PuzzleLevels {
 				elementBehaviours.Add(element, elementBehaviour);
 			}
 		}
+		
 
+		// Helper methods
+		public void ScaleUpSelectedElements(HashList<PuzzleElement> puzzleElements) {
+			scaledViewHelper.ScaleUpSelectedElements(puzzleElements);
+		}
+
+		public void ScaleDownUnselectedElements(HashList<PuzzleElement> puzzleElements) {
+			scaledViewHelper.ScaleDownUnselectedElements(puzzleElements);
+		}
+
+
+		// Getters
 		public PuzzleGridBehaviour GetPuzzleGridBehaviour(PuzzleGrid puzzleGrid) {
 			return gridBehaviours.GetValueOrDefault(puzzleGrid);
 		}
