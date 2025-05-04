@@ -5,9 +5,9 @@ using Frolics.Pooling;
 using UnityEngine;
 
 namespace Core.PuzzleElements.Behaviours {
-	public class PuzzleElementBehaviourFactory : MonoBehaviour {
+	public class PuzzleElementBehaviourFactory : MonoBehaviour, IInitializable {
 		[SerializeField] private Transform elementsParent;
-		
+
 		// Dependencies
 		private ObjectPool objectPool;
 

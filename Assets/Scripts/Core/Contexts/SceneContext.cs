@@ -8,12 +8,12 @@ namespace Core.Contexts {
 		private static SceneContext instance;
 
 		// To support vanilla classes IDependency/IContextItem might be needed
-		private readonly Dictionary<System.Type, MonoBehaviour> contextItems = new();
+		private readonly Dictionary<System.Type, IInitializable> contextItems = new();
 
 		private void Awake() {
 			// NOTE Migrate to somewhere else
 			Application.targetFrameRate = 60;
-			
+
 			AssertSingleton();
 			ResolveContext();
 			InitializeContext();
@@ -22,8 +22,8 @@ namespace Core.Contexts {
 		protected abstract void ResolveContext();
 		protected abstract void InitializeContext();
 
-		public T Get<T>() where T : MonoBehaviour {
-			if (contextItems.TryGetValue(typeof(T), out MonoBehaviour contextItem))
+		public T Get<T>() where T : class, IInitializable {
+			if (contextItems.TryGetValue(typeof(T), out IInitializable contextItem))
 				return contextItem as T;
 
 			// This can be an exception as dependent systems would be broken already
@@ -31,13 +31,30 @@ namespace Core.Contexts {
 			return null;
 		}
 
-		protected void Resolve<T>() where T : MonoBehaviour {
-			T dependency = GetComponentInChildren<T>(true) ?? FindObjectOfType<T>(true);
-			dependency?.transform.SetParent(transform);
+		protected void Resolve<T>() where T : IInitializable, new() {
+			if (typeof(MonoBehaviour).IsAssignableFrom(typeof(T))) {
+				ResolveMono<T>();
+			} else {
+				ResolvePlain<T>();
+			}
+		}
+
+		private void ResolveMono<T>() where T : IInitializable {
+			T dependency = GetComponentInChildren<T>(true);
 
 			if (dependency is null)
 				throw new Exception("Dependency not found: " + typeof(T));
 
+			// Try adding dependency to context dictionary
+			if (contextItems.TryAdd(typeof(T), dependency))
+				return;
+
+			// This can be an exception as dependent systems would be broken already
+			Debug.LogWarning($"Dependency {typeof(T)} is already added to context");
+		}
+
+		private void ResolvePlain<T>() where T : IInitializable, new() {
+			T dependency = new T();
 			// Try adding dependency to context dictionary
 			if (contextItems.TryAdd(typeof(T), dependency))
 				return;
@@ -55,5 +72,9 @@ namespace Core.Contexts {
 		}
 
 		public static SceneContext GetInstance() => instance;
+	}
+
+	public interface IInitializable {
+		void Initialize();
 	}
 }

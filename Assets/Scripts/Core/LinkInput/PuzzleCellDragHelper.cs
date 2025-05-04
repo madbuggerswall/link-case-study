@@ -9,44 +9,20 @@ using UnityEngine;
 namespace Core.LinkInput {
 	// NOTE Rename to LinkDragHelper
 	// NOTE This should be a vanilla class initialized by LinkInputManager
-	public class PuzzleCellDragHelper : MonoBehaviour {
-		private InputController inputController;
-		private InputHandler inputHandler;
-
-		private Vector3 pressPosition;
-		private Vector3 dragPosition;
-		private Vector3 releasePosition;
-
-		private bool isDragging;
-		private const float DragThreshold = 0.5f;
-
-		private PuzzleGrid puzzleGrid;
+	public class PuzzleCellDragHelper : IInitializable {
 		private readonly HashList<PuzzleCell> selectedCells = new();
 
+		// Dependencies
+		private PuzzleGrid puzzleGrid;
 		private LinkInputManager linkInputManager;
 
 		public void Initialize() {
-			SceneContext sceneContext = SceneContext.GetInstance();
-			inputController = sceneContext.Get<InputController>();
-			puzzleGrid = sceneContext.Get<PuzzleLevelInitializer>().GetPuzzleGrid();
-
-			inputHandler = inputController.InputHandler;
-			inputHandler.PressEvent.AddListener(OnPress);
-			inputHandler.ReleaseEvent.AddListener(OnRelease);
+			puzzleGrid = SceneContext.GetInstance().Get<PuzzleLevelInitializer>().GetPuzzleGrid();
+			linkInputManager = SceneContext.GetInstance().Get<LinkInputManager>();
 		}
 
-		private void Update() {
-			dragPosition = inputController.ScreenPositionToWorldSpace(inputHandler.PointerPosition);
-			if (isDragging)
-				OnDrag();
-		}
 
-		private void OnPress(PointerPressData pressData) {
-			pressPosition = inputController.ScreenPositionToWorldSpace(pressData.PressPosition);
-			isDragging = true;
-		}
-
-		private void OnDrag() {
+		public void OnDrag(Vector3 dragPosition) {
 			if (!puzzleGrid.TryGetPuzzleCell(dragPosition, out PuzzleCell puzzleCell))
 				return;
 
@@ -76,14 +52,9 @@ namespace Core.LinkInput {
 				SelectCell(puzzleCell);
 		}
 
-		private void OnRelease(PointerReleaseData releaseData) {
-			releasePosition = inputController.ScreenPositionToWorldSpace(releaseData.ReleasePosition);
-			pressPosition = releasePosition;
-
+		public void OnRelease() {
 			linkInputManager.OnCellSelectionAccepted();
 			selectedCells.Clear();
-
-			isDragging = false;
 		}
 
 		// Helper methods

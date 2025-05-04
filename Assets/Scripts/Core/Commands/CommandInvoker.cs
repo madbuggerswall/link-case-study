@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Core.Contexts;
 using UnityEngine;
 
 namespace Core.Commands {
-	public class CommandInvoker : MonoBehaviour {
+	public class CommandInvoker : MonoBehaviour, IInitializable {
 		private readonly Queue<Command> commands = new();
 		private bool isRunning = false;
 

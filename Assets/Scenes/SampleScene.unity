@@ -442,7 +442,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1102379079}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &654822486
 MonoBehaviour:
@@ -454,50 +454,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 004b04e036fe43c5dbb0a23d93200e2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &720881518
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 720881519}
-  - component: {fileID: 720881520}
-  m_Layer: 0
-  m_Name: Puzzle Cell Drag Helper
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &720881519
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 720881518}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1102379079}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &720881520
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 720881518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf11f2991fa520f9ea0552e074d72927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &915823636
@@ -530,7 +486,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1102379079}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &915823638
 MonoBehaviour:
@@ -593,7 +549,6 @@ Transform:
   - {fileID: 440247226}
   - {fileID: 1363267394}
   - {fileID: 391499362}
-  - {fileID: 720881519}
   - {fileID: 915823637}
   - {fileID: 654822485}
   - {fileID: 1255529142}
@@ -630,7 +585,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1102379079}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1255529143
 MonoBehaviour:
@@ -688,11 +643,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f762a9d6cc7573b92920cddd81074e5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorChipDefinitions:
-  - {fileID: 11400000, guid: ddb72ae6c3e5bade2a0784d0d22042fa, type: 2}
-  - {fileID: 11400000, guid: 3448c981fc127560fa138af3a11296d9, type: 2}
-  - {fileID: 11400000, guid: 93b0a7b4fe864a3caa4df53785c2138a, type: 2}
-  - {fileID: 11400000, guid: 0a76f4cfcf5949024a92d1c0a7facc2a, type: 2}
   elementsParent: {fileID: 1657235514}
 --- !u!1 &1433096519
 GameObject:

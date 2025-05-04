@@ -5,7 +5,7 @@ namespace Core.Input {
 	[DefaultExecutionOrder(-32)]
 	
 	// NOTE Can be renamed to InputManager
-	public class InputController : MonoBehaviour {
+	public class InputController : MonoBehaviour,IInitializable {
 		public InputHandler InputHandler { get; private set; }
 
 		// Dependencies

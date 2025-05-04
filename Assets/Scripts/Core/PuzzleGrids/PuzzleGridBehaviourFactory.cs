@@ -3,7 +3,7 @@ using Frolics.Pooling;
 using UnityEngine;
 
 namespace Core.PuzzleGrids {
-	public class PuzzleGridBehaviourFactory : MonoBehaviour {
+	public class PuzzleGridBehaviourFactory : MonoBehaviour, IInitializable {
 		[SerializeField] private PuzzleGridBehaviour puzzleGridBehaviourPrefab;
 		[SerializeField] private Transform puzzleGridRoot;
 

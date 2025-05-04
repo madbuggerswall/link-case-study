@@ -1,7 +1,8 @@
+using Core.Contexts;
 using UnityEngine;
 
 namespace Core.DataTransfer.Definitions {
-	public class ChipDefinitionManager : MonoBehaviour {
+	public class ChipDefinitionManager : MonoBehaviour, IInitializable {
 		[Header("Color Chip Definitions")]
 		[SerializeField] private ColorChipDefinition[] colorChipDefinitions;
 

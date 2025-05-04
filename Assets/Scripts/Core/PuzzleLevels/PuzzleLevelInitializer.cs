@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Core.PuzzleLevels {
 	// NOTE Rename this to PuzzleLevelLoader
-	public class PuzzleLevelInitializer : MonoBehaviour {
+	public class PuzzleLevelInitializer : MonoBehaviour,IInitializable {
 		[SerializeField] private PuzzleLevelDefinition levelDefinition;
 		
 		// Dependencies

@@ -1,7 +1,8 @@
+using Core.Contexts;
 using UnityEngine;
 
 namespace Frolics.Pooling {
-	public class ObjectPool : MonoBehaviour {
+	public class ObjectPool : MonoBehaviour, IInitializable {
 		private MonoBehaviourPool monoBehaviourPool;
 		private GameObjectPool gameObjectPool;
 
