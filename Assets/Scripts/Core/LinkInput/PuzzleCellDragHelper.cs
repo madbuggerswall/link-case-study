@@ -7,7 +7,6 @@ using Core.PuzzleLevels;
 using UnityEngine;
 
 namespace Core.LinkInput {
-	
 	// NOTE Rename to LinkDragHelper
 	// NOTE This should be a vanilla class initialized by LinkInputManager
 	public class PuzzleCellDragHelper : MonoBehaviour {
@@ -22,12 +21,9 @@ namespace Core.LinkInput {
 		private const float DragThreshold = 0.5f;
 
 		private PuzzleGrid puzzleGrid;
-		private readonly HashList<PuzzleCell> puzzleCells = new();
-		public HashList<PuzzleCell> GetPuzzleCells() => puzzleCells;
+		private readonly HashList<PuzzleCell> selectedCells = new();
 
-		public Action CellSelectionChangeAction { get; set; } = delegate { };
-		public Action CellSelectionAcceptedAction { get; set; } = delegate { };
-
+		private LinkInputManager linkInputManager;
 
 		public void Initialize() {
 			SceneContext sceneContext = SceneContext.GetInstance();
@@ -41,7 +37,6 @@ namespace Core.LinkInput {
 
 		private void Update() {
 			dragPosition = inputController.ScreenPositionToWorldSpace(inputHandler.PointerPosition);
-
 			if (isDragging)
 				OnDrag();
 		}
@@ -59,18 +54,18 @@ namespace Core.LinkInput {
 				return;
 
 			// Add first cell
-			if (puzzleCells.Count == 0) {
+			if (selectedCells.Count == 0) {
 				SelectCell(puzzleCell);
 				return;
 			}
 
 			// Reject non-adjacent cell
-			PuzzleCell lastAddedCell = puzzleCells[^1];
+			PuzzleCell lastAddedCell = selectedCells[^1];
 			if (!IsCellsAdjacent(lastAddedCell, puzzleCell))
 				return;
 
 			// Handle backtracking (player dragging back one step)	
-			if (puzzleCells.Count > 1 && puzzleCell == puzzleCells[^2]) {
+			if (selectedCells.Count > 1 && puzzleCell == selectedCells[^2]) {
 				DeselectCell(lastAddedCell);
 				return;
 			}
@@ -85,21 +80,21 @@ namespace Core.LinkInput {
 			releasePosition = inputController.ScreenPositionToWorldSpace(releaseData.ReleasePosition);
 			pressPosition = releasePosition;
 
-			CellSelectionAcceptedAction();
-			puzzleCells.Clear();
+			linkInputManager.OnCellSelectionAccepted();
+			selectedCells.Clear();
 
 			isDragging = false;
 		}
 
 		// Helper methods
 		private void SelectCell(PuzzleCell puzzleCell) {
-			if (puzzleCells.TryAdd(puzzleCell))
-				CellSelectionChangeAction.Invoke();
+			if (selectedCells.TryAdd(puzzleCell))
+				linkInputManager.OnCellsSelectionChanged();
 		}
 
 		private void DeselectCell(PuzzleCell lastAddedCell) {
-			if (puzzleCells.TryRemove(lastAddedCell))
-				CellSelectionChangeAction.Invoke();
+			if (selectedCells.TryRemove(lastAddedCell))
+				linkInputManager.OnCellsSelectionChanged();
 		}
 
 		private bool IsCellsAdjacent(PuzzleCell centerCell, PuzzleCell cell) {
@@ -111,5 +106,7 @@ namespace Core.LinkInput {
 
 			return false;
 		}
+
+		public HashList<PuzzleCell> GetSelectedCells() => selectedCells;
 	}
 }

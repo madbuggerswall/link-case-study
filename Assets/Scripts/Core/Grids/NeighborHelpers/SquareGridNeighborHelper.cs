@@ -118,10 +118,10 @@ namespace Core.Grids.NeighborHelpers {
 		private bool IsBottomRightCorner(int cellIndex) => cellIndex == GetBottomRightCorner();
 		private bool IsBottomLeftCorner(int cellIndex) => cellIndex == GetBottomLeftCorner();
 
-		private bool IsTopEdge(int cellIndex) => InRange(cellIndex, GetTopLeftCorner(), GetTopRightCorner());
-		private bool IsBottomEdge(int cellIndex) => InRange(cellIndex, GetBottomLeftCorner(), GetBottomRightCorner());
-		private bool IsRightEdge(int cellIndex) => (cellIndex - (gridWidth - 1)) % gridWidth == 0;
-		private bool IsLeftEdge(int cellIndex) => cellIndex % gridWidth == 0;
+		public bool IsTopEdge(int cellIndex) => InRange(cellIndex, GetTopLeftCorner(), GetTopRightCorner());
+		public bool IsBottomEdge(int cellIndex) => InRange(cellIndex, GetBottomLeftCorner(), GetBottomRightCorner());
+		public bool IsRightEdge(int cellIndex) => (cellIndex - (gridWidth - 1)) % gridWidth == 0;
+		public bool IsLeftEdge(int cellIndex) => cellIndex % gridWidth == 0;
 
 		private enum Position { TopLeft, TopRight, BottomLeft, BottomRight, Top, Bottom, Left, Right, Center }
 

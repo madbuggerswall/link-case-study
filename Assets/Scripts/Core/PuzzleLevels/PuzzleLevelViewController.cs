@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Core.Contexts;
 using Core.PuzzleElements;
+using Core.PuzzleElements.Behaviours;
 using Core.PuzzleGrids;
 using UnityEngine;
 
@@ -62,7 +63,8 @@ namespace Core.PuzzleLevels {
 
 			for (int i = 0; i < puzzleCells.Length; i++) {
 				PuzzleCell cell = puzzleCells[i];
-				PuzzleElement element = cell.GetPuzzleElement();
+				if(!cell.TryGetPuzzleElement(out PuzzleElement element))
+					return;
 
 				PuzzleElementBehaviour elementBehaviour = elementBehaviourFactory.Create(element, cell);
 				elementBehaviour.SetSortingOrder(i);

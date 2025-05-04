@@ -3,13 +3,18 @@ using UnityEngine;
 
 namespace Core.DataTransfer.Definitions {
 	[CreateAssetMenu(fileName = Filename, menuName = MenuName)]
-	public class DuckDefinition : PuzzleElementDefinition {
-		private const string Filename = nameof(DuckDefinition);
+
+	// NOTE Rename this VaseDefinition
+	public class VaseDefinition : PuzzleElementDefinition {
+		private const string Filename = nameof(VaseDefinition);
 		private const string MenuName = "ScriptableObjects/Definitions/" + Filename;
 
 		[SerializeField] private Sprite sprite;
+		[SerializeField] private int durability = 1;
 
+		public override PuzzleElement CreateElement() => new Vase(this);
+		
 		public Sprite GetSprite() => sprite;
-		public override PuzzleElement CreateElement() => new Duck(this);
+		public int GetDurability() => durability;
 	}
 }

@@ -14,33 +14,31 @@ namespace Core.LinkInput {
 		private PuzzleCellDragHelper dragHelper;
 		private PuzzleLevelViewController viewController;
 		private CommandInvoker commandInvoker;
-
-
+		private LinkManager linkManager;
+		
 		public void Initialize() {
 			dragHelper = SceneContext.GetInstance().Get<PuzzleCellDragHelper>();
 			commandInvoker = SceneContext.GetInstance().Get<CommandInvoker>();
 			viewController = SceneContext.GetInstance().Get<PuzzleLevelViewController>();
-
-			dragHelper.CellSelectionChangeAction += OnCellsSelectionChanged;
-			dragHelper.CellSelectionAcceptedAction += OnCellSelectionAccepted;
+			// TODO Get LinkManager
 		}
 
-		private void OnCellsSelectionChanged() {
+		public void OnCellsSelectionChanged() {
 			UpdateSelectedElements();
 			viewController.ScaleDownUnselectedElements(puzzleElements);
 			viewController.ScaleUpSelectedElements(puzzleElements);
 		}
 
-		private void OnCellSelectionAccepted() {
+		public void OnCellSelectionAccepted() {
 			UpdateSelectedElements();
 
 			Link link = new(puzzleElements);
-			ExplodeLinkCommand command = new ExplodeLinkCommand(link);
+			ExplodeLinkCommand command = new ExplodeLinkCommand(linkManager, link);
 			commandInvoker.Enqueue(command);
 		}
 
 		private void UpdateSelectedElements() {
-			HashList<PuzzleCell> selectedCells = dragHelper.GetPuzzleCells();
+			HashList<PuzzleCell> selectedCells = dragHelper.GetSelectedCells();
 			puzzleElements.Clear();
 
 			for (int index = 0; index < selectedCells.Count; index++) {

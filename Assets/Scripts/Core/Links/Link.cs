@@ -1,5 +1,6 @@
 using Core.DataTransfer.Definitions;
 using Core.PuzzleElements;
+using Core.PuzzleGrids;
 
 namespace Core.Links {
 	public class Link {
@@ -15,7 +16,7 @@ namespace Core.Links {
 			this.puzzleElements = new HashList<PuzzleElement>();
 			this.puzzleElements.TryAdd(currentElement);
 			this.puzzleElements.TryAdd(neighborElement);
-			
+
 			this.elementDefinition = currentElement.GetDefinition();
 		}
 
@@ -27,8 +28,13 @@ namespace Core.Links {
 			return puzzleElements.TryRemove(puzzleElement);
 		}
 
-		public bool IsValid() {
-			return IsLengthValid() && IsElementsValid();
+		public void Explode(PuzzleGrid puzzleGrid) {
+			foreach (PuzzleElement puzzleElement in puzzleElements)
+				puzzleElement.Explode(puzzleGrid);
+		}
+
+		public bool IsValid(PuzzleGrid puzzleGrid) {
+			return IsLengthValid() && IsElementsValid() && IsElementsAdjacent(puzzleGrid);
 		}
 
 		private bool IsLengthValid() {
@@ -44,12 +50,35 @@ namespace Core.Links {
 			return true;
 		}
 
-		// NOTE Explode should be called via LinkManager.Explode(Link)
-		public void Explode() {
-			for (int index = 0; index < puzzleElements.Count; index++) {
-				PuzzleElement puzzleElement = puzzleElements[index];
-				puzzleElement.Explode();
+		private bool IsElementsAdjacent(PuzzleGrid puzzleGrid) {
+			for (int index = 1; index < puzzleElements.Count; index++) {
+				PuzzleElement centerElement = puzzleElements[index];
+				PuzzleElement adjacentElement = puzzleElements[index - 1];
+
+				if (!puzzleGrid.TryGetPuzzleCell(centerElement, out PuzzleCell centerCell))
+					return false;
+
+				if (!puzzleGrid.TryGetPuzzleCell(centerElement, out PuzzleCell adjacentCell))
+					return false;
+
+				if (!IsCellsAdjacent(puzzleGrid, centerCell, adjacentCell))
+					return false;
 			}
+
+			return true;
 		}
+
+		private bool IsCellsAdjacent(PuzzleGrid puzzleGrid, PuzzleCell centerCell, PuzzleCell adjacentCell) {
+			PuzzleCell[] cellNeighbors = puzzleGrid.GetNeighbors(centerCell);
+
+			for (int i = 0; i < cellNeighbors.Length; i++)
+				if (adjacentCell == cellNeighbors[i])
+					return true;
+
+			return false;
+		}
+
+		public HashList<PuzzleElement> GetElements() => puzzleElements;
+		public PuzzleElementDefinition GetElementDefinition() => elementDefinition;
 	}
 }

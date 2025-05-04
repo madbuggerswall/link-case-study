@@ -3,31 +3,29 @@ using Core.DataTransfer.Definitions;
 using Core.PuzzleGrids;
 using UnityEngine;
 
-namespace Core.PuzzleElements {
-	// NOTE Rename it to VaseBehaviour
-	public class BalloonBehaviour : PuzzleElementBehaviour {
+namespace Core.PuzzleElements.Behaviours {
+	public class VaseBehaviour : PuzzleElementBehaviour {
 		[SerializeField] private SpriteRenderer spriteRenderer;
 
-		private Balloon balloon;
+		private Vase vase;
 
-		public void SetSprite(Sprite sprite) => spriteRenderer.sprite = sprite;
-
-		// PuzzleElementBehaviour
 		public override void Initialize(PuzzleElementDefinition definition, PuzzleCell puzzleCell) {
-			if (definition is not BalloonDefinition balloonDefinition)
+			if (definition is not VaseDefinition balloonDefinition)
 				throw new Exception("Invalid PuzzleElementDefinition!");
 
 			Initialize(balloonDefinition, puzzleCell);
 		}
 
-		private void Initialize(BalloonDefinition definition, PuzzleCell puzzleCell) {
+		private void Initialize(VaseDefinition definition, PuzzleCell puzzleCell) {
 			spriteRenderer.sprite = definition.GetSprite();
 			transform.position = puzzleCell.GetWorldPosition();
 		}
 
-		public override PuzzleElement GetPuzzleElement() => balloon;
+		// Getters
+		public override PuzzleElement GetPuzzleElement() => vase;
+
+		// Setters
 		public override void SetSortingOrder(int sortingOrder) => spriteRenderer.sortingOrder = sortingOrder;
+		public void SetSprite(Sprite sprite) => spriteRenderer.sprite = sprite;
 	}
-	
-	// NOTE Also create a CrateBehaviour
 }

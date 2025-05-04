@@ -13,16 +13,17 @@ namespace Core.PuzzleGrids {
 
 		public void SetPuzzleElement(PuzzleElement puzzleElement) {
 			this.puzzleElement = puzzleElement;
-			this.isEmpty = puzzleElement is null;
+			this.isEmpty = false;
 		}
 
-		public PuzzleElement GetPuzzleElement() => puzzleElement;
+		public void SetCellEmpty() {
+			this.puzzleElement = null;
+			this.isEmpty = true;
+		}
 
 		public bool TryGetPuzzleElement(out PuzzleElement puzzleElement) {
 			puzzleElement = this.puzzleElement;
 			return !isEmpty;
 		}
-		
-		public bool IsEmpty() => isEmpty;
 	}
 }

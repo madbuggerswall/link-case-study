@@ -1,10 +1,13 @@
 using Core.PuzzleElements;
+using Core.PuzzleElements.Behaviours;
 using UnityEngine;
 
 namespace Core.DataTransfer.Definitions {
 	public abstract class PuzzleElementDefinition : ScriptableObject {
 		[SerializeField] private PuzzleElementBehaviour prefab;
-		public PuzzleElementBehaviour GetPrefab() => prefab;
+
 		public abstract PuzzleElement CreateElement();
+
+		public PuzzleElementBehaviour GetPrefab() => prefab;
 	}
 }

@@ -3,19 +3,13 @@ using Core.DataTransfer.Definitions;
 using Core.PuzzleGrids;
 using UnityEngine;
 
-namespace Core.PuzzleElements {
+namespace Core.PuzzleElements.Behaviours {
 	public class RocketBehaviour : PuzzleElementBehaviour {
 		[SerializeField] private SpriteRenderer leftSpriteRenderer;
 		[SerializeField] private SpriteRenderer rightSpriteRenderer;
 
 		private Rocket rocket;
 
-		public void SetSprites(Sprite leftRocket, Sprite rightRocket) {
-			leftSpriteRenderer.sprite = leftRocket;
-			rightSpriteRenderer.sprite = rightRocket;
-		}
-
-		// PuzzleElementBehaviour
 		public override void Initialize(PuzzleElementDefinition definition, PuzzleCell puzzleCell) {
 			if (definition is not RocketDefinition rocketDefinition)
 				throw new Exception("Invalid PuzzleElementDefinition!");
@@ -29,11 +23,18 @@ namespace Core.PuzzleElements {
 			transform.position = puzzleCell.GetWorldPosition();
 		}
 
+		// Getters
 		public override PuzzleElement GetPuzzleElement() => rocket;
 
+		// Setters
 		public override void SetSortingOrder(int sortingOrder) {
 			leftSpriteRenderer.sortingOrder = sortingOrder;
 			rightSpriteRenderer.sortingOrder = sortingOrder;
+		}
+
+		public void SetSprites(Sprite leftRocket, Sprite rightRocket) {
+			leftSpriteRenderer.sprite = leftRocket;
+			rightSpriteRenderer.sprite = rightRocket;
 		}
 	}
 }

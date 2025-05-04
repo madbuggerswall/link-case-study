@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Core.PuzzleElements;
+using Core.PuzzleElements.Behaviours;
 using Frolics.Tween;
 using UnityEngine;
 

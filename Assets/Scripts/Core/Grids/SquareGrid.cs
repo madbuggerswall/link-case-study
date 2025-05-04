@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Core.Grids {
 	public abstract class SquareGrid<T> : Grid<T> where T : SquareCell {
-		private readonly SquareGridNeighborHelper<T> neighborHelper;
+		protected readonly SquareGridNeighborHelper<T> neighborHelper;
 
 		protected SquareGrid(CellFactory<T> cellFactory, Vector2Int gridSizeInCells, float cellDiameter) {
 			this.cellDiameter = cellDiameter;

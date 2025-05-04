@@ -4,14 +4,9 @@ using Core.PuzzleGrids;
 using Frolics.Pooling;
 using UnityEngine;
 
-namespace Core.PuzzleElements {
+namespace Core.PuzzleElements.Behaviours {
 	public class PuzzleElementBehaviourFactory : MonoBehaviour {
-		[Header("Color Chip Definitions")]
-		[SerializeField] private ColorChipDefinition[] colorChipDefinitions;
-
-		[Header("Core")]
 		[SerializeField] private Transform elementsParent;
-
 		
 		// Dependencies
 		private ObjectPool objectPool;
@@ -22,11 +17,11 @@ namespace Core.PuzzleElements {
 
 		public PuzzleElementBehaviour Create(PuzzleElement puzzleElement, PuzzleCell puzzleCell) {
 			PuzzleElementDefinition elementDefinition = puzzleElement.GetDefinition();
-			PuzzleElementBehaviour puzzleElementBehaviour = objectPool.Spawn(elementDefinition.GetPrefab(), elementsParent);
-			puzzleElementBehaviour.Initialize(elementDefinition, puzzleCell);
+			PuzzleElementBehaviour elementBehaviour = objectPool.Spawn(elementDefinition.GetPrefab(), elementsParent);
+			elementBehaviour.Initialize(elementDefinition, puzzleCell);
 
 			puzzleCell.SetPuzzleElement(puzzleElement);
-			return puzzleElementBehaviour;
+			return elementBehaviour;
 		}
 	}
 }

@@ -1,4 +1,6 @@
 using Core.DataTransfer.Definitions;
+using Core.PuzzleGrids;
+using UnityEngine;
 
 namespace Core.PuzzleElements {
 	public abstract class PuzzleElement {
@@ -8,61 +10,33 @@ namespace Core.PuzzleElements {
 			this.definition = definition;
 		}
 
-		// NOTE These operations should be handled by LinkManager
-		public abstract void Explode();
-		public abstract void OnAdjacentExplode();
+		public abstract void Explode(PuzzleGrid puzzleGrid);
+		public abstract void OnAdjacentExplode(PuzzleGrid puzzleGrid);
+		public abstract void Fall(PuzzleGrid puzzleGrid);
 
+
+		// Sandbox methods
+		protected bool GetFallTarget(PuzzleGrid puzzleGrid, PuzzleCell currentCell, out PuzzleCell targetCell) {
+			bool targetCellFound = false;
+			targetCell = null;
+
+			int gridWith = puzzleGrid.GetGridSizeInCells().x;
+			int cellBelowIndex = puzzleGrid.GetCellIndex(currentCell) - gridWith;
+
+			while (cellBelowIndex >= 0) {
+				PuzzleCell cellBelow = puzzleGrid.GetCell(cellBelowIndex);
+				if (cellBelow.TryGetPuzzleElement(out _))
+					break;
+
+				cellBelowIndex -= gridWith;
+				targetCell = cellBelow;
+				targetCellFound = true;
+			}
+
+			return targetCellFound;
+		}
+
+		// Getters
 		public PuzzleElementDefinition GetDefinition() => definition;
-	}
-
-	public class ColorChip : PuzzleElement {
-		public ColorChip(ColorChipDefinition definition) : base(definition) { }
-
-		public override void Explode() {
-			return;
-			throw new System.NotImplementedException();
-		}
-
-		public override void OnAdjacentExplode() {
-			return;
-			throw new System.NotImplementedException();
-		}
-	}
-
-	// Rename it to Vase
-	public class Balloon : PuzzleElement {
-		public Balloon(BalloonDefinition definition) : base(definition) { }
-
-		public override void Explode() {
-			throw new System.NotImplementedException();
-		}
-
-		public override void OnAdjacentExplode() {
-			throw new System.NotImplementedException();
-		}
-	}
-
-	public class Duck : PuzzleElement {
-		public Duck(DuckDefinition definition) : base(definition) { }
-
-		public override void Explode() {
-			throw new System.NotImplementedException();
-		}
-
-		public override void OnAdjacentExplode() {
-			throw new System.NotImplementedException();
-		}
-	}
-
-	public class Rocket : PuzzleElement {
-		public Rocket(RocketDefinition definition) : base(definition) { }
-
-		public override void Explode() {
-			throw new System.NotImplementedException();
-		}
-
-		public override void OnAdjacentExplode() {
-			throw new System.NotImplementedException();
-		}
 	}
 }

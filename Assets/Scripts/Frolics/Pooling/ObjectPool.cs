@@ -1,7 +1,6 @@
 using UnityEngine;
 
 namespace Frolics.Pooling {
-
 	public class ObjectPool : MonoBehaviour {
 		private MonoBehaviourPool monoBehaviourPool;
 		private GameObjectPool gameObjectPool;

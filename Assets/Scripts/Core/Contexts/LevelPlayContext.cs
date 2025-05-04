@@ -3,6 +3,7 @@ using Core.DataTransfer.Definitions;
 using Core.Input;
 using Core.LinkInput;
 using Core.PuzzleElements;
+using Core.PuzzleElements.Behaviours;
 using Core.PuzzleGrids;
 using Core.PuzzleLevels;
 using Frolics.Pooling;

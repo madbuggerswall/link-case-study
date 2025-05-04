@@ -22,23 +22,19 @@ namespace Core.Links {
 			
 			for (int i = 0; i < puzzleCells.Length; i++) {
 				PuzzleCell cell = puzzleCells[i];
-				if (cell.IsEmpty())
-					continue;
-
-				ProcessNeighborCells(cell);
+				if (!cell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
+					ProcessNeighborCells(cell, puzzleElement);
 			}
 		}
 
-		private void ProcessNeighborCells(PuzzleCell cell) {
-			PuzzleElement currentItem = cell.GetPuzzleElement();
-			PuzzleCell[] neighborCells = puzzleGrid.GetNeighbors(cell);
+		private void ProcessNeighborCells(PuzzleCell currentCell, PuzzleElement currentItem) {
+			PuzzleCell[] neighborCells = puzzleGrid.GetNeighbors(currentCell);
 
 			for (int i = 0; i < neighborCells.Length; i++) {
 				PuzzleCell neighborCell = neighborCells[i];
-				if (neighborCell.IsEmpty())
-					continue;
+				if(!neighborCell.TryGetPuzzleElement(out PuzzleElement neighborElement))
+					return;
 
-				PuzzleElement neighborElement = neighborCell.GetPuzzleElement();
 				if (currentItem.GetDefinition() == neighborElement.GetDefinition())
 					ExtendLink(currentItem, neighborElement);
 			}

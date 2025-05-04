@@ -25,7 +25,10 @@ namespace Core.PuzzleGrids {
 
 		public bool TryGetPuzzleCell(PuzzleElement puzzleElement, out PuzzleCell puzzleCell) {
 			for (int i = 0; i < cells.Length; i++) {
-				if (cells[i].GetPuzzleElement() != puzzleElement)
+				if (!cells[i].TryGetPuzzleElement(out PuzzleElement otherElement))
+					continue;
+
+				if (otherElement != puzzleElement)
 					continue;
 
 				puzzleCell = cells[i];
@@ -35,5 +38,18 @@ namespace Core.PuzzleGrids {
 			puzzleCell = null;
 			return false;
 		}
+		
+		public int GetCellIndex(PuzzleCell puzzleCell) {
+			for (int index = 0; index < cells.Length; index++)
+				if (puzzleCell == cells[index])
+					return index;
+
+			return -1;
+		}
+		
+		public bool IsTopEdge(int cellIndex) => neighborHelper.IsTopEdge(cellIndex);
+		public bool IsBottomEdge(int cellIndex) => neighborHelper.IsBottomEdge(cellIndex);
+		public bool IsRightEdge(int cellIndex) => neighborHelper.IsRightEdge(cellIndex);
+		public bool IsLeftEdge(int cellIndex) => neighborHelper.IsLeftEdge(cellIndex);
 	}
 }

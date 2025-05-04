@@ -3,27 +3,29 @@ using Core.DataTransfer.Definitions;
 using Core.PuzzleGrids;
 using UnityEngine;
 
-namespace Core.PuzzleElements {
-	public class ColorChipBehaviour : PuzzleElementBehaviour {
+namespace Core.PuzzleElements.Behaviours {
+	public class CrateBehaviour : PuzzleElementBehaviour {
 		[SerializeField] private SpriteRenderer spriteRenderer;
 
-		private ColorChip colorChip;
+		private Crate crate;
 
 		public override void Initialize(PuzzleElementDefinition definition, PuzzleCell puzzleCell) {
-			if (definition is not ColorChipDefinition colorCubeDefinition)
+			if (definition is not CrateDefinition duckDefinition)
 				throw new Exception("Invalid PuzzleElementDefinition!");
 
-			Initialize(colorCubeDefinition, puzzleCell);
+			Initialize(duckDefinition, puzzleCell);
 		}
 
-		private void Initialize(ColorChipDefinition definition, PuzzleCell puzzleCell) {
+		private void Initialize(CrateDefinition definition, PuzzleCell puzzleCell) {
 			spriteRenderer.sprite = definition.GetSprite();
 			transform.position = puzzleCell.GetWorldPosition();
 		}
 
-		public override PuzzleElement GetPuzzleElement() => colorChip;
+		// Getters
+		public override PuzzleElement GetPuzzleElement() => crate;
 
-		public void SetSprite(Sprite sprite) => spriteRenderer.sprite = sprite;
+		// Setters
 		public override void SetSortingOrder(int sortingOrder) => spriteRenderer.sortingOrder = sortingOrder;
+		public void SetSprite(Sprite sprite) => spriteRenderer.sprite = sprite;
 	}
 }
