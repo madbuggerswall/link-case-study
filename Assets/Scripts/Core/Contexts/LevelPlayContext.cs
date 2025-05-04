@@ -21,6 +21,7 @@ namespace Core.Contexts {
 			Resolve<PuzzleLevelInitializer>();
 			Resolve<PuzzleCellDragHelper>();
 			Resolve<LinkInputManager>();
+			Resolve<PuzzleLevelViewController>();
 		}
 
 		protected override void InitializeContext() {
@@ -35,6 +36,7 @@ namespace Core.Contexts {
 			Get<PuzzleLevelInitializer>().Initialize();
 			Get<PuzzleCellDragHelper>().Initialize();
 			Get<LinkInputManager>().Initialize();
+			Get<PuzzleLevelViewController>().Initialize();
 		}
 	}
 }

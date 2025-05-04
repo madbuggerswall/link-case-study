@@ -11,6 +11,9 @@ namespace Core.Contexts {
 		private readonly Dictionary<System.Type, MonoBehaviour> contextItems = new();
 
 		private void Awake() {
+			// NOTE Migrate to somewhere else
+			Application.targetFrameRate = 60;
+			
 			AssertSingleton();
 			ResolveContext();
 			InitializeContext();

@@ -19,6 +19,7 @@ namespace Core.LinkInput {
 		public void Initialize() {
 			dragHelper = SceneContext.GetInstance().Get<PuzzleCellDragHelper>();
 			commandInvoker = SceneContext.GetInstance().Get<CommandInvoker>();
+			viewController = SceneContext.GetInstance().Get<PuzzleLevelViewController>();
 
 			dragHelper.CellSelectionChangeAction += OnCellsSelectionChanged;
 			dragHelper.CellSelectionAcceptedAction += OnCellSelectionAccepted;

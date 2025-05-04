@@ -8,6 +8,7 @@ namespace Core.PuzzleElements {
 			this.definition = definition;
 		}
 
+		// NOTE These operations should be handled by LinkManager
 		public abstract void Explode();
 		public abstract void OnAdjacentExplode();
 
@@ -18,10 +19,12 @@ namespace Core.PuzzleElements {
 		public ColorChip(ColorChipDefinition definition) : base(definition) { }
 
 		public override void Explode() {
+			return;
 			throw new System.NotImplementedException();
 		}
 
 		public override void OnAdjacentExplode() {
+			return;
 			throw new System.NotImplementedException();
 		}
 	}

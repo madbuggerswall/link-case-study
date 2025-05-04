@@ -5,20 +5,20 @@ using UnityEngine;
 
 namespace Core.PuzzleLevels {
 	public class ScaledViewHelper {
-		private const float Scale = 1.5f;
-		private const float ScaleDuration = 0.5f;
+		private const float Scale = 1.2f;
+		private const float ScaleDuration = 0.2f;
 
 		private readonly Dictionary<Transform, TransformTween> scaleTweens = new();
+		private readonly HashSet<PuzzleElement> lastSelection = new();
+
 		private readonly PuzzleLevelViewController viewController;
-		private HashList<PuzzleElement> lastSelection = new();
 
 		public ScaledViewHelper(PuzzleLevelViewController viewController) {
 			this.viewController = viewController;
 		}
 
 		public void ScaleDownUnselectedElements(HashList<PuzzleElement> puzzleElements) {
-			for (int index = 0; index < lastSelection.Count; index++) {
-				PuzzleElement puzzleElement = lastSelection[index];
+			foreach (PuzzleElement puzzleElement in lastSelection) {
 				if (puzzleElements.Contains(puzzleElement))
 					continue;
 
@@ -28,7 +28,7 @@ namespace Core.PuzzleLevels {
 		}
 
 		public void ScaleUpSelectedElements(HashList<PuzzleElement> puzzleElements) {
-			this.lastSelection = puzzleElements;
+			SaveLastSelection(puzzleElements);
 
 			for (int index = 0; index < puzzleElements.Count; index++) {
 				PuzzleElement puzzleElement = puzzleElements[index];
@@ -38,10 +38,13 @@ namespace Core.PuzzleLevels {
 		}
 
 		private void PlayScaleTween(Transform elementTransform, float scale) {
-			if (scaleTweens.TryGetValue(elementTransform, out TransformTween transformTween))
+			if (scaleTweens.TryGetValue(elementTransform, out TransformTween transformTween)) {
 				transformTween.Stop();
+				scaleTweens.Remove(elementTransform);
+			}
 
 			transformTween = new TransformTween(elementTransform, ScaleDuration);
+			transformTween.SetEase(Ease.Type.OutQuad);
 			transformTween.SetLocalScale(Vector3.one * scale);
 			transformTween.Play();
 			transformTween.SetOnComplete(() => OnScaleTweenComplete(elementTransform));
@@ -51,6 +54,12 @@ namespace Core.PuzzleLevels {
 
 		private void OnScaleTweenComplete(Transform elementTransform) {
 			scaleTweens.Remove(elementTransform);
+		}
+
+		private void SaveLastSelection(HashList<PuzzleElement> puzzleElements) {
+			lastSelection.Clear();
+			foreach (PuzzleElement puzzleElement in puzzleElements)
+				lastSelection.Add(puzzleElement);
 		}
 	}
 }

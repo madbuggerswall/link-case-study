@@ -34,7 +34,7 @@ namespace Core.PuzzleLevels {
 		}
 
 		private void InitializeGrid() {
-			float cellDiameter = 1f;
+			const float cellDiameter = 1.2f;
 
 			Vector2Int gridSize = levelDefinition.GetGridSize();
 			puzzleGrid = new PuzzleGrid(gridSize, cellDiameter);
