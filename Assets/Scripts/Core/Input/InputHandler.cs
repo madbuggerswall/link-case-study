@@ -9,10 +9,5 @@ namespace Core.Input {
 		public UnityEvent<PointerReleaseData> ReleaseEvent { get; } = new();
 
 		public abstract void HandleInput();
-
-		public static InputHandler CreateForPlatform(RuntimePlatform platform) {
-			bool isMobile = platform is RuntimePlatform.Android or RuntimePlatform.IPhonePlayer;
-			return isMobile ? new MobileInputHandler() : new StandaloneInputHandler();
-		}
 	}
 }

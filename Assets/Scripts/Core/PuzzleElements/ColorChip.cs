@@ -1,6 +1,5 @@
 using Core.DataTransfer.Definitions;
 using Core.PuzzleGrids;
-using UnityEngine;
 
 namespace Core.PuzzleElements {
 	public class ColorChip : PuzzleElement {

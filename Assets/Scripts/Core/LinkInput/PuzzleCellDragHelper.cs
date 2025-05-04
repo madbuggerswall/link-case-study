@@ -1,6 +1,4 @@
-using System;
 using Core.Contexts;
-using Core.Input;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
 using Core.PuzzleLevels;
@@ -53,19 +51,19 @@ namespace Core.LinkInput {
 		}
 
 		public void OnRelease() {
-			linkInputManager.OnCellSelectionAccepted();
+			linkInputManager.OnCellSelectionAccepted(selectedCells);
 			selectedCells.Clear();
 		}
 
 		// Helper methods
 		private void SelectCell(PuzzleCell puzzleCell) {
 			if (selectedCells.TryAdd(puzzleCell))
-				linkInputManager.OnCellsSelectionChanged();
+				linkInputManager.OnCellsSelectionChanged(selectedCells);
 		}
 
 		private void DeselectCell(PuzzleCell lastAddedCell) {
 			if (selectedCells.TryRemove(lastAddedCell))
-				linkInputManager.OnCellsSelectionChanged();
+				linkInputManager.OnCellsSelectionChanged(selectedCells);
 		}
 
 		private bool IsCellsAdjacent(PuzzleCell centerCell, PuzzleCell cell) {
