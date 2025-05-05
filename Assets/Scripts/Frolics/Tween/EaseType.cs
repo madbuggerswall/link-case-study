@@ -27,7 +27,7 @@ namespace Frolics.Tween {
 			InOutCirc
 		}
 
-		public static Func<float, float, float> GetEase(Type easeType) {
+		public static Func<float, float> GetEase(Type easeType) {
 			return easeType switch {
 				Type.Linear => Linear,
 				Type.InQuad => EaseInQuad,

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Frolics.Tween {
 	public abstract class Tween {
 		private Action onCompleteCallback;
-		private Func<float, float, float> easingMethod;
+		private Func<float, float> easingMethod;
 
 		private float time;
 		protected float progress;
@@ -51,7 +51,8 @@ namespace Frolics.Tween {
 		// Tween operations
 		public void Tick(float deltaTime) {
 			time += deltaTime;
-			progress = Mathf.Lerp(0, 1, easingMethod(time, duration));
+			float normalizedTime = Mathf.Clamp01(time / duration);
+			progress = Mathf.Lerp(0, 1, easingMethod(normalizedTime));
 			UpdateTween();
 
 			if (time >= duration) {
