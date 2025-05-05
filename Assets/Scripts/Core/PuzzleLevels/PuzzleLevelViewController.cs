@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using Core.Contexts;
+using Core.LinkInput;
 using Core.PuzzleElements;
 using Core.PuzzleElements.Behaviours;
 using Core.PuzzleGrids;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Core.PuzzleLevels {
-	public class PuzzleLevelViewController : MonoBehaviour, IInitializable {
+	public class PuzzleLevelViewController : IInitializable {
 		private readonly Dictionary<PuzzleElement, PuzzleElementBehaviour> elementBehaviours = new();
 		private readonly Dictionary<PuzzleGrid, PuzzleGridBehaviour> gridBehaviours = new();
 		private readonly Dictionary<PuzzleCell, PuzzleCellBehaviour> cellBehaviours = new();
@@ -16,15 +18,19 @@ namespace Core.PuzzleLevels {
 		private PuzzleGridBehaviourFactory gridBehaviourFactory;
 		private PuzzleCellBehaviourFactory cellBehaviourFactory;
 		private PuzzleLevelManager levelManager;
+		private LinkInputManager linkInputManager;
 
 		private ScaledViewHelper scaledViewHelper;
 		private FallViewHelper fallViewHelper;
+		
+		public UnityEvent OnViewReady { get; private set; } = new UnityEvent(); 
 
 		public void Initialize() {
 			this.elementBehaviourFactory = SceneContext.GetInstance().Get<PuzzleElementBehaviourFactory>();
 			this.gridBehaviourFactory = SceneContext.GetInstance().Get<PuzzleGridBehaviourFactory>();
 			this.cellBehaviourFactory = SceneContext.GetInstance().Get<PuzzleCellBehaviourFactory>();
 			this.levelManager = SceneContext.GetInstance().Get<PuzzleLevelManager>();
+			this.linkInputManager = SceneContext.GetInstance().Get<LinkInputManager>();
 
 			// PuzzleGridBehaviours
 			PuzzleGrid puzzleGrid = levelManager.GetPuzzleGrid();
@@ -101,6 +107,11 @@ namespace Core.PuzzleLevels {
 
 		public PuzzleElementBehaviour GetPuzzleElementBehaviour(PuzzleElement element) {
 			return elementBehaviours.GetValueOrDefault(element);
+		}
+
+		public void OnFallTweensComplete() {
+			OnViewReady.Invoke();
+			OnViewReady.RemoveAllListeners();
 		}
 	}
 }

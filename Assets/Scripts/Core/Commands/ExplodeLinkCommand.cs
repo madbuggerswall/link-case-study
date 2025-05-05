@@ -3,17 +3,16 @@ using Core.PuzzleLevels;
 
 namespace Core.Commands {
 	public class ExplodeLinkCommand : Command {
-		private readonly LinkManager linkManager;
+		private readonly PuzzleLevelManager levelManager;
 		private readonly Link link;
 
-		public ExplodeLinkCommand(LinkManager linkManager, Link link) {
-			this.linkManager = linkManager;
+		public ExplodeLinkCommand(PuzzleLevelManager levelManager, Link link) {
+			this.levelManager = levelManager;
 			this.link = link;
 		}
 
-		// NOTE This should call LinkManager.Explode(Link)
 		public override void Execute() {
-			linkManager.Explode(link);
+			levelManager.Explode(this, link);
 		}
 	}
 }

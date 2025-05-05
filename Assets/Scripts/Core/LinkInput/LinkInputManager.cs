@@ -18,23 +18,20 @@ namespace Core.LinkInput {
 
 		private PuzzleCellDragHelper dragHelper;
 		private InputHandler inputHandler;
-		private LinkManager linkManager;
 
 		// Dependencies
 		private InputManager inputManager;
 		private CommandInvoker commandInvoker;
 		private PuzzleLevelViewController viewController;
-		private PuzzleLevelManager puzzleLevelManager;
+		private PuzzleLevelManager levelManager;
 
 		public void Initialize() {
 			inputManager = SceneContext.GetInstance().Get<InputManager>();
 			commandInvoker = SceneContext.GetInstance().Get<CommandInvoker>();
 			viewController = SceneContext.GetInstance().Get<PuzzleLevelViewController>();
-			puzzleLevelManager = SceneContext.GetInstance().Get<PuzzleLevelManager>();
+			levelManager = SceneContext.GetInstance().Get<PuzzleLevelManager>();
 
-			linkManager = puzzleLevelManager.GetLinkManager();
-
-			PuzzleGrid puzzleGrid = puzzleLevelManager.GetPuzzleGrid();
+			PuzzleGrid puzzleGrid = levelManager.GetPuzzleGrid();
 			dragHelper = new PuzzleCellDragHelper(this, puzzleGrid);
 
 			inputHandler = inputManager.CommonInputHandler;
@@ -75,7 +72,7 @@ namespace Core.LinkInput {
 				return;
 
 			Link link = new(selectedElements);
-			ExplodeLinkCommand command = new ExplodeLinkCommand(linkManager, link);
+			ExplodeLinkCommand command = new ExplodeLinkCommand(levelManager, link);
 			commandInvoker.Enqueue(command);
 		}
 

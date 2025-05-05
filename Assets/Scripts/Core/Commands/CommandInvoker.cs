@@ -10,6 +10,9 @@ namespace Core.Commands {
 		public void Initialize() { }
 
 		public void Enqueue(Command command) {
+			if(isRunning)
+				return;
+			
 			commands.Enqueue(command);
 			TryExecuteNextCommand();
 		}

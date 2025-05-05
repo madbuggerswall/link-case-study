@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Core.Commands;
 using Core.Contexts;
 using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.DataTransfer.Definitions.PuzzleLevels;
@@ -21,7 +22,6 @@ namespace Core.PuzzleLevels {
 		// Fields
 		private PuzzleGrid puzzleGrid;
 
-		private LinkManager linkManager;
 		private TurnManager turnManager;
 		private ScoreManager scoreManager;
 		private TargetManager targetManager;
@@ -35,7 +35,6 @@ namespace Core.PuzzleLevels {
 
 			puzzleGrid = levelInitializer.GetPuzzleGrid();
 
-			linkManager = new LinkManager(this);
 			turnManager = new TurnManager();
 			scoreManager = new ScoreManager();
 			targetManager = new TargetManager();
@@ -51,34 +50,22 @@ namespace Core.PuzzleLevels {
 			objectPool.Despawn(elementBehaviour);
 		}
 
-		public void OnLinkExploded(Link link) {
+		public void Explode(ExplodeLinkCommand command, Link link) {
+			if (!link.IsValid(puzzleGrid)) {
+				command.InvokeCompletionHandlers();
+				return;
+			}
+
+			link.Explode(puzzleGrid);
+
 			fallManager.ApplyFall(puzzleGrid);
 			HashSet<PuzzleElement> fallenElements = fallManager.GetFallenElements();
 			viewController.MoveFallenElements(fallenElements);
+			viewController.OnViewReady.AddListener(command.InvokeCompletionHandlers);
 		}
 
 		// Getters
 		public PuzzleGrid GetPuzzleGrid() => puzzleGrid;
-		public LinkManager GetLinkManager() => linkManager;
-	}
-
-	// TODO Implement and utilize LinkManager
-	public class LinkManager {
-		private readonly PuzzleLevelManager puzzleLevelManager;
-		private readonly PuzzleGrid puzzleGrid;
-
-		public LinkManager(PuzzleLevelManager puzzleLevelManager) {
-			this.puzzleLevelManager = puzzleLevelManager;
-			this.puzzleGrid = puzzleLevelManager.GetPuzzleGrid();
-		}
-
-		public void Explode(Link link) {
-			if (!link.IsValid(puzzleGrid))
-				return;
-
-			link.Explode(puzzleGrid);
-			puzzleLevelManager.OnLinkExploded(link);
-		}
 	}
 
 	public class TargetManager {

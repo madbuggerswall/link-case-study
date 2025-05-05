@@ -38,9 +38,15 @@ namespace Core.PuzzleLevels {
 			transformTween.SetEase(Ease.Type.InQuad);
 			transformTween.SetPosition(targetPosition);
 			transformTween.Play();
-			transformTween.SetOnComplete(() => fallTweens.Remove(elementTransform));
+			transformTween.SetOnComplete(() => OnFallTweenComplete(elementTransform));
 
 			fallTweens.Add(elementTransform, transformTween);
+		}
+
+		private void OnFallTweenComplete(Transform elementTransform) {
+			fallTweens.Remove(elementTransform);
+			if (fallTweens.Count == 0)
+				viewController.OnFallTweensComplete();
 		}
 	}
 }
