@@ -19,19 +19,27 @@ namespace Core.PuzzleLevels {
 		}
 
 		public void MoveFilledElements(HashSet<PuzzleElement> filledElements) {
-			Vector2 gridSize = puzzleGrid.GetGridSize();
-			Vector3 centerPoint = puzzleGrid.GetCenterPoint();
-			float upperEdge = centerPoint.y + gridSize.y / 2f;
-
+			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
+			Dictionary<int, int> filledElementByColumn = new();
+			
 			foreach (PuzzleElement filledElement in filledElements) {
 				if (!puzzleGrid.TryGetPuzzleCell(filledElement, out PuzzleCell cell))
 					return;
 
+				int cellIndex = puzzleGrid.GetCellIndex(cell);
+				int column = cellIndex % gridSize.x;
+				int row = Mathf.FloorToInt((float) cellIndex / gridSize.x);
+
+				if (!filledElementByColumn.TryAdd(column, 1))
+					filledElementByColumn[column]++;
+
+				PuzzleCell columnTopCell = puzzleGrid.GetCell((gridSize.y - 1) * gridSize.x + column);
+				Vector3 startPosition = columnTopCell.GetWorldPosition();
+				startPosition.y += puzzleGrid.GetCellDiameter() * filledElementByColumn[column];
+
 				PuzzleElementBehaviour elementBehaviour = viewController.SpawnElementBehaviour(filledElement, cell);
-				Vector3 startPosition = elementBehaviour.transform.position;
-				startPosition.y += upperEdge - startPosition.y;
 				elementBehaviour.transform.position = startPosition;
-				
+
 				PlayFallTween(elementBehaviour.transform, cell.GetWorldPosition());
 			}
 		}

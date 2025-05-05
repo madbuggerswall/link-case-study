@@ -62,10 +62,10 @@ namespace Core.PuzzleLevels {
 			fillManager.ApplyFill();
 
 			HashSet<PuzzleElement> fallenElements = fallManager.GetFallenElements();
-			viewController.MoveFallenElements(fallenElements);
+			viewController.FallViewHelper.MoveFallenElements(fallenElements);
 
 			HashSet<PuzzleElement> filledElements = fillManager.GetFilledElements();
-			viewController.MoveFilledElements(filledElements);
+			viewController.FillViewHelper.MoveFilledElements(filledElements);
 
 			viewController.OnViewReady.AddListener(command.InvokeCompletionHandlers);
 		}

@@ -21,9 +21,9 @@ namespace Core.PuzzleLevels {
 		private PuzzleLevelManager levelManager;
 		private ObjectPool objectPool;
 
-		private ScaledViewHelper scaledViewHelper;
-		private FallViewHelper fallViewHelper;
-		private FillViewHelper fillViewHelper;
+		public FallViewHelper FallViewHelper { get; private set; }
+		public FillViewHelper FillViewHelper { get; private set; }
+		public ScaledViewHelper ScaledViewHelper { get; private set; }
 
 		public UnityEvent OnViewReady { get; private set; } = new UnityEvent();
 
@@ -45,9 +45,9 @@ namespace Core.PuzzleLevels {
 			// PuzzleElementBehaviours
 			SpawnElementBehaviours(puzzleGrid);
 
-			scaledViewHelper = new ScaledViewHelper(this);
-			fallViewHelper = new FallViewHelper(this, puzzleGrid);
-			fillViewHelper = new FillViewHelper(this, puzzleGrid);
+			ScaledViewHelper = new ScaledViewHelper(this);
+			FallViewHelper = new FallViewHelper(this, puzzleGrid);
+			FillViewHelper = new FillViewHelper(this, puzzleGrid);
 		}
 
 		// Initializer methods
@@ -97,28 +97,6 @@ namespace Core.PuzzleLevels {
 			PuzzleElementBehaviour elementBehaviour = GetPuzzleElementBehaviour(puzzleElement);
 			objectPool.Despawn(elementBehaviour);
 			elementBehaviours.Remove(puzzleElement);
-		}
-
-
-		// Helper methods
-		public void ScaleUpSelectedElements(HashList<PuzzleElement> puzzleElements) {
-			scaledViewHelper.ScaleUpSelectedElements(puzzleElements);
-		}
-
-		public void ScaleDownUnselectedElements(HashList<PuzzleElement> puzzleElements) {
-			scaledViewHelper.ScaleDownUnselectedElements(puzzleElements);
-		}
-
-		public void ResetSelectedElements(HashList<PuzzleElement> puzzleElements) {
-			scaledViewHelper.ResetSelectedElements(puzzleElements);
-		}
-
-		public void MoveFallenElements(HashSet<PuzzleElement> puzzleElements) {
-			fallViewHelper.MoveFallenElements(puzzleElements);
-		}
-
-		public void MoveFilledElements(HashSet<PuzzleElement> puzzleElements) {
-			fillViewHelper.MoveFilledElements(puzzleElements);
 		}
 
 

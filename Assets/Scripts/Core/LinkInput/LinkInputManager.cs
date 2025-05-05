@@ -62,13 +62,13 @@ namespace Core.LinkInput {
 		public void OnCellsSelectionChanged(HashList<PuzzleCell> selectedCells) {
 			UpdateSelectedElements(selectedCells);
 
-			viewController.ScaleDownUnselectedElements(selectedElements);
-			viewController.ScaleUpSelectedElements(selectedElements);
+			viewController.ScaledViewHelper.ScaleDownUnselectedElements(selectedElements);
+			viewController.ScaledViewHelper.ScaleUpSelectedElements(selectedElements);
 		}
 
 		public void OnCellSelectionAccepted(HashList<PuzzleCell> selectedCells) {
 			UpdateSelectedElements(selectedCells);
-			viewController.ResetSelectedElements(selectedElements);
+			viewController.ScaledViewHelper.ResetSelectedElements(selectedElements);
 			if (selectedCells.Count == 0)
 				return;
 
