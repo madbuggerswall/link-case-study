@@ -34,15 +34,9 @@ namespace Core.PuzzleLevels {
 			this.levelManager = SceneContext.GetInstance().Get<PuzzleLevelManager>();
 			this.objectPool = SceneContext.GetInstance().Get<ObjectPool>();
 
-			// PuzzleGridBehaviours
 			PuzzleGrid puzzleGrid = levelManager.GetPuzzleGrid();
 			SpawnGridBehaviour(puzzleGrid);
-
-			// PuzzleCellBehaviours
-			PuzzleGridBehaviour gridBehaviour = GetPuzzleGridBehaviour(puzzleGrid);
-			SpawnCellBehaviours(gridBehaviour);
-
-			// PuzzleElementBehaviours
+			SpawnCellBehaviours(puzzleGrid);
 			SpawnElementBehaviours(puzzleGrid);
 
 			ScaledViewHelper = new ScaledViewHelper(this);
@@ -56,9 +50,11 @@ namespace Core.PuzzleLevels {
 			gridBehaviours.Add(puzzleGrid, gridBehaviour);
 		}
 
-		private void SpawnCellBehaviours(PuzzleGridBehaviour puzzleGridBehaviour) {
-			PuzzleGrid puzzleGrid = puzzleGridBehaviour.GetPuzzleGrid();
-			Transform cellsParent = puzzleGridBehaviour.GetCellsParent();
+		private void SpawnCellBehaviours(PuzzleGrid puzzleGrid) {
+			if (!gridBehaviours.TryGetValue(puzzleGrid, out PuzzleGridBehaviour gridBehaviour))
+				return;
+
+			Transform cellsParent = gridBehaviour.GetCellsParent();
 			PuzzleCell[] puzzleCells = puzzleGrid.GetCells();
 
 			for (int i = 0; i < puzzleCells.Length; i++) {

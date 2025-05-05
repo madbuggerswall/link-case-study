@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Core.PuzzleLevels {
 	public class FillViewHelper {
-		private const float FillDuration = 0.5f;
+		private const float FillDuration = 0.6f;
 
 		private readonly Dictionary<Transform, TransformTween> fillTweens = new();
 		private readonly PuzzleLevelViewController viewController;
@@ -21,25 +21,24 @@ namespace Core.PuzzleLevels {
 		public void MoveFilledElements(HashSet<PuzzleElement> filledElements) {
 			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
 			Dictionary<int, int> filledElementByColumn = new();
-			
+
 			foreach (PuzzleElement filledElement in filledElements) {
 				if (!puzzleGrid.TryGetPuzzleCell(filledElement, out PuzzleCell cell))
 					return;
 
 				int cellIndex = puzzleGrid.GetCellIndex(cell);
-				int column = cellIndex % gridSize.x;
-				int row = Mathf.FloorToInt((float) cellIndex / gridSize.x);
+				int cellColumn = cellIndex % gridSize.x;
+				int cellRow = Mathf.FloorToInt((float) cellIndex / gridSize.x);
 
-				if (!filledElementByColumn.TryAdd(column, 1))
-					filledElementByColumn[column]++;
+				if (!filledElementByColumn.TryAdd(cellColumn, 1))
+					filledElementByColumn[cellColumn]++;
 
-				PuzzleCell columnTopCell = puzzleGrid.GetCell((gridSize.y - 1) * gridSize.x + column);
-				Vector3 startPosition = columnTopCell.GetWorldPosition();
-				startPosition.y += puzzleGrid.GetCellDiameter() * filledElementByColumn[column];
+				PuzzleCell topColumnCell = puzzleGrid.GetCell((gridSize.y - 1) * gridSize.x + cellColumn);
+				Vector3 startPosition = topColumnCell.GetWorldPosition();
+				startPosition.y += puzzleGrid.GetCellDiameter() * filledElementByColumn[cellColumn];
 
 				PuzzleElementBehaviour elementBehaviour = viewController.SpawnElementBehaviour(filledElement, cell);
 				elementBehaviour.transform.position = startPosition;
-
 				PlayFallTween(elementBehaviour.transform, cell.GetWorldPosition());
 			}
 		}
@@ -51,7 +50,7 @@ namespace Core.PuzzleLevels {
 			}
 
 			transformTween = new TransformTween(elementTransform, FillDuration);
-			transformTween.SetEase(Ease.Type.InQuad);
+			transformTween.SetEase(Ease.Type.InCubic);
 			transformTween.SetPosition(targetPosition);
 			transformTween.Play();
 			transformTween.SetOnComplete(() => OnFillTweenComplete(elementTransform));

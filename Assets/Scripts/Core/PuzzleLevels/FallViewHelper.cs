@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Core.PuzzleLevels {
 	public class FallViewHelper {
-		private const float FallDuration = 0.5f;
+		private const float FallDuration = 0.6f;
 
 		private readonly Dictionary<Transform, TransformTween> fallTweens = new();
 		private readonly PuzzleLevelViewController viewController;
@@ -35,7 +35,7 @@ namespace Core.PuzzleLevels {
 			}
 
 			transformTween = new TransformTween(elementTransform, FallDuration);
-			transformTween.SetEase(Ease.Type.InQuad);
+			transformTween.SetEase(Ease.Type.InCubic);
 			transformTween.SetPosition(targetPosition);
 			transformTween.Play();
 			transformTween.SetOnComplete(() => OnFallTweenComplete(elementTransform));

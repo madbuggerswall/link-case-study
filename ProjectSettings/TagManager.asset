@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Grid
+    uniqueID: 3566845317
+    locked: 0
+  - name: Cell
+    uniqueID: 662676303
+    locked: 0
+  - name: Puzzle Element
+    uniqueID: 382323129
+    locked: 0
