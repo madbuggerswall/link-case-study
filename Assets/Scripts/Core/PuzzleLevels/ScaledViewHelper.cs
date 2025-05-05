@@ -44,9 +44,10 @@ namespace Core.PuzzleLevels {
 			for (int index = 0; index < puzzleElements.Count; index++) {
 				PuzzleElement puzzleElement = puzzleElements[index];
 				PuzzleElementBehaviour elementBehaviour = viewController.GetPuzzleElementBehaviour(puzzleElement);
-				elementBehaviour.transform.localScale = Vector3.one;
+				PlayScaleTween(elementBehaviour.transform, 1f);
 			}
 		}
+
 
 		private void PlayScaleTween(Transform elementTransform, float scale) {
 			if (scaleTweens.TryGetValue(elementTransform, out TransformTween transformTween)) {

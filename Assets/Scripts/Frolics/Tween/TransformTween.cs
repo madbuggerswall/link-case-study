@@ -3,6 +3,8 @@ using UnityEngine;
 
 // TODO Needs a tween pool
 namespace Frolics.Tween {
+	
+	// TODO Separate this class to PositionTween, RotationTween and ScaleTween
 	public class TransformTween : Tween {
 		private readonly Transform tweener;
 		private Action tweenAction;

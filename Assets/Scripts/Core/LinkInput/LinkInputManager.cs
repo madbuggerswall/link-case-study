@@ -5,6 +5,7 @@ using Core.Links;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
 using Core.PuzzleLevels;
+using Frolics.Utilities;
 using UnityEngine;
 
 namespace Core.LinkInput {
@@ -73,7 +74,7 @@ namespace Core.LinkInput {
 				return;
 
 			Link link = new(selectedElements);
-			ExplodeLinkCommand command = new ExplodeLinkCommand(levelManager, link);
+			ExplodeLinkCommand command = new(levelManager, link);
 			commandInvoker.Enqueue(command);
 		}
 
