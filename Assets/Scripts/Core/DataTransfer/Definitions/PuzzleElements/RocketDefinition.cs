@@ -1,7 +1,7 @@
 using Core.PuzzleElements;
 using UnityEngine;
 
-namespace Core.DataTransfer.Definitions {
+namespace Core.DataTransfer.Definitions.PuzzleElements {
 	[CreateAssetMenu(fileName = Filename, menuName = MenuName)]
 	public class RocketDefinition : PuzzleElementDefinition {
 		private const string Filename = nameof(RocketDefinition);

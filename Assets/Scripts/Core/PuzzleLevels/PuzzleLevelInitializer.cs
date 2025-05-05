@@ -1,5 +1,7 @@
 using Core.Contexts;
 using Core.DataTransfer.Definitions;
+using Core.DataTransfer.Definitions.PuzzleElements;
+using Core.DataTransfer.Definitions.PuzzleLevels;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
 using UnityEngine;

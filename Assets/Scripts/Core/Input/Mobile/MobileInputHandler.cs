@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
-namespace Core.Input {
+namespace Core.Input.Mobile {
 	public class MobileInputHandler : InputHandler {
 		private const int MaxTouches = 1;
 

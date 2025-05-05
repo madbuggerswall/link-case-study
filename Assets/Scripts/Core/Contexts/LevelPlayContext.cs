@@ -1,5 +1,6 @@
 using Core.Commands;
 using Core.DataTransfer.Definitions;
+using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.Input;
 using Core.LinkInput;
 using Core.PuzzleElements.Behaviours;

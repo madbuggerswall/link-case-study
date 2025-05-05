@@ -1,7 +1,7 @@
 using UnityEngine;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
-namespace Core.Input {
+namespace Core.Input.Mobile {
 	public struct TouchPressData {
 		public Touch Touch { get; private set; }
 		public Vector2 PressPosition { get; private set; }

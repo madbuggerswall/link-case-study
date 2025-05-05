@@ -1,7 +1,7 @@
 using Core.Contexts;
 using UnityEngine;
 
-namespace Core.DataTransfer.Definitions {
+namespace Core.DataTransfer.Definitions.PuzzleElements {
 	public class ChipDefinitionManager : MonoBehaviour, IInitializable {
 		[Header("Color Chip Definitions")]
 		[SerializeField] private ColorChipDefinition[] colorChipDefinitions;

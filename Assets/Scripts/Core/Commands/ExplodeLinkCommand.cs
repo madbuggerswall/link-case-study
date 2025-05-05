@@ -13,7 +13,7 @@ namespace Core.Commands {
 
 		// NOTE This should call LinkManager.Explode(Link)
 		public override void Execute() {
-			// Maybe evaluate here
+			linkManager.Explode(link);
 		}
 	}
 }

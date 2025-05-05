@@ -11,10 +11,11 @@ namespace Core.PuzzleLevels {
 
 		// Fields
 		private PuzzleGrid puzzleGrid;
-		
+
 		private LinkManager linkManager;
 		private TurnManager turnManager;
 		private ScoreManager scoreManager;
+		private TargetManager targetManager;
 
 		public void Initialize() {
 			this.levelInitializer = SceneContext.GetInstance().Get<PuzzleLevelInitializer>();
@@ -28,7 +29,10 @@ namespace Core.PuzzleLevels {
 	// TODO Implement and utilize LinkManager
 	public class LinkManager {
 		private PuzzleGrid puzzleGrid;
-		public LinkManager() { }
+
+		public LinkManager() {
+			
+		}
 
 		public void Explode(Link link) {
 			if (!link.IsValid(puzzleGrid))
@@ -43,7 +47,19 @@ namespace Core.PuzzleLevels {
 
 	public class TurnManager { }
 
-	public class ScoreManager { }
+	public class ScoreManager {
+		private const int BaseScorePerElement = 10;
+		private const int MultiplierThreshold = 3;
+		private const float MultiplierIncrement = 0.20f;
+
+		private int CalculateScore(Link link) {
+			HashList<PuzzleElement> elements = link.GetElements();
+			int multiplierAmount = Mathf.Min(0, elements.Count / MultiplierThreshold - 1);
+			float multiplier = 1f + MultiplierIncrement * multiplierAmount;
+			int scorePerElement = Mathf.RoundToInt(BaseScorePerElement * multiplier);
+			return scorePerElement * elements.Count;
+		}
+	}
 
 	public class FillManager {
 		private PuzzleGrid puzzleGrid;

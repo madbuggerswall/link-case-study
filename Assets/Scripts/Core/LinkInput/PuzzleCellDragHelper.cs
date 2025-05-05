@@ -5,8 +5,6 @@ using Core.PuzzleLevels;
 using UnityEngine;
 
 namespace Core.LinkInput {
-	// NOTE Rename to LinkDragHelper
-	// NOTE This should be a vanilla class initialized by LinkInputManager
 	public class PuzzleCellDragHelper : IInitializable {
 		private readonly HashList<PuzzleCell> selectedCells = new();
 

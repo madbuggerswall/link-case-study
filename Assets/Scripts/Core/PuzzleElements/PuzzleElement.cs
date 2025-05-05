@@ -1,4 +1,5 @@
 using Core.DataTransfer.Definitions;
+using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.PuzzleGrids;
 
 namespace Core.PuzzleElements {

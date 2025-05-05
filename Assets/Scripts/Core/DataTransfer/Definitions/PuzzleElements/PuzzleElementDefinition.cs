@@ -2,7 +2,7 @@ using Core.PuzzleElements;
 using Core.PuzzleElements.Behaviours;
 using UnityEngine;
 
-namespace Core.DataTransfer.Definitions {
+namespace Core.DataTransfer.Definitions.PuzzleElements {
 	public abstract class PuzzleElementDefinition : ScriptableObject {
 		[SerializeField] private PuzzleElementBehaviour prefab;
 
