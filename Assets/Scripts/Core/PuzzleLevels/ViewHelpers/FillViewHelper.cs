@@ -5,7 +5,7 @@ using Core.PuzzleGrids;
 using Frolics.Tween;
 using UnityEngine;
 
-namespace Core.PuzzleLevels {
+namespace Core.PuzzleLevels.ViewHelpers {
 	public class FillViewHelper {
 		private const float FillDuration = 0.6f;
 
@@ -21,7 +21,7 @@ namespace Core.PuzzleLevels {
 		public void MoveFilledElements(HashSet<PuzzleElement> filledElements) {
 			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
 			Dictionary<int, int> filledElementByColumn = new();
-
+			
 			foreach (PuzzleElement filledElement in filledElements) {
 				if (!puzzleGrid.TryGetPuzzleCell(filledElement, out PuzzleCell cell))
 					return;
@@ -39,11 +39,11 @@ namespace Core.PuzzleLevels {
 
 				PuzzleElementBehaviour elementBehaviour = viewController.SpawnElementBehaviour(filledElement, cell);
 				elementBehaviour.transform.position = startPosition;
-				PlayFallTween(elementBehaviour.transform, cell.GetWorldPosition());
+				PlayFillTween(elementBehaviour.transform, cell.GetWorldPosition());
 			}
 		}
 
-		private void PlayFallTween(Transform elementTransform, Vector3 targetPosition) {
+		private void PlayFillTween(Transform elementTransform, Vector3 targetPosition) {
 			if (fillTweens.TryGetValue(elementTransform, out TransformTween transformTween)) {
 				transformTween.Stop();
 				fillTweens.Remove(elementTransform);

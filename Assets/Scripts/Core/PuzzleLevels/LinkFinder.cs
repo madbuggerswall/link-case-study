@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
-using Unity.VisualScripting;
 
-namespace Core.Links {
+namespace Core.PuzzleLevels {
 	public class LinkFinder {
 		private readonly PuzzleGrid puzzleGrid;
 		private readonly Dictionary<PuzzleElement, Link> linksByElement;
@@ -28,14 +27,12 @@ namespace Core.Links {
 		}
 
 		private void MapLinksByPuzzleElements() {
-			PuzzleCell[] puzzleCells = puzzleGrid.GetCells();
+			PuzzleCell[] cells = puzzleGrid.GetCells();
 			linksByElement.Clear();
 
-			for (int i = 0; i < puzzleCells.Length; i++) {
-				PuzzleCell cell = puzzleCells[i];
-				if (!cell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
-					ProcessNeighborCells(cell, puzzleElement);
-			}
+			for (int i = 0; i < cells.Length; i++)
+				if (cells[i].TryGetPuzzleElement(out PuzzleElement puzzleElement))
+					ProcessNeighborCells(cells[i], puzzleElement);
 		}
 
 		private void ProcessNeighborCells(PuzzleCell currentCell, PuzzleElement currentItem) {

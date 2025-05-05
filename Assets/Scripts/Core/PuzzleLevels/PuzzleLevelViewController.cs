@@ -4,6 +4,7 @@ using Core.LinkInput;
 using Core.PuzzleElements;
 using Core.PuzzleElements.Behaviours;
 using Core.PuzzleGrids;
+using Core.PuzzleLevels.ViewHelpers;
 using Frolics.Pooling;
 using UnityEngine;
 
@@ -23,7 +24,8 @@ namespace Core.PuzzleLevels {
 		public FallViewHelper FallViewHelper { get; private set; }
 		public FillViewHelper FillViewHelper { get; private set; }
 		public ScaledViewHelper ScaledViewHelper { get; private set; }
-		
+		public ShuffleViewHelper ShuffleViewHelper { get; private set; }
+
 		public ViewReadyNotifier ViewReadyNotifier { get; private set; }
 
 		public void Initialize() {
@@ -41,6 +43,8 @@ namespace Core.PuzzleLevels {
 			ScaledViewHelper = new ScaledViewHelper(this);
 			FallViewHelper = new FallViewHelper(this, puzzleGrid);
 			FillViewHelper = new FillViewHelper(this, puzzleGrid);
+			ShuffleViewHelper = new ShuffleViewHelper(this, puzzleGrid);
+
 			ViewReadyNotifier = new ViewReadyNotifier();
 		}
 

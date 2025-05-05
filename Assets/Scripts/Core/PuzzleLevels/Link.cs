@@ -1,9 +1,8 @@
-using Core.DataTransfer.Definitions;
 using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
 
-namespace Core.Links {
+namespace Core.PuzzleLevels {
 	public class Link {
 		public const int MinLength = 3;
 		

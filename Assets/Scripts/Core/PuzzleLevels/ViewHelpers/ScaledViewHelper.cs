@@ -4,7 +4,7 @@ using Core.PuzzleElements.Behaviours;
 using Frolics.Tween;
 using UnityEngine;
 
-namespace Core.PuzzleLevels {
+namespace Core.PuzzleLevels.ViewHelpers {
 	public class ScaledViewHelper {
 		private const float Scale = 1.2f;
 		private const float ScaleDuration = 0.2f;
@@ -58,8 +58,8 @@ namespace Core.PuzzleLevels {
 			transformTween = new TransformTween(elementTransform, ScaleDuration);
 			transformTween.SetEase(Ease.Type.OutQuad);
 			transformTween.SetLocalScale(Vector3.one * scale);
-			transformTween.Play();
 			transformTween.SetOnComplete(() => scaleTweens.Remove(elementTransform));
+			transformTween.Play();
 
 			scaleTweens.Add(elementTransform, transformTween);
 		}

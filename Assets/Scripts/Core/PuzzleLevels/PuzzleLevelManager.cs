@@ -3,7 +3,6 @@ using Core.Commands;
 using Core.Contexts;
 using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.DataTransfer.Definitions.PuzzleLevels;
-using Core.Links;
 using Core.PuzzleElements;
 using Core.PuzzleElements.Behaviours;
 using Core.PuzzleGrids;
@@ -24,12 +23,13 @@ namespace Core.PuzzleLevels {
 		// Fields
 		private PuzzleGrid puzzleGrid;
 
-		private TurnManager turnManager;
-		private ScoreManager scoreManager;
-		private TargetManager targetManager;
 		private FallManager fallManager;
 		private FillManager fillManager;
 		private ShuffleManager shuffleManager;
+
+		private TurnManager turnManager;
+		private ScoreManager scoreManager;
+		private TargetManager targetManager;
 
 		public void Initialize() {
 			levelInitializer = SceneContext.GetInstance().Get<PuzzleLevelInitializer>();
@@ -38,12 +38,13 @@ namespace Core.PuzzleLevels {
 
 			puzzleGrid = levelInitializer.GetPuzzleGrid();
 
-			turnManager = new TurnManager();
-			scoreManager = new ScoreManager();
-			targetManager = new TargetManager();
 			fallManager = new FallManager(this);
 			fillManager = new FillManager(this);
 			shuffleManager = new ShuffleManager(this);
+
+			turnManager = new TurnManager();
+			scoreManager = new ScoreManager();
+			targetManager = new TargetManager();
 
 			SignalBus.GetInstance().SubscribeTo<ElementExplodedSignal>(OnElementExploded);
 		}
@@ -70,8 +71,18 @@ namespace Core.PuzzleLevels {
 			HashSet<PuzzleElement> filledElements = fillManager.GetFilledElements();
 			viewController.FillViewHelper.MoveFilledElements(filledElements);
 
-			UnityEvent onViewReady = viewController.ViewReadyNotifier.OnViewReady;
-			onViewReady.AddListener(command.InvokeCompletionHandlers);
+			viewController.ViewReadyNotifier.OnReadyForShuffle.AddListener(OnReadyForShuffle);
+			viewController.ViewReadyNotifier.OnViewReady.AddListener(command.InvokeCompletionHandlers);
+		}
+
+		private void OnReadyForShuffle() {
+			if (!shuffleManager.IsShuffleNeeded()) {
+				viewController.ViewReadyNotifier.OnShuffleTweensComplete();
+				return;
+			}
+
+			shuffleManager.Shuffle();
+			viewController.ShuffleViewHelper.MoveShuffledElements();
 		}
 
 		public ColorChip CreateRandomColorChip() {

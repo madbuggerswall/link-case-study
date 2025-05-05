@@ -5,7 +5,7 @@ using Core.PuzzleGrids;
 using Frolics.Tween;
 using UnityEngine;
 
-namespace Core.PuzzleLevels {
+namespace Core.PuzzleLevels.ViewHelpers {
 	public class FallViewHelper {
 		private const float FallDuration = 0.6f;
 
@@ -37,8 +37,8 @@ namespace Core.PuzzleLevels {
 			transformTween = new TransformTween(elementTransform, FallDuration);
 			transformTween.SetEase(Ease.Type.InCubic);
 			transformTween.SetPosition(targetPosition);
-			transformTween.Play();
 			transformTween.SetOnComplete(() => OnFallTweenComplete(elementTransform));
+			transformTween.Play();
 
 			fallTweens.Add(elementTransform, transformTween);
 		}

@@ -2,10 +2,9 @@ using System.Collections.Generic;
 using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
-using Core.PuzzleLevels;
 using UnityEngine;
 
-namespace Core.Links {
+namespace Core.PuzzleLevels {
 	public class ShuffleManager {
 		private readonly PuzzleLevelManager levelManager;
 		private readonly LinkFinder linkFinder;
@@ -17,14 +16,14 @@ namespace Core.Links {
 			linkFinder = new LinkFinder(levelManager.GetPuzzleGrid());
 		}
 
-		public bool TryShuffle() {
-			if (linkFinder.TryFindLinks(out _))
-				return false;
+		public bool IsShuffleNeeded() {
+			return !linkFinder.TryFindLinks(out _);
+		}
 
+		public void Shuffle() {
 			MapColorChipCountByDefinition();
 			CreateLink(Link.MinLength);
 			ShuffleElements();
-			return true;
 		}
 
 		private void ShuffleElements() {
