@@ -160,6 +160,7 @@ namespace Core.PuzzleLevels {
 		public void ApplyFill() {
 			PuzzleGrid puzzleGrid = levelManager.GetPuzzleGrid();
 			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
+			filledElements.Clear();
 
 			// Assumes that a fall operation has already resolved empty spaces
 			for (int columnIndex = 0; columnIndex < gridSize.x; columnIndex++) {
