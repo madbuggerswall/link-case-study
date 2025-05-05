@@ -1,0 +1,46 @@
+using System.Collections.Generic;
+using Core.PuzzleElements;
+using Core.PuzzleElements.Behaviours;
+using Core.PuzzleGrids;
+using Frolics.Tween;
+using UnityEngine;
+
+namespace Core.PuzzleLevels {
+	public class FallViewHelper {
+		private const float FallDuration = 0.5f;
+
+		private readonly Dictionary<Transform, TransformTween> fallTweens = new();
+		private readonly PuzzleLevelViewController viewController;
+		private readonly PuzzleGrid puzzleGrid;
+
+		public FallViewHelper(PuzzleLevelViewController viewController, PuzzleGrid puzzleGrid) {
+			this.viewController = viewController;
+			this.puzzleGrid = puzzleGrid;
+		}
+
+		public void MoveFallenElements(HashSet<PuzzleElement> fallenElements) {
+			foreach (PuzzleElement fallenElement in fallenElements) {
+				if (!puzzleGrid.TryGetPuzzleCell(fallenElement, out PuzzleCell cell))
+					return;
+
+				PuzzleElementBehaviour elementBehaviour = viewController.GetPuzzleElementBehaviour(fallenElement);
+				PlayFallTween(elementBehaviour.transform, cell.GetWorldPosition());
+			}
+		}
+
+		private void PlayFallTween(Transform elementTransform, Vector3 targetPosition) {
+			if (fallTweens.TryGetValue(elementTransform, out TransformTween transformTween)) {
+				transformTween.Stop();
+				fallTweens.Remove(elementTransform);
+			}
+
+			transformTween = new TransformTween(elementTransform, FallDuration);
+			transformTween.SetEase(Ease.Type.InQuad);
+			transformTween.SetPosition(targetPosition);
+			transformTween.Play();
+			transformTween.SetOnComplete(() => fallTweens.Remove(elementTransform));
+
+			fallTweens.Add(elementTransform, transformTween);
+		}
+	}
+}

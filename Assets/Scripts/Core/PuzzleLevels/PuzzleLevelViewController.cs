@@ -6,7 +6,7 @@ using Core.PuzzleGrids;
 using UnityEngine;
 
 namespace Core.PuzzleLevels {
-	public class PuzzleLevelViewController : MonoBehaviour,IInitializable {
+	public class PuzzleLevelViewController : MonoBehaviour, IInitializable {
 		private readonly Dictionary<PuzzleElement, PuzzleElementBehaviour> elementBehaviours = new();
 		private readonly Dictionary<PuzzleGrid, PuzzleGridBehaviour> gridBehaviours = new();
 		private readonly Dictionary<PuzzleCell, PuzzleCellBehaviour> cellBehaviours = new();
@@ -18,6 +18,7 @@ namespace Core.PuzzleLevels {
 		private PuzzleLevelManager levelManager;
 
 		private ScaledViewHelper scaledViewHelper;
+		private FallViewHelper fallViewHelper;
 
 		public void Initialize() {
 			this.elementBehaviourFactory = SceneContext.GetInstance().Get<PuzzleElementBehaviourFactory>();
@@ -37,6 +38,7 @@ namespace Core.PuzzleLevels {
 			SpawnElements(puzzleGrid);
 
 			scaledViewHelper = new ScaledViewHelper(this);
+			fallViewHelper = new FallViewHelper(this, puzzleGrid);
 		}
 
 		// Initializer methods
@@ -63,7 +65,7 @@ namespace Core.PuzzleLevels {
 
 			for (int i = 0; i < puzzleCells.Length; i++) {
 				PuzzleCell cell = puzzleCells[i];
-				if(!cell.TryGetPuzzleElement(out PuzzleElement element))
+				if (!cell.TryGetPuzzleElement(out PuzzleElement element))
 					return;
 
 				PuzzleElementBehaviour elementBehaviour = elementBehaviourFactory.Create(element, cell);
@@ -72,7 +74,7 @@ namespace Core.PuzzleLevels {
 				elementBehaviours.Add(element, elementBehaviour);
 			}
 		}
-		
+
 
 		// Helper methods
 		public void ScaleUpSelectedElements(HashList<PuzzleElement> puzzleElements) {
@@ -81,6 +83,10 @@ namespace Core.PuzzleLevels {
 
 		public void ScaleDownUnselectedElements(HashList<PuzzleElement> puzzleElements) {
 			scaledViewHelper.ScaleDownUnselectedElements(puzzleElements);
+		}
+
+		public void MoveFallenElements(HashSet<PuzzleElement> puzzleElements) {
+			fallViewHelper.MoveFallenElements(puzzleElements);
 		}
 
 

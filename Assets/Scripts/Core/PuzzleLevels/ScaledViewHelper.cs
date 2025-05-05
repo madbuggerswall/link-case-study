@@ -48,13 +48,9 @@ namespace Core.PuzzleLevels {
 			transformTween.SetEase(Ease.Type.OutQuad);
 			transformTween.SetLocalScale(Vector3.one * scale);
 			transformTween.Play();
-			transformTween.SetOnComplete(() => OnScaleTweenComplete(elementTransform));
+			transformTween.SetOnComplete(() => scaleTweens.Remove(elementTransform));
 
 			scaleTweens.Add(elementTransform, transformTween);
-		}
-
-		private void OnScaleTweenComplete(Transform elementTransform) {
-			scaleTweens.Remove(elementTransform);
 		}
 
 		private void SaveLastSelection(HashList<PuzzleElement> puzzleElements) {

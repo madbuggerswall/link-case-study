@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Core.Contexts;
 using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.DataTransfer.Definitions.PuzzleLevels;
@@ -50,7 +51,11 @@ namespace Core.PuzzleLevels {
 			objectPool.Despawn(elementBehaviour);
 		}
 
-		public void OnLinkExploded(Link link) { }
+		public void OnLinkExploded(Link link) {
+			fallManager.ApplyFall(puzzleGrid);
+			HashSet<PuzzleElement> fallenElements = fallManager.GetFallenElements();
+			viewController.MoveFallenElements(fallenElements);
+		}
 
 		// Getters
 		public PuzzleGrid GetPuzzleGrid() => puzzleGrid;
@@ -97,6 +102,10 @@ namespace Core.PuzzleLevels {
 		public void InitializeMoveCount(PuzzleLevelDefinition levelDefinition) {
 			this.maxMoveCount = levelDefinition.GetMaxMoveCount();
 		}
+
+		public void OnTurnMade() {
+			currentMoveCount++;
+		}
 	}
 
 	public class ScoreManager {
@@ -116,6 +125,7 @@ namespace Core.PuzzleLevels {
 	public class FallManager {
 		private readonly PuzzleLevelManager puzzleLevelManager;
 		private readonly PuzzleGrid puzzleGrid;
+		private HashSet<PuzzleElement> fallenElements = new();
 
 		public FallManager(PuzzleLevelManager puzzleLevelManager) {
 			this.puzzleLevelManager = puzzleLevelManager;
@@ -124,12 +134,16 @@ namespace Core.PuzzleLevels {
 
 		public void ApplyFall(PuzzleGrid puzzleGrid) {
 			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
+			fallenElements.Clear();
 
 			for (int columnIndex = 0; columnIndex < gridSize.x; columnIndex++) {
 				for (int rowIndex = 0; rowIndex < gridSize.y; rowIndex++) {
 					PuzzleCell columnCell = puzzleGrid.GetCell(rowIndex * gridSize.x + columnIndex);
-					if (columnCell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
-						puzzleElement.Fall(puzzleGrid);
+					if (!columnCell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
+						continue;
+
+					puzzleElement.Fall(puzzleGrid);
+					fallenElements.Add(puzzleElement);
 				}
 			}
 		}
@@ -150,6 +164,9 @@ namespace Core.PuzzleLevels {
 			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
 			return columnIndex >= 0 && columnIndex < gridSize.x;
 		}
+
+		// Getters
+		public HashSet<PuzzleElement> GetFallenElements() => fallenElements;
 	}
 
 	public class FillManager {
