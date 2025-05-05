@@ -5,6 +5,8 @@ using Core.PuzzleGrids;
 
 namespace Core.Links {
 	public class Link {
+		public const int MinLength = 3;
+		
 		private readonly HashList<PuzzleElement> puzzleElements;
 		private readonly PuzzleElementDefinition elementDefinition;
 
@@ -39,8 +41,7 @@ namespace Core.Links {
 		}
 
 		private bool IsLengthValid() {
-			const int minLength = 3;
-			return puzzleElements.Count >= minLength;
+			return puzzleElements.Count >= MinLength;
 		}
 
 		private bool IsElementsValid() {

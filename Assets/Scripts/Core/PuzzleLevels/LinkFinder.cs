@@ -1,25 +1,36 @@
 using System.Collections.Generic;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
-using UnityEngine;
+using Unity.VisualScripting;
 
 namespace Core.Links {
-	// NOTE For hints (HintManager)
 	public class LinkFinder {
 		private readonly PuzzleGrid puzzleGrid;
-		private readonly Dictionary<PuzzleElement, Link> linksByItem;
+		private readonly Dictionary<PuzzleElement, Link> linksByElement;
 
 		public LinkFinder(PuzzleGrid puzzleGrid) {
 			this.puzzleGrid = puzzleGrid;
+			this.linksByElement = new Dictionary<PuzzleElement, Link>();
+		}
 
-			int maxMatchCount = GetMaxMatchCount(puzzleGrid);
-			this.linksByItem = new Dictionary<PuzzleElement, Link>(maxMatchCount);
+		public bool TryFindLinks(out Dictionary<PuzzleElement, Link> linksByElement) {
+			MapLinksByPuzzleElements();
+			RemoveInvalidLinks();
+
+			linksByElement = this.linksByElement;
+			return linksByElement.Count != 0;
+		}
+
+		private void RemoveInvalidLinks() {
+			foreach ((PuzzleElement puzzleElement, Link link) in linksByElement)
+				if (!link.IsValid(puzzleGrid))
+					linksByElement.Remove(puzzleElement);
 		}
 
 		private void MapLinksByPuzzleElements() {
 			PuzzleCell[] puzzleCells = puzzleGrid.GetCells();
-			linksByItem.Clear();
-			
+			linksByElement.Clear();
+
 			for (int i = 0; i < puzzleCells.Length; i++) {
 				PuzzleCell cell = puzzleCells[i];
 				if (!cell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
@@ -32,7 +43,7 @@ namespace Core.Links {
 
 			for (int i = 0; i < neighborCells.Length; i++) {
 				PuzzleCell neighborCell = neighborCells[i];
-				if(!neighborCell.TryGetPuzzleElement(out PuzzleElement neighborElement))
+				if (!neighborCell.TryGetPuzzleElement(out PuzzleElement neighborElement))
 					return;
 
 				if (currentItem.GetDefinition() == neighborElement.GetDefinition())
@@ -41,22 +52,14 @@ namespace Core.Links {
 		}
 
 		private void ExtendLink(PuzzleElement currentItem, PuzzleElement neighborItem) {
-			if (linksByItem.TryGetValue(currentItem, out Link formerLink)) {
+			if (linksByElement.TryGetValue(currentItem, out Link formerLink)) {
 				if (formerLink.TryAdd(neighborItem))
-					linksByItem.Add(neighborItem, formerLink);
+					linksByElement.Add(neighborItem, formerLink);
 			} else {
 				Link link = new(currentItem, neighborItem);
-				linksByItem.Add(currentItem, link);
-				linksByItem.Add(neighborItem, link);
+				linksByElement.Add(currentItem, link);
+				linksByElement.Add(neighborItem, link);
 			}
-		}
-
-		private static int GetMaxMatchCount(PuzzleGrid puzzleGrid) {
-			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
-			int cellCount = gridSize.x * gridSize.y;
-			int maxMatchCount = cellCount / 2;
-
-			return maxMatchCount;
 		}
 	}
 }
