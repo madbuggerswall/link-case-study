@@ -6,7 +6,6 @@ using Core.PuzzleElements.Behaviours;
 using Core.PuzzleGrids;
 using Frolics.Pooling;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Core.PuzzleLevels {
 	public class PuzzleLevelViewController : IInitializable {
@@ -24,8 +23,8 @@ namespace Core.PuzzleLevels {
 		public FallViewHelper FallViewHelper { get; private set; }
 		public FillViewHelper FillViewHelper { get; private set; }
 		public ScaledViewHelper ScaledViewHelper { get; private set; }
-
-		public UnityEvent OnViewReady { get; private set; } = new UnityEvent();
+		
+		public ViewReadyNotifier ViewReadyNotifier { get; private set; }
 
 		public void Initialize() {
 			this.elementBehaviourFactory = SceneContext.GetInstance().Get<PuzzleElementBehaviourFactory>();
@@ -42,6 +41,7 @@ namespace Core.PuzzleLevels {
 			ScaledViewHelper = new ScaledViewHelper(this);
 			FallViewHelper = new FallViewHelper(this, puzzleGrid);
 			FillViewHelper = new FillViewHelper(this, puzzleGrid);
+			ViewReadyNotifier = new ViewReadyNotifier();
 		}
 
 		// Initializer methods
@@ -107,11 +107,6 @@ namespace Core.PuzzleLevels {
 
 		public PuzzleElementBehaviour GetPuzzleElementBehaviour(PuzzleElement element) {
 			return elementBehaviours.GetValueOrDefault(element);
-		}
-
-		public void OnFallTweensComplete() {
-			OnViewReady.Invoke();
-			OnViewReady.RemoveAllListeners();
 		}
 	}
 }

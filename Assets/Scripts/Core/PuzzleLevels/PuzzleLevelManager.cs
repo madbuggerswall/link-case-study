@@ -11,6 +11,7 @@ using Core.PuzzleLevels.Targets;
 using Frolics.Pooling;
 using Frolics.Signals;
 using UnityEngine;
+using UnityEngine.Events;
 
 // NOTE Rename this namespace to PuzzleMechanics/LevelMechanics/Mechanics
 namespace Core.PuzzleLevels {
@@ -67,7 +68,8 @@ namespace Core.PuzzleLevels {
 			HashSet<PuzzleElement> filledElements = fillManager.GetFilledElements();
 			viewController.FillViewHelper.MoveFilledElements(filledElements);
 
-			viewController.OnViewReady.AddListener(command.InvokeCompletionHandlers);
+			UnityEvent onViewReady = viewController.ViewReadyNotifier.OnViewReady;
+			onViewReady.AddListener(command.InvokeCompletionHandlers);
 		}
 
 		public ColorChip CreateRandomColorChip() {

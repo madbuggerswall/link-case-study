@@ -61,7 +61,7 @@ namespace Core.PuzzleLevels {
 		private void OnFillTweenComplete(Transform elementTransform) {
 			fillTweens.Remove(elementTransform);
 			if (fillTweens.Count == 0)
-				viewController.OnFallTweensComplete();
+				viewController.ViewReadyNotifier.OnFillTweensComplete();
 		}
 	}
 }
