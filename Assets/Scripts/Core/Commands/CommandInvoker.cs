@@ -3,7 +3,7 @@ using Core.Contexts;
 using UnityEngine;
 
 namespace Core.Commands {
-	public class CommandInvoker : MonoBehaviour, IInitializable {
+	public class CommandInvoker : IInitializable {
 		private readonly Queue<Command> commands = new();
 		private bool isRunning = false;
 

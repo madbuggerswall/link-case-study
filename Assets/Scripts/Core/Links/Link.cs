@@ -59,7 +59,7 @@ namespace Core.Links {
 				if (!puzzleGrid.TryGetPuzzleCell(centerElement, out PuzzleCell centerCell))
 					return false;
 
-				if (!puzzleGrid.TryGetPuzzleCell(centerElement, out PuzzleCell adjacentCell))
+				if (!puzzleGrid.TryGetPuzzleCell(adjacentElement, out PuzzleCell adjacentCell))
 					return false;
 
 				if (!IsCellsAdjacent(puzzleGrid, centerCell, adjacentCell))

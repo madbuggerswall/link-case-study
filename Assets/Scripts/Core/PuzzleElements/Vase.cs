@@ -1,6 +1,6 @@
-using Core.DataTransfer.Definitions;
 using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.PuzzleGrids;
+using Frolics.Signals;
 
 namespace Core.PuzzleElements {
 	public class Vase : PuzzleElement {
@@ -11,8 +11,11 @@ namespace Core.PuzzleElements {
 		}
 
 		public override void Explode(PuzzleGrid puzzleGrid) {
-			if (puzzleGrid.TryGetPuzzleCell(this, out PuzzleCell puzzleCell))
-				puzzleCell.SetCellEmpty();
+			if (!puzzleGrid.TryGetPuzzleCell(this, out PuzzleCell puzzleCell))
+				return;
+
+			puzzleCell.SetCellEmpty();
+			SignalBus.GetInstance().Fire(new ElementExplodedSignal(this));
 		}
 
 		public override void OnAdjacentExplode(PuzzleGrid puzzleGrid) {

@@ -17,19 +17,25 @@ namespace Core.LinkInput {
 		private bool isDragging;
 
 		private PuzzleCellDragHelper dragHelper;
-		// Dependencies
-		private InputManager inputManager;
 		private InputHandler inputHandler;
-		private PuzzleLevelViewController viewController;
-		private CommandInvoker commandInvoker;
 		private LinkManager linkManager;
 
+		// Dependencies
+		private InputManager inputManager;
+		private CommandInvoker commandInvoker;
+		private PuzzleLevelViewController viewController;
+		private PuzzleLevelManager puzzleLevelManager;
+
 		public void Initialize() {
+			inputManager = SceneContext.GetInstance().Get<InputManager>();
 			commandInvoker = SceneContext.GetInstance().Get<CommandInvoker>();
 			viewController = SceneContext.GetInstance().Get<PuzzleLevelViewController>();
-			inputManager = SceneContext.GetInstance().Get<InputManager>();
-			dragHelper = SceneContext.GetInstance().Get<PuzzleCellDragHelper>();
-			// TODO Get LinkManager
+			puzzleLevelManager = SceneContext.GetInstance().Get<PuzzleLevelManager>();
+
+			linkManager = puzzleLevelManager.GetLinkManager();
+
+			PuzzleGrid puzzleGrid = puzzleLevelManager.GetPuzzleGrid();
+			dragHelper = new PuzzleCellDragHelper(this, puzzleGrid);
 
 			inputHandler = inputManager.CommonInputHandler;
 			inputHandler.PressEvent.AddListener(OnPress);

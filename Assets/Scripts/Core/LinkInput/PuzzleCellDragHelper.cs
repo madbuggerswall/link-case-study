@@ -5,18 +5,16 @@ using Core.PuzzleLevels;
 using UnityEngine;
 
 namespace Core.LinkInput {
-	public class PuzzleCellDragHelper : IInitializable {
+	public class PuzzleCellDragHelper {
 		private readonly HashList<PuzzleCell> selectedCells = new();
+		private readonly PuzzleGrid puzzleGrid;
+		
+		private readonly LinkInputManager linkInputManager;
 
-		// Dependencies
-		private PuzzleGrid puzzleGrid;
-		private LinkInputManager linkInputManager;
-
-		public void Initialize() {
-			puzzleGrid = SceneContext.GetInstance().Get<PuzzleLevelInitializer>().GetPuzzleGrid();
-			linkInputManager = SceneContext.GetInstance().Get<LinkInputManager>();
+		public PuzzleCellDragHelper(LinkInputManager linkInputManager, PuzzleGrid puzzleGrid) {
+			this.linkInputManager = linkInputManager;
+			this.puzzleGrid = puzzleGrid;
 		}
-
 
 		public void OnDrag(Vector3 dragPosition) {
 			if (!puzzleGrid.TryGetPuzzleCell(dragPosition, out PuzzleCell puzzleCell))

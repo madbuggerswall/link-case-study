@@ -20,7 +20,7 @@ namespace Core.Contexts {
 			Resolve<PuzzleGridBehaviourFactory>();
 			Resolve<PuzzleElementBehaviourFactory>();
 			Resolve<PuzzleLevelInitializer>();
-			Resolve<PuzzleCellDragHelper>();
+			Resolve<PuzzleLevelManager>();
 			Resolve<LinkInputManager>();
 			Resolve<PuzzleLevelViewController>();
 		}
@@ -35,7 +35,7 @@ namespace Core.Contexts {
 			Get<PuzzleGridBehaviourFactory>().Initialize();
 			Get<PuzzleElementBehaviourFactory>().Initialize();
 			Get<PuzzleLevelInitializer>().Initialize();
-			Get<PuzzleCellDragHelper>().Initialize();
+			Get<PuzzleLevelManager>().Initialize();
 			Get<LinkInputManager>().Initialize();
 			Get<PuzzleLevelViewController>().Initialize();
 		}

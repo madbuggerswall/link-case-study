@@ -1,13 +1,21 @@
 using Core.Contexts;
+using Core.DataTransfer.Definitions.PuzzleElements;
+using Core.DataTransfer.Definitions.PuzzleLevels;
 using Core.Links;
 using Core.PuzzleElements;
+using Core.PuzzleElements.Behaviours;
 using Core.PuzzleGrids;
+using Core.PuzzleLevels.Targets;
+using Frolics.Pooling;
+using Frolics.Signals;
 using UnityEngine;
 
 namespace Core.PuzzleLevels {
-	public class PuzzleLevelManager : MonoBehaviour {
+	public class PuzzleLevelManager : IInitializable {
 		// Dependencies
 		private PuzzleLevelInitializer levelInitializer;
+		private PuzzleLevelViewController viewController;
+		private ObjectPool objectPool;
 
 		// Fields
 		private PuzzleGrid puzzleGrid;
@@ -16,22 +24,47 @@ namespace Core.PuzzleLevels {
 		private TurnManager turnManager;
 		private ScoreManager scoreManager;
 		private TargetManager targetManager;
+		private FallManager fallManager;
+		private FillManager fillManager;
 
 		public void Initialize() {
-			this.levelInitializer = SceneContext.GetInstance().Get<PuzzleLevelInitializer>();
+			levelInitializer = SceneContext.GetInstance().Get<PuzzleLevelInitializer>();
+			viewController = SceneContext.GetInstance().Get<PuzzleLevelViewController>();
+			objectPool = SceneContext.GetInstance().Get<ObjectPool>();
 
-			this.puzzleGrid = levelInitializer.GetPuzzleGrid();
+			puzzleGrid = levelInitializer.GetPuzzleGrid();
+
+			linkManager = new LinkManager(this);
+			turnManager = new TurnManager();
+			scoreManager = new ScoreManager();
+			targetManager = new TargetManager();
+			fallManager = new FallManager(this);
+			fillManager = new FillManager(this);
+
+			SignalBus.GetInstance().SubscribeTo<ElementExplodedSignal>(OnElementExploded);
 		}
 
-		public PuzzleGrid GetPuzzleGrid() => this.puzzleGrid;
+		private void OnElementExploded(ElementExplodedSignal signal) {
+			PuzzleElement puzzleElement = signal.PuzzleElement;
+			PuzzleElementBehaviour elementBehaviour = viewController.GetPuzzleElementBehaviour(puzzleElement);
+			objectPool.Despawn(elementBehaviour);
+		}
+
+		public void OnLinkExploded(Link link) { }
+
+		// Getters
+		public PuzzleGrid GetPuzzleGrid() => puzzleGrid;
+		public LinkManager GetLinkManager() => linkManager;
 	}
 
 	// TODO Implement and utilize LinkManager
 	public class LinkManager {
-		private PuzzleGrid puzzleGrid;
+		private readonly PuzzleLevelManager puzzleLevelManager;
+		private readonly PuzzleGrid puzzleGrid;
 
-		public LinkManager() {
-			
+		public LinkManager(PuzzleLevelManager puzzleLevelManager) {
+			this.puzzleLevelManager = puzzleLevelManager;
+			this.puzzleGrid = puzzleLevelManager.GetPuzzleGrid();
 		}
 
 		public void Explode(Link link) {
@@ -39,13 +72,32 @@ namespace Core.PuzzleLevels {
 				return;
 
 			link.Explode(puzzleGrid);
-			// Fire signal
+			puzzleLevelManager.OnLinkExploded(link);
 		}
 	}
 
-	public class TargetManager { }
+	public class TargetManager {
+		private Target[] targets;
 
-	public class TurnManager { }
+		public void InitializeTargets(PuzzleLevelDefinition levelDefinition) {
+			TargetDTO[] targetDTOs = levelDefinition.GetGoals();
+			this.targets = new Target[targetDTOs.Length];
+
+			for (int i = 0; i < targetDTOs.Length; i++) {
+				TargetDTO targetDTO = targetDTOs[i];
+				targets[i] = targetDTO.CreateTarget();
+			}
+		}
+	}
+
+	public class TurnManager {
+		private int maxMoveCount;
+		private int currentMoveCount;
+
+		public void InitializeMoveCount(PuzzleLevelDefinition levelDefinition) {
+			this.maxMoveCount = levelDefinition.GetMaxMoveCount();
+		}
+	}
 
 	public class ScoreManager {
 		private const int BaseScorePerElement = 10;
@@ -61,8 +113,14 @@ namespace Core.PuzzleLevels {
 		}
 	}
 
-	public class FillManager {
-		private PuzzleGrid puzzleGrid;
+	public class FallManager {
+		private readonly PuzzleLevelManager puzzleLevelManager;
+		private readonly PuzzleGrid puzzleGrid;
+
+		public FallManager(PuzzleLevelManager puzzleLevelManager) {
+			this.puzzleLevelManager = puzzleLevelManager;
+			this.puzzleGrid = puzzleLevelManager.GetPuzzleGrid();
+		}
 
 		public void ApplyFall(PuzzleGrid puzzleGrid) {
 			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
@@ -91,6 +149,33 @@ namespace Core.PuzzleLevels {
 		private bool IsColumnIndexInRange(int columnIndex) {
 			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
 			return columnIndex >= 0 && columnIndex < gridSize.x;
+		}
+	}
+
+	public class FillManager {
+		private PuzzleLevelManager puzzleLevelManager;
+		private PuzzleGrid puzzleGrid;
+		private ChipDefinitionManager chipDefinitionManager;
+
+		public FillManager(PuzzleLevelManager puzzleLevelManager) {
+			this.puzzleLevelManager = puzzleLevelManager;
+			this.puzzleGrid = puzzleLevelManager.GetPuzzleGrid();
+		}
+
+		public void ApplyFill(PuzzleGrid puzzleGrid) {
+			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
+
+			for (int columnIndex = 0; columnIndex < gridSize.x; columnIndex++) {
+				for (int rowIndex = 0; rowIndex < gridSize.y; rowIndex++) {
+					PuzzleCell columnCell = puzzleGrid.GetCell(rowIndex * gridSize.x + columnIndex);
+					if (columnCell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
+						continue;
+
+					ColorChipDefinition definition = chipDefinitionManager.GetRandomColorChipDefinition();
+					ColorChip colorChip = new ColorChip(definition);
+					columnCell.SetPuzzleElement(colorChip);
+				}
+			}
 		}
 	}
 }

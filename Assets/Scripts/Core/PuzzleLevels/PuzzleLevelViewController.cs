@@ -15,7 +15,7 @@ namespace Core.PuzzleLevels {
 		private PuzzleElementBehaviourFactory elementBehaviourFactory;
 		private PuzzleGridBehaviourFactory gridBehaviourFactory;
 		private PuzzleCellBehaviourFactory cellBehaviourFactory;
-		private PuzzleLevelInitializer levelInitializer;
+		private PuzzleLevelManager levelManager;
 
 		private ScaledViewHelper scaledViewHelper;
 
@@ -23,10 +23,10 @@ namespace Core.PuzzleLevels {
 			this.elementBehaviourFactory = SceneContext.GetInstance().Get<PuzzleElementBehaviourFactory>();
 			this.gridBehaviourFactory = SceneContext.GetInstance().Get<PuzzleGridBehaviourFactory>();
 			this.cellBehaviourFactory = SceneContext.GetInstance().Get<PuzzleCellBehaviourFactory>();
-			this.levelInitializer = SceneContext.GetInstance().Get<PuzzleLevelInitializer>();
+			this.levelManager = SceneContext.GetInstance().Get<PuzzleLevelManager>();
 
 			// PuzzleGridBehaviours
-			PuzzleGrid puzzleGrid = levelInitializer.GetPuzzleGrid();
+			PuzzleGrid puzzleGrid = levelManager.GetPuzzleGrid();
 			SpawnGridBehaviour(puzzleGrid);
 
 			// PuzzleCellBehaviours
