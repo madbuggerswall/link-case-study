@@ -38,6 +38,16 @@ namespace Core.PuzzleLevels {
 			}
 		}
 
+		public void ResetSelectedElements(HashList<PuzzleElement> puzzleElements) {
+			lastSelection.Clear();
+
+			for (int index = 0; index < puzzleElements.Count; index++) {
+				PuzzleElement puzzleElement = puzzleElements[index];
+				PuzzleElementBehaviour elementBehaviour = viewController.GetPuzzleElementBehaviour(puzzleElement);
+				elementBehaviour.transform.localScale = Vector3.one;
+			}
+		}
+
 		private void PlayScaleTween(Transform elementTransform, float scale) {
 			if (scaleTweens.TryGetValue(elementTransform, out TransformTween transformTween)) {
 				transformTween.Stop();

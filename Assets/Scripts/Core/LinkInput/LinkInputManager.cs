@@ -68,6 +68,7 @@ namespace Core.LinkInput {
 
 		public void OnCellSelectionAccepted(HashList<PuzzleCell> selectedCells) {
 			UpdateSelectedElements(selectedCells);
+			viewController.ResetSelectedElements(selectedElements);
 			if (selectedCells.Count == 0)
 				return;
 

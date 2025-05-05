@@ -20,7 +20,12 @@ namespace Core.Contexts {
 		}
 
 		protected abstract void ResolveContext();
-		protected abstract void InitializeContext();
+
+		private void InitializeContext() {
+			//.NET Standard 2.1 preserves insertion order which is vital
+			foreach ((Type type, IInitializable initializable) in contextItems)
+				initializable.Initialize();
+		}
 
 		public T Get<T>() where T : class, IInitializable {
 			if (contextItems.TryGetValue(typeof(T), out IInitializable contextItem))

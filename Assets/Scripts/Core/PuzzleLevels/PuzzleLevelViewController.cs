@@ -4,6 +4,7 @@ using Core.LinkInput;
 using Core.PuzzleElements;
 using Core.PuzzleElements.Behaviours;
 using Core.PuzzleGrids;
+using Frolics.Pooling;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,19 +19,20 @@ namespace Core.PuzzleLevels {
 		private PuzzleGridBehaviourFactory gridBehaviourFactory;
 		private PuzzleCellBehaviourFactory cellBehaviourFactory;
 		private PuzzleLevelManager levelManager;
-		private LinkInputManager linkInputManager;
+		private ObjectPool objectPool;
 
 		private ScaledViewHelper scaledViewHelper;
 		private FallViewHelper fallViewHelper;
-		
-		public UnityEvent OnViewReady { get; private set; } = new UnityEvent(); 
+		private FillViewHelper fillViewHelper;
+
+		public UnityEvent OnViewReady { get; private set; } = new UnityEvent();
 
 		public void Initialize() {
 			this.elementBehaviourFactory = SceneContext.GetInstance().Get<PuzzleElementBehaviourFactory>();
 			this.gridBehaviourFactory = SceneContext.GetInstance().Get<PuzzleGridBehaviourFactory>();
 			this.cellBehaviourFactory = SceneContext.GetInstance().Get<PuzzleCellBehaviourFactory>();
 			this.levelManager = SceneContext.GetInstance().Get<PuzzleLevelManager>();
-			this.linkInputManager = SceneContext.GetInstance().Get<LinkInputManager>();
+			this.objectPool = SceneContext.GetInstance().Get<ObjectPool>();
 
 			// PuzzleGridBehaviours
 			PuzzleGrid puzzleGrid = levelManager.GetPuzzleGrid();
@@ -41,10 +43,11 @@ namespace Core.PuzzleLevels {
 			SpawnCellBehaviours(gridBehaviour);
 
 			// PuzzleElementBehaviours
-			SpawnElements(puzzleGrid);
+			SpawnElementBehaviours(puzzleGrid);
 
 			scaledViewHelper = new ScaledViewHelper(this);
 			fallViewHelper = new FallViewHelper(this, puzzleGrid);
+			fillViewHelper = new FillViewHelper(this, puzzleGrid);
 		}
 
 		// Initializer methods
@@ -65,8 +68,7 @@ namespace Core.PuzzleLevels {
 			}
 		}
 
-		private void SpawnElements(PuzzleGrid puzzleGrid) {
-			// Puzzle Elements - Fill with random color chips
+		private void SpawnElementBehaviours(PuzzleGrid puzzleGrid) {
 			PuzzleCell[] puzzleCells = puzzleGrid.GetCells();
 
 			for (int i = 0; i < puzzleCells.Length; i++) {
@@ -76,9 +78,25 @@ namespace Core.PuzzleLevels {
 
 				PuzzleElementBehaviour elementBehaviour = elementBehaviourFactory.Create(element, cell);
 				elementBehaviour.SetSortingOrder(i);
-
 				elementBehaviours.Add(element, elementBehaviour);
 			}
+		}
+
+		public PuzzleElementBehaviour SpawnElementBehaviour(PuzzleElement puzzleElement, PuzzleCell puzzleCell) {
+			PuzzleGrid puzzleGrid = levelManager.GetPuzzleGrid();
+			int cellIndex = puzzleGrid.GetCellIndex(puzzleCell);
+
+			PuzzleElementBehaviour elementBehaviour = elementBehaviourFactory.Create(puzzleElement, puzzleCell);
+			elementBehaviour.SetSortingOrder(cellIndex);
+			elementBehaviours.Add(puzzleElement, elementBehaviour);
+
+			return elementBehaviour;
+		}
+
+		public void DespawnElementBehaviour(PuzzleElement puzzleElement) {
+			PuzzleElementBehaviour elementBehaviour = GetPuzzleElementBehaviour(puzzleElement);
+			objectPool.Despawn(elementBehaviour);
+			elementBehaviours.Remove(puzzleElement);
 		}
 
 
@@ -91,8 +109,16 @@ namespace Core.PuzzleLevels {
 			scaledViewHelper.ScaleDownUnselectedElements(puzzleElements);
 		}
 
+		public void ResetSelectedElements(HashList<PuzzleElement> puzzleElements) {
+			scaledViewHelper.ResetSelectedElements(puzzleElements);
+		}
+
 		public void MoveFallenElements(HashSet<PuzzleElement> puzzleElements) {
 			fallViewHelper.MoveFallenElements(puzzleElements);
+		}
+
+		public void MoveFilledElements(HashSet<PuzzleElement> puzzleElements) {
+			fillViewHelper.MoveFilledElements(puzzleElements);
 		}
 
 

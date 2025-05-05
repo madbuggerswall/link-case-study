@@ -24,20 +24,5 @@ namespace Core.Contexts {
 			Resolve<LinkInputManager>();
 			Resolve<PuzzleLevelViewController>();
 		}
-
-		protected override void InitializeContext() {
-			Get<ObjectPool>().Initialize();
-			Get<ChipDefinitionManager>().Initialize();
-			Get<InputManager>().Initialize();
-			Get<CommandInvoker>().Initialize();
-			Get<CameraController>().Initialize();
-			Get<PuzzleCellBehaviourFactory>().Initialize();
-			Get<PuzzleGridBehaviourFactory>().Initialize();
-			Get<PuzzleElementBehaviourFactory>().Initialize();
-			Get<PuzzleLevelInitializer>().Initialize();
-			Get<PuzzleLevelManager>().Initialize();
-			Get<LinkInputManager>().Initialize();
-			Get<PuzzleLevelViewController>().Initialize();
-		}
 	}
 }

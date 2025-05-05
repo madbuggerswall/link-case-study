@@ -15,7 +15,9 @@ namespace Core.Input.Mobile {
 
 		public MobileInputHandler() : base() {
 			UnityEngine.InputSystem.EnhancedTouch.EnhancedTouchSupport.Enable();
-			Debug.Log(nameof(MobileInputHandler));
+			
+			TouchPressEvent = new UnityEvent<TouchPressData>();
+			TouchReleaseEvent = new UnityEvent<TouchReleaseData>();
 		}
 
 		public override void HandleInput() {

@@ -12,12 +12,13 @@ using Frolics.Pooling;
 using Frolics.Signals;
 using UnityEngine;
 
+// NOTE Rename this namespace to PuzzleMechanics/LevelMechanics/Mechanics
 namespace Core.PuzzleLevels {
 	public class PuzzleLevelManager : IInitializable {
 		// Dependencies
 		private PuzzleLevelInitializer levelInitializer;
 		private PuzzleLevelViewController viewController;
-		private ObjectPool objectPool;
+		private ChipDefinitionManager chipDefinitionManager;
 
 		// Fields
 		private PuzzleGrid puzzleGrid;
@@ -31,7 +32,7 @@ namespace Core.PuzzleLevels {
 		public void Initialize() {
 			levelInitializer = SceneContext.GetInstance().Get<PuzzleLevelInitializer>();
 			viewController = SceneContext.GetInstance().Get<PuzzleLevelViewController>();
-			objectPool = SceneContext.GetInstance().Get<ObjectPool>();
+			chipDefinitionManager = SceneContext.GetInstance().Get<ChipDefinitionManager>();
 
 			puzzleGrid = levelInitializer.GetPuzzleGrid();
 
@@ -46,8 +47,7 @@ namespace Core.PuzzleLevels {
 
 		private void OnElementExploded(ElementExplodedSignal signal) {
 			PuzzleElement puzzleElement = signal.PuzzleElement;
-			PuzzleElementBehaviour elementBehaviour = viewController.GetPuzzleElementBehaviour(puzzleElement);
-			objectPool.Despawn(elementBehaviour);
+			viewController.DespawnElementBehaviour(puzzleElement);
 		}
 
 		public void Explode(ExplodeLinkCommand command, Link link) {
@@ -58,10 +58,21 @@ namespace Core.PuzzleLevels {
 
 			link.Explode(puzzleGrid);
 
-			fallManager.ApplyFall(puzzleGrid);
+			fallManager.ApplyFall();
+			fillManager.ApplyFill();
+
 			HashSet<PuzzleElement> fallenElements = fallManager.GetFallenElements();
 			viewController.MoveFallenElements(fallenElements);
+
+			HashSet<PuzzleElement> filledElements = fillManager.GetFilledElements();
+			viewController.MoveFilledElements(filledElements);
+
 			viewController.OnViewReady.AddListener(command.InvokeCompletionHandlers);
+		}
+
+		public ColorChip CreateRandomColorChip() {
+			ColorChipDefinition definition = chipDefinitionManager.GetRandomColorChipDefinition();
+			return new ColorChip(definition);
 		}
 
 		// Getters
@@ -110,16 +121,15 @@ namespace Core.PuzzleLevels {
 	}
 
 	public class FallManager {
-		private readonly PuzzleLevelManager puzzleLevelManager;
-		private readonly PuzzleGrid puzzleGrid;
-		private HashSet<PuzzleElement> fallenElements = new();
+		private readonly PuzzleLevelManager levelManager;
+		private readonly HashSet<PuzzleElement> fallenElements = new();
 
-		public FallManager(PuzzleLevelManager puzzleLevelManager) {
-			this.puzzleLevelManager = puzzleLevelManager;
-			this.puzzleGrid = puzzleLevelManager.GetPuzzleGrid();
+		public FallManager(PuzzleLevelManager levelManager) {
+			this.levelManager = levelManager;
 		}
 
-		public void ApplyFall(PuzzleGrid puzzleGrid) {
+		public void ApplyFall() {
+			PuzzleGrid puzzleGrid = levelManager.GetPuzzleGrid();
 			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
 			fallenElements.Clear();
 
@@ -135,51 +145,36 @@ namespace Core.PuzzleLevels {
 			}
 		}
 
-		private PuzzleCell[] GetEveryCellOfColumn(int columnIndex) {
-			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
-			PuzzleCell[] columnCells = new PuzzleCell[gridSize.y];
-
-			for (int index = 0; index < columnCells.Length; index++) {
-				int gridWidth = gridSize.x;
-				columnCells[index] = puzzleGrid.GetCell(index * gridWidth + columnIndex);
-			}
-
-			return columnCells;
-		}
-
-		private bool IsColumnIndexInRange(int columnIndex) {
-			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
-			return columnIndex >= 0 && columnIndex < gridSize.x;
-		}
-
 		// Getters
 		public HashSet<PuzzleElement> GetFallenElements() => fallenElements;
 	}
 
 	public class FillManager {
-		private PuzzleLevelManager puzzleLevelManager;
-		private PuzzleGrid puzzleGrid;
-		private ChipDefinitionManager chipDefinitionManager;
+		private readonly PuzzleLevelManager levelManager;
+		private readonly HashSet<PuzzleElement> filledElements = new();
 
-		public FillManager(PuzzleLevelManager puzzleLevelManager) {
-			this.puzzleLevelManager = puzzleLevelManager;
-			this.puzzleGrid = puzzleLevelManager.GetPuzzleGrid();
+		public FillManager(PuzzleLevelManager levelManager) {
+			this.levelManager = levelManager;
 		}
 
-		public void ApplyFill(PuzzleGrid puzzleGrid) {
+		public void ApplyFill() {
+			PuzzleGrid puzzleGrid = levelManager.GetPuzzleGrid();
 			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
 
+			// Assumes that a fall operation has already resolved empty spaces
 			for (int columnIndex = 0; columnIndex < gridSize.x; columnIndex++) {
 				for (int rowIndex = 0; rowIndex < gridSize.y; rowIndex++) {
 					PuzzleCell columnCell = puzzleGrid.GetCell(rowIndex * gridSize.x + columnIndex);
-					if (columnCell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
+					if (columnCell.TryGetPuzzleElement(out _))
 						continue;
 
-					ColorChipDefinition definition = chipDefinitionManager.GetRandomColorChipDefinition();
-					ColorChip colorChip = new ColorChip(definition);
+					ColorChip colorChip = levelManager.CreateRandomColorChip();
 					columnCell.SetPuzzleElement(colorChip);
+					filledElements.Add(colorChip);
 				}
 			}
 		}
+
+		public HashSet<PuzzleElement> GetFilledElements() => filledElements;
 	}
 }
