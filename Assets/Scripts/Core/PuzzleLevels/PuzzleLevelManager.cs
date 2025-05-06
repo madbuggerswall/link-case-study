@@ -49,17 +49,13 @@ namespace Core.PuzzleLevels {
 			SignalBus.GetInstance().SubscribeTo<ElementExplodedSignal>(OnElementExploded);
 			SignalBus.GetInstance().SubscribeTo<ContextInitializedSignal>(OnContextInitialized);
 		}
-		
+
 		private void OnElementExploded(ElementExplodedSignal signal) {
 			PuzzleElement puzzleElement = signal.PuzzleElement;
 			viewController.DespawnElementBehaviour(puzzleElement);
 		}
 
 		private void OnContextInitialized(ContextInitializedSignal signal) {
-			TryShuffle();
-		}
-
-		private void TryShuffle() {
 			if (!shuffleManager.IsShuffleNeeded()) {
 				return;
 			}
@@ -81,21 +77,23 @@ namespace Core.PuzzleLevels {
 			fillManager.ApplyFill();
 
 			HashSet<PuzzleElement> fallenElements = fallManager.GetFallenElements();
-			viewController.FallViewHelper.MoveFallenElements(fallenElements);
-
 			HashSet<PuzzleElement> filledElements = fillManager.GetFilledElements();
-			viewController.FillViewHelper.MoveFilledElements(filledElements);
 
-			viewController.ViewReadyNotifier.OnReadyForShuffle.AddListener(OnReadyForShuffle);
+			viewController.FallViewHelper.MoveFallenElements(fallenElements);
+			viewController.ViewReadyNotifier.WaitForFallTweens();
+
+			viewController.FillViewHelper.MoveFilledElements(filledElements);
+			viewController.ViewReadyNotifier.WaitForFillTweens();
+
+			if (shuffleManager.IsShuffleNeeded()) {
+				viewController.ViewReadyNotifier.OnReadyForShuffle.AddListener(OnReadyForShuffle);
+				viewController.ViewReadyNotifier.WaitShuffleForTweens();
+			}
+
 			viewController.ViewReadyNotifier.OnViewReady.AddListener(command.InvokeCompletionHandlers);
 		}
 
 		private void OnReadyForShuffle() {
-			if (!shuffleManager.IsShuffleNeeded()) {
-				viewController.ViewReadyNotifier.OnShuffleTweensComplete();
-				return;
-			}
-
 			shuffleManager.Shuffle();
 			viewController.ShuffleViewHelper.MoveShuffledElements();
 		}

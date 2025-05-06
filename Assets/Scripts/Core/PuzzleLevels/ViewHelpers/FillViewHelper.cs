@@ -21,6 +21,7 @@ namespace Core.PuzzleLevels.ViewHelpers {
 		public void MoveFilledElements(HashSet<PuzzleElement> filledElements) {
 			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
 			Dictionary<int, int> filledElementByColumn = new();
+			fillTweens.Clear();
 			
 			foreach (PuzzleElement filledElement in filledElements) {
 				if (!puzzleGrid.TryGetPuzzleCell(filledElement, out PuzzleCell cell))

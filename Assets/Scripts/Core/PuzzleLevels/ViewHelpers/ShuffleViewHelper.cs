@@ -19,6 +19,8 @@ namespace Core.PuzzleLevels.ViewHelpers {
 		}
 
 		public void MoveShuffledElements() {
+			moveTweens.Clear();
+
 			PuzzleCell[] cells = puzzleGrid.GetCells();
 			foreach (PuzzleCell cell in cells) {
 				if (!cell.TryGetPuzzleElement(out PuzzleElement element))

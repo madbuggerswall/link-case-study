@@ -2,9 +2,9 @@ using UnityEngine.Events;
 
 namespace Core.PuzzleLevels {
 	public class ViewReadyNotifier {
-		private bool isFallTweensComplete = false;
-		private bool isFillTweensComplete = false;
-		private bool isShuffleTweensComplete = false;
+		private bool isFallTweensComplete = true;
+		private bool isFillTweensComplete = true;
+		private bool isShuffleTweensComplete = true;
 
 		public UnityEvent OnViewReady { get; private set; } = new UnityEvent();
 		public UnityEvent OnReadyForShuffle { get; private set; } = new UnityEvent();
@@ -26,8 +26,14 @@ namespace Core.PuzzleLevels {
 			TryNotifyViewReady();
 		}
 
+		public void WaitForFallTweens() => isFallTweensComplete = false;
+
+		public void WaitForFillTweens() => isFillTweensComplete = false;
+
+		public void WaitShuffleForTweens() => isShuffleTweensComplete = false;
+
 		private void TryNotifyReadyForShuffle() {
-			if (!isFillTweensComplete || !isFallTweensComplete)
+			if (!isFillTweensComplete || !isFallTweensComplete || isShuffleTweensComplete)
 				return;
 
 			OnReadyForShuffle.Invoke();
