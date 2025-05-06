@@ -1,62 +1,56 @@
 using System.Collections.Generic;
+using Core.Contexts;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
+using UnityEngine;
 
 namespace Core.PuzzleLevels {
 	public class LinkFinder {
 		private readonly PuzzleGrid puzzleGrid;
-		private readonly Dictionary<PuzzleElement, Link> linksByElement;
+		private readonly HashSet<Link> links;
 
 		public LinkFinder(PuzzleGrid puzzleGrid) {
 			this.puzzleGrid = puzzleGrid;
-			this.linksByElement = new Dictionary<PuzzleElement, Link>();
+			this.links = new HashSet<Link>();
 		}
 
-		public bool TryFindLinks(out Dictionary<PuzzleElement, Link> linksByElement) {
-			MapLinksByPuzzleElements();
-			RemoveInvalidLinks();
-
-			linksByElement = this.linksByElement;
-			return linksByElement.Count != 0;
+		public bool TryFindLinks(out HashSet<Link> links) {
+			TraverseForLinks();
+			links = this.links;
+			return links.Count != 0;
 		}
 
-		private void RemoveInvalidLinks() {
-			foreach ((PuzzleElement puzzleElement, Link link) in linksByElement)
-				if (!link.IsValid(puzzleGrid))
-					linksByElement.Remove(puzzleElement);
-		}
-
-		private void MapLinksByPuzzleElements() {
+		private void TraverseForLinks() {
 			PuzzleCell[] cells = puzzleGrid.GetCells();
-			linksByElement.Clear();
+			links.Clear();
 
-			for (int i = 0; i < cells.Length; i++)
-				if (cells[i].TryGetPuzzleElement(out PuzzleElement puzzleElement))
-					ProcessNeighborCells(cells[i], puzzleElement);
+			for (int i = 0; i < cells.Length; i++) {
+				if (!cells[i].TryGetPuzzleElement(out PuzzleElement puzzleElement))
+					continue;
+
+				HashList<PuzzleElement> matchingNeighbors = GetMatchingNeighbors(cells[i], puzzleElement);
+				if (matchingNeighbors.Count < 3)
+					continue;
+
+				Link link = new(matchingNeighbors);
+				links.Add(link);
+			}
 		}
 
-		private void ProcessNeighborCells(PuzzleCell currentCell, PuzzleElement currentItem) {
+		private HashList<PuzzleElement> GetMatchingNeighbors(PuzzleCell currentCell, PuzzleElement currentItem) {
 			PuzzleCell[] neighborCells = puzzleGrid.GetNeighbors(currentCell);
+			HashList<PuzzleElement> matchingNeighbors = new();
+			matchingNeighbors.TryAdd(currentItem);
 
 			for (int i = 0; i < neighborCells.Length; i++) {
-				PuzzleCell neighborCell = neighborCells[i];
-				if (!neighborCell.TryGetPuzzleElement(out PuzzleElement neighborElement))
-					return;
+				if (!neighborCells[i].TryGetPuzzleElement(out PuzzleElement neighborElement))
+					continue;
 
 				if (currentItem.GetDefinition() == neighborElement.GetDefinition())
-					ExtendLink(currentItem, neighborElement);
+					matchingNeighbors.TryAdd(neighborElement);
 			}
-		}
 
-		private void ExtendLink(PuzzleElement currentItem, PuzzleElement neighborItem) {
-			if (linksByElement.TryGetValue(currentItem, out Link formerLink)) {
-				if (formerLink.TryAdd(neighborItem))
-					linksByElement.Add(neighborItem, formerLink);
-			} else {
-				Link link = new(currentItem, neighborItem);
-				linksByElement.Add(currentItem, link);
-				linksByElement.Add(neighborItem, link);
-			}
+			return matchingNeighbors;
 		}
 	}
 }
