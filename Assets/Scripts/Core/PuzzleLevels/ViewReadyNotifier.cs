@@ -35,7 +35,7 @@ namespace Core.PuzzleLevels {
 		}
 
 		private void TryNotifyViewReady() {
-			if (!isFillTweensComplete || !isFallTweensComplete || isShuffleTweensComplete)
+			if (!isFillTweensComplete || !isFallTweensComplete || !isShuffleTweensComplete)
 				return;
 
 			OnViewReady.Invoke();

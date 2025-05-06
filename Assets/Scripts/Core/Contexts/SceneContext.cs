@@ -17,9 +17,11 @@ namespace Core.Contexts {
 			AssertSingleton();
 			ResolveContext();
 			InitializeContext();
+			OnInitialized();
 		}
 
 		protected abstract void ResolveContext();
+		protected abstract void OnInitialized();
 
 		private void InitializeContext() {
 			//.NET Standard 2.1 preserves insertion order which is vital

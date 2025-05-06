@@ -31,7 +31,7 @@ namespace Core.PuzzleLevels {
 			PuzzleCell[] puzzleCells = puzzleGrid.GetCells();
 			for (int i = Link.MinLength; i < puzzleCells.Length; i++) {
 				PuzzleCell currentCell = puzzleCells[i];
-				PuzzleCell randomCell = puzzleCells[Random.Range(0, puzzleCells.Length)];
+				PuzzleCell randomCell = puzzleCells[Random.Range(Link.MinLength, puzzleCells.Length)];
 
 				if (!currentCell.TryGetPuzzleElement(out PuzzleElement currentElement))
 					return;

@@ -47,12 +47,27 @@ namespace Core.PuzzleLevels {
 			targetManager = new TargetManager();
 
 			SignalBus.GetInstance().SubscribeTo<ElementExplodedSignal>(OnElementExploded);
+			SignalBus.GetInstance().SubscribeTo<ContextInitializedSignal>(OnContextInitialized);
 		}
-
+		
 		private void OnElementExploded(ElementExplodedSignal signal) {
 			PuzzleElement puzzleElement = signal.PuzzleElement;
 			viewController.DespawnElementBehaviour(puzzleElement);
 		}
+
+		private void OnContextInitialized(ContextInitializedSignal signal) {
+			TryShuffle();
+		}
+
+		private void TryShuffle() {
+			if (!shuffleManager.IsShuffleNeeded()) {
+				return;
+			}
+
+			shuffleManager.Shuffle();
+			viewController.ShuffleViewHelper.MoveShuffledElements();
+		}
+
 
 		public void Explode(ExplodeLinkCommand command, Link link) {
 			if (!link.IsValid(puzzleGrid)) {

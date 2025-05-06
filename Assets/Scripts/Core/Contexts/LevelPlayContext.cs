@@ -7,6 +7,7 @@ using Core.PuzzleElements.Behaviours;
 using Core.PuzzleGrids;
 using Core.PuzzleLevels;
 using Frolics.Pooling;
+using Frolics.Signals;
 
 namespace Core.Contexts {
 	public class LevelPlayContext : SceneContext {
@@ -24,5 +25,11 @@ namespace Core.Contexts {
 			Resolve<LinkInputManager>();
 			Resolve<PuzzleLevelViewController>();
 		}
+
+		protected override void OnInitialized() {
+			SignalBus.GetInstance().Fire(new ContextInitializedSignal());
+		}
 	}
+
+	public class ContextInitializedSignal : Signal { }
 }
