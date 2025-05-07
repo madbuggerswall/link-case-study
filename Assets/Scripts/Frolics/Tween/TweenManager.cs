@@ -55,6 +55,11 @@ namespace Frolics.Tween {
 			tweensToRemove.Clear();
 		}
 
+		public void ClearAllTweens() {
+			tweens.Clear();
+			tweensToRemove.Clear();
+		}
+
 		public static TweenManager GetInstance() {
 			instance ??= new TweenManager();
 			return instance;

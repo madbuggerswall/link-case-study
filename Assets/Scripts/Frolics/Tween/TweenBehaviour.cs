@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Frolics.Tween {
 
@@ -10,8 +11,11 @@ namespace Frolics.Tween {
 			tweenManager.TickAllTweens();
 		}
 
-		internal void Initialize(TweenManager tweenManager) {
+		public void Initialize(TweenManager tweenManager) {
 			this.tweenManager = tweenManager;
+			
+			// Very questionable 
+			SceneManager.sceneUnloaded += scene => this.tweenManager.ClearAllTweens();
 		}
 	}
 }
