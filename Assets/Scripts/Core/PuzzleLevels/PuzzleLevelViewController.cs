@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Core.Contexts;
-using Core.LinkInput;
 using Core.PuzzleElements;
 using Core.PuzzleElements.Behaviours;
 using Core.PuzzleGrids;

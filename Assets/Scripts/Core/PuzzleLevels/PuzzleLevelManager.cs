@@ -2,15 +2,10 @@ using System.Collections.Generic;
 using Core.Commands;
 using Core.Contexts;
 using Core.DataTransfer.Definitions.PuzzleElements;
-using Core.DataTransfer.Definitions.PuzzleLevels;
 using Core.PuzzleElements;
-using Core.PuzzleElements.Behaviours;
 using Core.PuzzleGrids;
 using Core.PuzzleLevels.Targets;
-using Frolics.Pooling;
 using Frolics.Signals;
-using UnityEngine;
-using UnityEngine.Events;
 
 // NOTE Rename this namespace to PuzzleMechanics/LevelMechanics/Mechanics
 namespace Core.PuzzleLevels {

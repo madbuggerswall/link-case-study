@@ -1,7 +1,6 @@
 using Core.PuzzleLevels.Targets;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Core.UI {

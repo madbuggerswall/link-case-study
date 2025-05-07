@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using Core.Contexts;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
-using UnityEngine;
 
 namespace Core.PuzzleLevels {
 	public class LinkFinder {

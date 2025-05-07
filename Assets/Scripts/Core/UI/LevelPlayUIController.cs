@@ -1,8 +1,6 @@
 using Core.Contexts;
-using Core.PuzzleLevels;
 using Core.PuzzleLevels.Targets;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Core.UI {
 	public class LevelPlayUIController : MonoBehaviour, IInitializable {

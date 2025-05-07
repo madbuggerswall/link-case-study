@@ -1,4 +1,3 @@
-using Core.DataTransfer.Definitions;
 using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.DataTransfer.Definitions.PuzzleLevels;
 
