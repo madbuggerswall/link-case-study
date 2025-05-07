@@ -28,7 +28,6 @@ namespace Core.PuzzleLevels {
 		private ShuffleManager shuffleManager;
 
 		private TurnManager turnManager;
-		private ScoreManager scoreManager;
 		private TargetManager targetManager;
 
 		public void Initialize() {
@@ -42,9 +41,8 @@ namespace Core.PuzzleLevels {
 			fillManager = new FillManager(this);
 			shuffleManager = new ShuffleManager(this);
 
-			turnManager = new TurnManager();
-			scoreManager = new ScoreManager();
-			targetManager = new TargetManager();
+			targetManager = new TargetManager(levelInitializer.GetElementTargets(), levelInitializer.GetScoreTarget());
+			turnManager = new TurnManager(levelInitializer.GetMaxMoveCount());
 
 			SignalBus.GetInstance().SubscribeTo<ElementExplodedSignal>(OnElementExploded);
 			SignalBus.GetInstance().SubscribeTo<ContextInitializedSignal>(OnContextInitialized);
@@ -56,9 +54,8 @@ namespace Core.PuzzleLevels {
 		}
 
 		private void OnContextInitialized(ContextInitializedSignal signal) {
-			if (!shuffleManager.IsShuffleNeeded()) {
+			if (!shuffleManager.IsShuffleNeeded())
 				return;
-			}
 
 			shuffleManager.Shuffle();
 			viewController.ShuffleViewHelper.MoveShuffledElements();
@@ -72,6 +69,9 @@ namespace Core.PuzzleLevels {
 			}
 
 			link.Explode(puzzleGrid);
+			turnManager.OnTurnMade();
+			targetManager.CheckForElementTargets(link);
+			targetManager.CheckForScoreTarget(link);
 
 			fallManager.ApplyFall();
 			fillManager.ApplyFill();
@@ -108,43 +108,55 @@ namespace Core.PuzzleLevels {
 	}
 
 	public class TargetManager {
-		private Target[] targets;
+		private readonly PuzzleElementTarget[] elementTargets;
+		private readonly ScoreTarget scoreTarget;
 
-		public void InitializeTargets(PuzzleLevelDefinition levelDefinition) {
-			TargetDTO[] targetDTOs = levelDefinition.GetGoals();
-			this.targets = new Target[targetDTOs.Length];
+		public TargetManager(PuzzleElementTarget[] elementTargets, ScoreTarget scoreTarget) {
+			this.elementTargets = elementTargets;
+			this.scoreTarget = scoreTarget;
+		}
 
-			for (int i = 0; i < targetDTOs.Length; i++) {
-				TargetDTO targetDTO = targetDTOs[i];
-				targets[i] = targetDTO.CreateTarget();
+		public void CheckForElementTargets(Link link) {
+			PuzzleElementDefinition elementDefinition = link.GetElementDefinition();
+
+			for (int i = 0; i < elementTargets.Length; i++) {
+				PuzzleElementTarget target = elementTargets[i];
+				PuzzleElementDefinition targetDefinition = target.GetElementDefinition();
+				PuzzleElementDefinition linkDefinition = link.GetElementDefinition();
+				if (targetDefinition != linkDefinition)
+					continue;
+
+				target.IncreaseCurrentAmount(link.GetElements().Count);
 			}
+		}
+
+		public void CheckForScoreTarget(Link link) {
+			scoreTarget.IncreaseCurrentScore(link);
+		}
+
+		public bool IsAllTargetsCompleted() {
+			for (int i = 0; i < elementTargets.Length; i++)
+				if (!elementTargets[i].IsTargetCompleted())
+					return false;
+
+			return scoreTarget.IsTargetCompleted();
 		}
 	}
 
 	public class TurnManager {
-		private int maxMoveCount;
+		private readonly int maxMoveCount;
 		private int currentMoveCount;
 
-		public void InitializeMoveCount(PuzzleLevelDefinition levelDefinition) {
-			this.maxMoveCount = levelDefinition.GetMaxMoveCount();
+		public TurnManager(int maxMoveCount) {
+			this.maxMoveCount = maxMoveCount;
 		}
 
 		public void OnTurnMade() {
 			currentMoveCount++;
 		}
-	}
 
-	public class ScoreManager {
-		private const int BaseScorePerElement = 10;
-		private const int MultiplierThreshold = 3;
-		private const float MultiplierIncrement = 0.20f;
-
-		private int CalculateScore(Link link) {
-			HashList<PuzzleElement> elements = link.GetElements();
-			int multiplierAmount = Mathf.Min(0, elements.Count / MultiplierThreshold - 1);
-			float multiplier = 1f + MultiplierIncrement * multiplierAmount;
-			int scorePerElement = Mathf.RoundToInt(BaseScorePerElement * multiplier);
-			return scorePerElement * elements.Count;
+		public bool IsTurnsLeft() {
+			return maxMoveCount - currentMoveCount > 0;
 		}
 	}
 }

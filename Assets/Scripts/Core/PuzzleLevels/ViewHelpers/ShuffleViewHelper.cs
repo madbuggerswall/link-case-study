@@ -47,7 +47,9 @@ namespace Core.PuzzleLevels.ViewHelpers {
 		}
 
 		private void OnMoveTweenComplete(Transform elementTransform) {
-			moveTweens.Remove(elementTransform);
+			if (!moveTweens.Remove(elementTransform))
+				return;
+
 			if (moveTweens.Count == 0)
 				viewController.ViewReadyNotifier.OnShuffleTweensComplete();
 		}

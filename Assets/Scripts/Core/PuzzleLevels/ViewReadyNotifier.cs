@@ -6,8 +6,8 @@ namespace Core.PuzzleLevels {
 		private bool isFillTweensComplete = true;
 		private bool isShuffleTweensComplete = true;
 
-		public UnityEvent OnViewReady { get; private set; } = new UnityEvent();
-		public UnityEvent OnReadyForShuffle { get; private set; } = new UnityEvent();
+		public UnityEvent OnViewReady { get; } = new UnityEvent();
+		public UnityEvent OnReadyForShuffle { get; } = new UnityEvent();
 
 		public void OnFallTweensComplete() {
 			isFallTweensComplete = true;

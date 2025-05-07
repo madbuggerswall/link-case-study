@@ -8,12 +8,14 @@ namespace Core.DataTransfer.Definitions.PuzzleLevels {
 
 		[SerializeField] private Vector2Int gridSize;
 		[SerializeField] private int maxMoveCount;
-		[SerializeField] private TargetDTO[] goals;
+		[SerializeField] private PuzzleElementTargetDTO[] elementTargets;
+		[SerializeField] private ScoreTargetDTO scoreTarget;
 		[SerializeField] private ElementPlacementDTO[] elementPlacements;
 
 		public Vector2Int GetGridSize() => gridSize;
 		public int GetMaxMoveCount() => maxMoveCount;
-		public TargetDTO[] GetGoals() => goals;
+		public PuzzleElementTargetDTO[] GetElementTargets() => elementTargets;
+		public ScoreTargetDTO GetScoreTarget() => scoreTarget;
 		public ElementPlacementDTO[] GetElementPlacements() => elementPlacements;
 	}
 }

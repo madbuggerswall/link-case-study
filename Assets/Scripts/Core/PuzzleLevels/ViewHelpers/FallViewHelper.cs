@@ -20,7 +20,7 @@ namespace Core.PuzzleLevels.ViewHelpers {
 
 		public void MoveFallenElements(HashSet<PuzzleElement> fallenElements) {
 			fallTweens.Clear();
-			
+
 			foreach (PuzzleElement fallenElement in fallenElements) {
 				if (!puzzleGrid.TryGetPuzzleCell(fallenElement, out PuzzleCell cell))
 					return;
@@ -46,7 +46,9 @@ namespace Core.PuzzleLevels.ViewHelpers {
 		}
 
 		private void OnFallTweenComplete(Transform elementTransform) {
-			fallTweens.Remove(elementTransform);
+			if (!fallTweens.Remove(elementTransform))
+				return;
+
 			if (fallTweens.Count == 0)
 				viewController.ViewReadyNotifier.OnFallTweensComplete();
 		}

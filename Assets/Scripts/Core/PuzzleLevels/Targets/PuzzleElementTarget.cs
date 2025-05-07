@@ -4,7 +4,7 @@ using Core.DataTransfer.Definitions.PuzzleLevels;
 
 namespace Core.PuzzleLevels.Targets {
 	public class PuzzleElementTarget : Target {
-		private PuzzleElementDefinition elementDefinition;
+		private readonly PuzzleElementDefinition elementDefinition;
 		private readonly int targetAmount;
 		private int currentAmount;
 
@@ -19,5 +19,6 @@ namespace Core.PuzzleLevels.Targets {
 
 		// Getters
 		public int GetTargetAmount() => targetAmount;
+		public PuzzleElementDefinition GetElementDefinition() => elementDefinition;
 	}
 }

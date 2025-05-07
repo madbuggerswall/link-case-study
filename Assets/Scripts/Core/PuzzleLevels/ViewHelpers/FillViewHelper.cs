@@ -22,7 +22,7 @@ namespace Core.PuzzleLevels.ViewHelpers {
 			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
 			Dictionary<int, int> filledElementByColumn = new();
 			fillTweens.Clear();
-			
+
 			foreach (PuzzleElement filledElement in filledElements) {
 				if (!puzzleGrid.TryGetPuzzleCell(filledElement, out PuzzleCell cell))
 					return;
@@ -60,7 +60,9 @@ namespace Core.PuzzleLevels.ViewHelpers {
 		}
 
 		private void OnFillTweenComplete(Transform elementTransform) {
-			fillTweens.Remove(elementTransform);
+			if (!fillTweens.Remove(elementTransform))
+				return;
+
 			if (fillTweens.Count == 0)
 				viewController.ViewReadyNotifier.OnFillTweensComplete();
 		}
