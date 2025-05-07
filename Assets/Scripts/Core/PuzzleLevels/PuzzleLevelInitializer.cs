@@ -21,9 +21,6 @@ namespace Core.PuzzleLevels {
 		private ScoreTarget scoreTarget;
 		private int maxMoveCount;
 
-		// TODO Initialize Targets
-		// TODO Initialize TurnCount
-
 		public void Initialize() {
 			chipDefinitionManager = SceneContext.GetInstance().Get<ChipDefinitionManager>();
 			cameraController = SceneContext.GetInstance().Get<CameraController>();
