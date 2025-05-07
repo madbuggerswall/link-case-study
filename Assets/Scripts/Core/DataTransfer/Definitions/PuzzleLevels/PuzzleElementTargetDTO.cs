@@ -10,8 +10,7 @@ namespace Core.DataTransfer.Definitions.PuzzleLevels {
 
 		public PuzzleElementDefinition GetTargetDefinition() => puzzleElementDefinition;
 		public int GetTargetAmount() => targetAmount;
-		public override Target CreateTarget() {
-			return new PuzzleElementTarget(this);
-		}
+
+		public override Target CreateTarget() => new PuzzleElementTarget(this);
 	}
 }

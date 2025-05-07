@@ -2,10 +2,10 @@ using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
 
-namespace Core.PuzzleLevels {
+namespace Core.PuzzleLevels.Links {
 	public class Link {
 		public const int MinLength = 3;
-		
+
 		private readonly HashList<PuzzleElement> puzzleElements;
 		private readonly PuzzleElementDefinition elementDefinition;
 

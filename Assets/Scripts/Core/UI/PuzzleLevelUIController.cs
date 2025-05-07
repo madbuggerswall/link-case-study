@@ -1,6 +1,6 @@
 using Core.Contexts;
-using Core.PuzzleLevels;
 using Core.PuzzleLevels.Targets;
+using Core.PuzzleLevels.Turns;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -25,7 +25,7 @@ namespace Core.UI {
 			elementTargetsPanel.Initialize(targetManager.GetElementTargets());
 			scoreTargetPanel.UpdateRemainingScore(targetManager.GetScoreTarget());
 			remainingTurnsPanel.UpdateRemainingTurns(turnManager.GetRemainingTurnCount());
-			
+
 			restartButton.onClick.AddListener(OnRestartButtonClick);
 		}
 

@@ -1,3 +1,4 @@
+using Core.CameraUtilities;
 using Core.Contexts;
 using Core.Input.Mobile;
 using Core.Input.Standalone;
@@ -5,8 +6,6 @@ using UnityEngine;
 
 namespace Core.Input {
 	[DefaultExecutionOrder(-32)]
-
-	// NOTE Can be renamed to InputManager
 	public class InputManager : MonoBehaviour, IInitializable {
 		public MobileInputHandler MobileInputHandler { get; private set; }
 		public StandaloneInputHandler StandaloneInputHandler { get; private set; }
@@ -17,7 +16,7 @@ namespace Core.Input {
 
 		public void Initialize() {
 			cameraController = SceneContext.GetInstance().Get<CameraController>();
-			
+
 			MobileInputHandler = new MobileInputHandler();
 			StandaloneInputHandler = new StandaloneInputHandler();
 			CommonInputHandler = GetPlatformDependentHandler();

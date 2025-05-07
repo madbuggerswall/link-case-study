@@ -4,6 +4,8 @@ using Core.Input;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
 using Core.PuzzleLevels;
+using Core.PuzzleLevels.LevelView;
+using Core.PuzzleLevels.Links;
 using UnityEngine;
 
 namespace Core.LinkInput {
@@ -85,7 +87,6 @@ namespace Core.LinkInput {
 				if (!selectedCell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
 					break;
 
-				// NOTE This part seems very similar to DragHelper.OnDrag, maybe it can be accessed by LinkManager
 				if (selectedElements.Count == 0)
 					selectedElements.TryAdd(puzzleElement);
 

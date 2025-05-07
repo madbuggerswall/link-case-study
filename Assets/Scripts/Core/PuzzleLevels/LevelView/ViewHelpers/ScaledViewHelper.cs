@@ -4,7 +4,7 @@ using Core.PuzzleElements.Behaviours;
 using Frolics.Tween;
 using UnityEngine;
 
-namespace Core.PuzzleLevels.ViewHelpers {
+namespace Core.PuzzleLevels.LevelView.ViewHelpers {
 	public class ScaledViewHelper {
 		private const float Scale = 1.2f;
 		private const float ScaleDuration = 0.2f;

@@ -21,9 +21,6 @@ namespace Core.PuzzleElements.Behaviours {
 			transform.position = puzzleCell.GetWorldPosition();
 		}
 
-		// Getters
-		public override PuzzleElement GetPuzzleElement() => colorChip;
-
 		// Setters
 		public override void SetSortingOrder(int sortingOrder) => spriteRenderer.sortingOrder = sortingOrder;
 		public void SetSprite(Sprite sprite) => spriteRenderer.sprite = sprite;

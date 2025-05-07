@@ -1,7 +1,7 @@
 using Core.Contexts;
 using Core.UI;
 
-namespace Core.PuzzleLevels {
+namespace Core.PuzzleLevels.Turns {
 	public class TurnManager : IInitializable {
 		private int maxTurnCount;
 		private int currentTurnCount;
@@ -16,7 +16,7 @@ namespace Core.PuzzleLevels {
 
 			this.maxTurnCount = levelInitializer.GetMaxMoveCount();
 		}
-		
+
 		public void OnTurnMade() {
 			currentTurnCount++;
 			uiController.UpdateRemainingTurnsPanel(GetRemainingTurnCount());

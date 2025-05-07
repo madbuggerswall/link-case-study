@@ -3,11 +3,16 @@ using Core.Commands;
 using Core.Contexts;
 using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.PuzzleElements;
+using Core.PuzzleElements.Signals;
 using Core.PuzzleGrids;
+using Core.PuzzleLevels.LevelView;
+using Core.PuzzleLevels.Links;
+using Core.PuzzleLevels.MechanicsHelpers;
+using Core.PuzzleLevels.Targets;
+using Core.PuzzleLevels.Turns;
 using Core.UI;
 using Frolics.Signals;
 
-// NOTE Rename this namespace to PuzzleMechanics/LevelMechanics/Mechanics
 namespace Core.PuzzleLevels {
 	public class PuzzleLevelManager : IInitializable {
 		// Dependencies

@@ -1,5 +1,6 @@
 using Core.DataTransfer.Definitions.PuzzleLevels;
 using Core.PuzzleElements;
+using Core.PuzzleLevels.Links;
 using UnityEngine;
 
 namespace Core.PuzzleLevels.Targets {

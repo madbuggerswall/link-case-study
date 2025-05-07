@@ -1,9 +1,9 @@
 using Core.Contexts;
 using Core.DataTransfer.Definitions.PuzzleElements;
-using Core.PuzzleLevels.Targets;
+using Core.PuzzleLevels.Links;
 using Core.UI;
 
-namespace Core.PuzzleLevels {
+namespace Core.PuzzleLevels.Targets {
 	public class TargetManager : IInitializable {
 		private PuzzleElementTarget[] elementTargets;
 		private ScoreTarget scoreTarget;

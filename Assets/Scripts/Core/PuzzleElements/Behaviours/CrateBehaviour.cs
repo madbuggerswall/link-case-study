@@ -4,6 +4,7 @@ using Core.PuzzleGrids;
 using UnityEngine;
 
 namespace Core.PuzzleElements.Behaviours {
+	// Not tested
 	public class CrateBehaviour : PuzzleElementBehaviour {
 		[SerializeField] private SpriteRenderer spriteRenderer;
 
@@ -20,9 +21,6 @@ namespace Core.PuzzleElements.Behaviours {
 			spriteRenderer.sprite = definition.GetSprite();
 			transform.position = puzzleCell.GetWorldPosition();
 		}
-
-		// Getters
-		public override PuzzleElement GetPuzzleElement() => crate;
 
 		// Setters
 		public override void SetSortingOrder(int sortingOrder) => spriteRenderer.sortingOrder = sortingOrder;

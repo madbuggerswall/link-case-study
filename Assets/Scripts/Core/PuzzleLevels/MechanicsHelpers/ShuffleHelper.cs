@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
+using Core.PuzzleLevels.Links;
 using UnityEngine;
 
-namespace Core.PuzzleLevels {
+namespace Core.PuzzleLevels.MechanicsHelpers {
 	public class ShuffleHelper {
 		private readonly PuzzleLevelManager levelManager;
 		private readonly LinkFinder linkFinder;

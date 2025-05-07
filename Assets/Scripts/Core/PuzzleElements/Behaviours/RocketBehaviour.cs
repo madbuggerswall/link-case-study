@@ -4,6 +4,7 @@ using Core.PuzzleGrids;
 using UnityEngine;
 
 namespace Core.PuzzleElements.Behaviours {
+	// Not tested
 	public class RocketBehaviour : PuzzleElementBehaviour {
 		[SerializeField] private SpriteRenderer leftSpriteRenderer;
 		[SerializeField] private SpriteRenderer rightSpriteRenderer;
@@ -22,9 +23,6 @@ namespace Core.PuzzleElements.Behaviours {
 			rightSpriteRenderer.sprite = definition.GetRightRocketSprite();
 			transform.position = puzzleCell.GetWorldPosition();
 		}
-
-		// Getters
-		public override PuzzleElement GetPuzzleElement() => rocket;
 
 		// Setters
 		public override void SetSortingOrder(int sortingOrder) {

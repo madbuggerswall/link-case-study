@@ -5,7 +5,7 @@ using Core.PuzzleGrids;
 using Frolics.Tween;
 using UnityEngine;
 
-namespace Core.PuzzleLevels.ViewHelpers {
+namespace Core.PuzzleLevels.LevelView.ViewHelpers {
 	public class ShuffleViewHelper {
 		private const float MoveDuration = 1f;
 

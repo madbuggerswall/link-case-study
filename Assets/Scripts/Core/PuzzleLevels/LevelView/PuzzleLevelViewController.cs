@@ -3,11 +3,11 @@ using Core.Contexts;
 using Core.PuzzleElements;
 using Core.PuzzleElements.Behaviours;
 using Core.PuzzleGrids;
-using Core.PuzzleLevels.ViewHelpers;
+using Core.PuzzleLevels.LevelView.ViewHelpers;
 using Frolics.Pooling;
 using UnityEngine;
 
-namespace Core.PuzzleLevels {
+namespace Core.PuzzleLevels.LevelView {
 	public class PuzzleLevelViewController : IInitializable {
 		private readonly Dictionary<PuzzleElement, PuzzleElementBehaviour> elementBehaviours = new();
 		private readonly Dictionary<PuzzleGrid, PuzzleGridBehaviour> gridBehaviours = new();

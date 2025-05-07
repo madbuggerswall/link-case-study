@@ -1,3 +1,4 @@
+using Core.CameraUtilities;
 using Core.Contexts;
 using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.DataTransfer.Definitions.PuzzleLevels;
@@ -7,7 +8,6 @@ using Core.PuzzleLevels.Targets;
 using UnityEngine;
 
 namespace Core.PuzzleLevels {
-	// NOTE Rename this to PuzzleLevelLoader
 	public class PuzzleLevelInitializer : MonoBehaviour, IInitializable {
 		[SerializeField] private PuzzleLevelDefinition levelDefinition;
 

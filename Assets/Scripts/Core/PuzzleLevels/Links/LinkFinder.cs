@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
 
-namespace Core.PuzzleLevels {
+namespace Core.PuzzleLevels.Links {
 	public class LinkFinder {
 		private readonly PuzzleGrid puzzleGrid;
 		private readonly HashSet<Link> links;

@@ -1,4 +1,5 @@
 using Core.PuzzleLevels;
+using Core.PuzzleLevels.Links;
 
 namespace Core.Commands {
 	public class ExplodeLinkCommand : Command {

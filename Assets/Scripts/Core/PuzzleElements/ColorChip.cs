@@ -1,4 +1,5 @@
 using Core.DataTransfer.Definitions.PuzzleElements;
+using Core.PuzzleElements.Signals;
 using Core.PuzzleGrids;
 using Frolics.Signals;
 
@@ -12,7 +13,7 @@ namespace Core.PuzzleElements {
 
 			puzzleCell.SetCellEmpty();
 			SignalBus.GetInstance().Fire(new ElementExplodedSignal(this));
-			
+
 			InvokeAdjacentElements(puzzleGrid);
 		}
 
@@ -38,14 +39,6 @@ namespace Core.PuzzleElements {
 			foreach (PuzzleCell cell in neighbors)
 				if (cell.TryGetPuzzleElement(out PuzzleElement neighborElement))
 					neighborElement.OnAdjacentExplode(puzzleGrid);
-		}
-	}
-
-	public class ElementExplodedSignal : Signal {
-		public PuzzleElement PuzzleElement { get; }
-
-		public ElementExplodedSignal(PuzzleElement puzzleElement) {
-			this.PuzzleElement = puzzleElement;
 		}
 	}
 }

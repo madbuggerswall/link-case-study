@@ -5,7 +5,7 @@ using Core.PuzzleGrids;
 using Frolics.Tween;
 using UnityEngine;
 
-namespace Core.PuzzleLevels.ViewHelpers {
+namespace Core.PuzzleLevels.LevelView.ViewHelpers {
 	public class FallViewHelper {
 		private const float FallDuration = 0.6f;
 

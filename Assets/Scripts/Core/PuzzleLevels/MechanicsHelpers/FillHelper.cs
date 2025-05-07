@@ -3,7 +3,7 @@ using Core.PuzzleElements;
 using Core.PuzzleGrids;
 using UnityEngine;
 
-namespace Core.PuzzleLevels {
+namespace Core.PuzzleLevels.MechanicsHelpers {
 	public class FillHelper {
 		private readonly PuzzleLevelManager levelManager;
 		private readonly HashSet<PuzzleElement> filledElements = new();

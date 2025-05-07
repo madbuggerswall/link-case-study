@@ -6,7 +6,7 @@ namespace Core.LinkInput {
 	public class PuzzleCellDragHelper {
 		private readonly HashList<PuzzleCell> selectedCells = new();
 		private readonly PuzzleGrid puzzleGrid;
-		
+
 		private readonly LinkInputManager linkInputManager;
 
 		public PuzzleCellDragHelper(LinkInputManager linkInputManager, PuzzleGrid puzzleGrid) {
@@ -69,7 +69,5 @@ namespace Core.LinkInput {
 
 			return false;
 		}
-
-		public HashList<PuzzleCell> GetSelectedCells() => selectedCells;
 	}
 }

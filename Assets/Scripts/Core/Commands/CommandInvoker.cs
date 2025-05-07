@@ -9,9 +9,9 @@ namespace Core.Commands {
 		public void Initialize() { }
 
 		public void Enqueue(Command command) {
-			if(isRunning)
+			if (isRunning)
 				return;
-			
+
 			commands.Enqueue(command);
 			TryExecuteNextCommand();
 		}
@@ -21,7 +21,7 @@ namespace Core.Commands {
 				return;
 
 			isRunning = true;
-			
+
 			Command currentCommand = commands.Dequeue();
 			currentCommand.RegisterCompletionHandler(OnCommandCompleted);
 			currentCommand.Execute();
@@ -30,9 +30,7 @@ namespace Core.Commands {
 		private void OnCommandCompleted(Command command) {
 			isRunning = false;
 			command.DeregisterCompletionHandler(OnCommandCompleted);
-		
-			// NOTE Clear the queue instead
-			// TryExecuteNextCommand();
+			commands.Clear();
 		}
 	}
 }

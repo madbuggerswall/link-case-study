@@ -4,9 +4,7 @@ using Frolics.Tween;
 using Frolics.Utilities;
 using UnityEngine;
 
-namespace Core {
-	// NOTE Move to a relevant folder (CameraUtilities)
-	// NOTE Can be renamed to CameraManager
+namespace Core.CameraUtilities {
 	public class CameraController : MonoBehaviour, IInitializable {
 		[SerializeField] private new Camera camera;
 		[SerializeField] private Ease.Type easeType = Ease.Type.InOutQuad;

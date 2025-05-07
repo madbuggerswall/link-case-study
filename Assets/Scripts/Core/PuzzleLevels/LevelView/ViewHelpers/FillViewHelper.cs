@@ -5,7 +5,7 @@ using Core.PuzzleGrids;
 using Frolics.Tween;
 using UnityEngine;
 
-namespace Core.PuzzleLevels.ViewHelpers {
+namespace Core.PuzzleLevels.LevelView.ViewHelpers {
 	public class FillViewHelper {
 		private const float FillDuration = 0.6f;
 

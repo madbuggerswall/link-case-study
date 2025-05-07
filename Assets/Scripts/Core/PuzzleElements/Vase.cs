@@ -1,8 +1,10 @@
 using Core.DataTransfer.Definitions.PuzzleElements;
+using Core.PuzzleElements.Signals;
 using Core.PuzzleGrids;
 using Frolics.Signals;
 
 namespace Core.PuzzleElements {
+	// Not tested
 	public class Vase : PuzzleElement {
 		private int durability;
 

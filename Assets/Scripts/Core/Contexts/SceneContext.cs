@@ -7,11 +7,10 @@ namespace Core.Contexts {
 	public abstract class SceneContext : MonoBehaviour {
 		private static SceneContext instance;
 
-		// To support vanilla classes IDependency/IContextItem might be needed
 		private readonly Dictionary<System.Type, IInitializable> contextItems = new();
 
 		private void Awake() {
-			// NOTE Migrate to somewhere else
+			//  Migrate this line to somewhere relevant
 			Application.targetFrameRate = 60;
 
 			AssertSingleton();
@@ -24,7 +23,7 @@ namespace Core.Contexts {
 		protected abstract void OnInitialized();
 
 		private void InitializeContext() {
-			//.NET Standard 2.1 preserves insertion order which is vital
+			//.NET Standard 2.1 preserves dictionary insertion order which is vital
 			foreach ((Type type, IInitializable initializable) in contextItems)
 				initializable.Initialize();
 		}
@@ -79,9 +78,5 @@ namespace Core.Contexts {
 		}
 
 		public static SceneContext GetInstance() => instance;
-	}
-
-	public interface IInitializable {
-		void Initialize();
 	}
 }

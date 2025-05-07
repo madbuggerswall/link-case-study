@@ -38,7 +38,7 @@ namespace Core.PuzzleGrids {
 			puzzleCell = null;
 			return false;
 		}
-		
+
 		public int GetCellIndex(PuzzleCell puzzleCell) {
 			for (int index = 0; index < cells.Length; index++)
 				if (puzzleCell == cells[index])
@@ -46,7 +46,7 @@ namespace Core.PuzzleGrids {
 
 			return -1;
 		}
-		
+
 		public bool IsTopEdge(int cellIndex) => neighborHelper.IsTopEdge(cellIndex);
 		public bool IsBottomEdge(int cellIndex) => neighborHelper.IsBottomEdge(cellIndex);
 		public bool IsRightEdge(int cellIndex) => neighborHelper.IsRightEdge(cellIndex);
