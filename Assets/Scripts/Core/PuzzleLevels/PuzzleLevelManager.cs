@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using Core.Commands;
 using Core.Contexts;
 using Core.DataTransfer.Definitions.PuzzleElements;

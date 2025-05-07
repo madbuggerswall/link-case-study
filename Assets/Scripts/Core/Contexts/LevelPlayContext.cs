@@ -5,7 +5,6 @@ using Core.LinkInput;
 using Core.PuzzleElements.Behaviours;
 using Core.PuzzleGrids;
 using Core.PuzzleLevels;
-using Core.PuzzleLevels.Targets;
 using Core.UI;
 using Frolics.Pooling;
 using Frolics.Signals;
