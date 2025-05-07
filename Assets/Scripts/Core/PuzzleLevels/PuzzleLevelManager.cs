@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Core.Commands;
@@ -41,9 +42,13 @@ namespace Core.PuzzleLevels {
 			fillHelper = new FillHelper(this);
 			shuffleHelper = new ShuffleHelper(this);
 
+			SignalBus.GetInstance().ClearListeners<ElementExplodedSignal>();
+			SignalBus.GetInstance().ClearListeners<ContextInitializedSignal>();
+
 			SignalBus.GetInstance().SubscribeTo<ElementExplodedSignal>(OnElementExploded);
 			SignalBus.GetInstance().SubscribeTo<ContextInitializedSignal>(OnContextInitialized);
 		}
+
 
 		private void OnElementExploded(ElementExplodedSignal signal) {
 			PuzzleElement puzzleElement = signal.PuzzleElement;

@@ -13,6 +13,10 @@ namespace Frolics.Signals {
 			callbacks.Remove(callback);
 		}
 
+		public void Clear() {
+			callbacks.Clear();
+		}
+
 		public void Invoke(T signal) {
 			foreach (Action<T> callback in callbacks) {
 				callback.Invoke(signal);

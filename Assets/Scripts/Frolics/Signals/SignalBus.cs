@@ -39,6 +39,11 @@ namespace Frolics.Signals {
 				callbackSet.Remove((Signal signal) => callback((T) signal));
 			}
 		}
-	}
 
+		public void ClearListeners<T>() where T : Signal {
+			if (callbackSetsBySignalType.TryGetValue(typeof(T), out CallbackSet<Signal> callbackSet)) {
+				callbackSet.Clear();
+			}
+		}
+	}
 }
