@@ -15,7 +15,10 @@ namespace Core.PuzzleLevels.Targets {
 			this.targetScore = targetDTO.GetTargetScore();
 		}
 
-		public int CalculateScore(Link link) {
+		public override bool IsTargetCompleted() => currentScore >= targetScore;
+		public void IncreaseCurrentScore(Link link) => currentScore += CalculateScore(link);
+
+		private int CalculateScore(Link link) {
 			HashList<PuzzleElement> elements = link.GetElements();
 			int multiplierAmount = Mathf.Min(0, elements.Count / MultiplierThreshold - 1);
 			float multiplier = 1f + MultiplierIncrement * multiplierAmount;
@@ -23,7 +26,7 @@ namespace Core.PuzzleLevels.Targets {
 			return scorePerElement * elements.Count;
 		}
 
-		public override bool IsTargetCompleted() => currentScore >= targetScore;
-		public void IncreaseCurrentScore(Link link) => currentScore += CalculateScore(link);
+		public int GetTargetScore() => targetScore;
+		public int GetCurrentScore() => currentScore;
 	}
 }

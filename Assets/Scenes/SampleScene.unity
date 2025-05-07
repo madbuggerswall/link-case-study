@@ -801,7 +801,7 @@ MonoBehaviour:
   levelFailPanel: {fileID: 819291557}
   elementTargetsPanel: {fileID: 1042012194}
   scoreTargetPanel: {fileID: 604267822}
-  remainingMovesPanel: {fileID: 88864059}
+  remainingTurnsPanel: {fileID: 88864059}
 --- !u!1 &1363267393
 GameObject:
   m_ObjectHideFlags: 0
@@ -1209,26 +1209,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Element Targets Panel
       objectReference: {fileID: 0}
-    - target: {fileID: 5781592522202292144, guid: dc9368c48817c6adebcf2a3a777f36a1, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5781592522202292144, guid: dc9368c48817c6adebcf2a3a777f36a1, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5781592522202292144, guid: dc9368c48817c6adebcf2a3a777f36a1, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5781592522202292144, guid: dc9368c48817c6adebcf2a3a777f36a1, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5781592522202292144, guid: dc9368c48817c6adebcf2a3a777f36a1, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc9368c48817c6adebcf2a3a777f36a1, type: 3}
 --- !u!1001 &674560401609925037
@@ -1522,7 +1502,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2302574897754371528, guid: 79d7b7936bd51c2f5be0810106c1a472, type: 3}
       propertyPath: m_Name
-      value: Remaining Moves Panel
+      value: Remaining Moves  Panel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79d7b7936bd51c2f5be0810106c1a472, type: 3}

@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Core.Commands;
 using Core.Contexts;
 using Core.DataTransfer.Definitions.PuzzleElements;
 using Core.PuzzleElements;
 using Core.PuzzleGrids;
-using Core.PuzzleLevels.Targets;
+using Core.UI;
 using Frolics.Signals;
 
 // NOTE Rename this namespace to PuzzleMechanics/LevelMechanics/Mechanics
@@ -14,30 +15,29 @@ namespace Core.PuzzleLevels {
 		private PuzzleLevelInitializer levelInitializer;
 		private PuzzleLevelViewController viewController;
 		private ChipDefinitionManager chipDefinitionManager;
+		private TurnManager turnManager;
+		private TargetManager targetManager;
+
+		// Helpers
+		private FallHelper fallHelper;
+		private FillHelper fillHelper;
+		private ShuffleHelper shuffleHelper;
 
 		// Fields
 		private PuzzleGrid puzzleGrid;
-
-		private FallManager fallManager;
-		private FillManager fillManager;
-		private ShuffleManager shuffleManager;
-
-		private TurnManager turnManager;
-		private TargetManager targetManager;
 
 		public void Initialize() {
 			levelInitializer = SceneContext.GetInstance().Get<PuzzleLevelInitializer>();
 			viewController = SceneContext.GetInstance().Get<PuzzleLevelViewController>();
 			chipDefinitionManager = SceneContext.GetInstance().Get<ChipDefinitionManager>();
+			turnManager = SceneContext.GetInstance().Get<TurnManager>();
+			targetManager = SceneContext.GetInstance().Get<TargetManager>();
 
 			puzzleGrid = levelInitializer.GetPuzzleGrid();
 
-			fallManager = new FallManager(this);
-			fillManager = new FillManager(this);
-			shuffleManager = new ShuffleManager(this);
-
-			targetManager = new TargetManager(levelInitializer.GetElementTargets(), levelInitializer.GetScoreTarget());
-			turnManager = new TurnManager(levelInitializer.GetMaxMoveCount());
+			fallHelper = new FallHelper(this);
+			fillHelper = new FillHelper(this);
+			shuffleHelper = new ShuffleHelper(this);
 
 			SignalBus.GetInstance().SubscribeTo<ElementExplodedSignal>(OnElementExploded);
 			SignalBus.GetInstance().SubscribeTo<ContextInitializedSignal>(OnContextInitialized);
@@ -49,10 +49,10 @@ namespace Core.PuzzleLevels {
 		}
 
 		private void OnContextInitialized(ContextInitializedSignal signal) {
-			if (!shuffleManager.IsShuffleNeeded())
+			if (!shuffleHelper.IsShuffleNeeded())
 				return;
 
-			shuffleManager.Shuffle();
+			shuffleHelper.Shuffle();
 			viewController.ShuffleViewHelper.MoveShuffledElements();
 		}
 
@@ -68,11 +68,11 @@ namespace Core.PuzzleLevels {
 			targetManager.CheckForElementTargets(link);
 			targetManager.CheckForScoreTarget(link);
 
-			fallManager.ApplyFall();
-			fillManager.ApplyFill();
+			fallHelper.ApplyFall();
+			fillHelper.ApplyFill();
 
-			HashSet<PuzzleElement> fallenElements = fallManager.GetFallenElements();
-			HashSet<PuzzleElement> filledElements = fillManager.GetFilledElements();
+			HashSet<PuzzleElement> fallenElements = fallHelper.GetFallenElements();
+			HashSet<PuzzleElement> filledElements = fillHelper.GetFilledElements();
 
 			viewController.FallViewHelper.MoveFallenElements(fallenElements);
 			viewController.ViewReadyNotifier.WaitForFallTweens();
@@ -80,7 +80,7 @@ namespace Core.PuzzleLevels {
 			viewController.FillViewHelper.MoveFilledElements(filledElements);
 			viewController.ViewReadyNotifier.WaitForFillTweens();
 
-			if (shuffleManager.IsShuffleNeeded()) {
+			if (shuffleHelper.IsShuffleNeeded()) {
 				viewController.ViewReadyNotifier.OnReadyForShuffle.AddListener(OnReadyForShuffle);
 				viewController.ViewReadyNotifier.WaitShuffleForTweens();
 			}
@@ -89,7 +89,7 @@ namespace Core.PuzzleLevels {
 		}
 
 		private void OnReadyForShuffle() {
-			shuffleManager.Shuffle();
+			shuffleHelper.Shuffle();
 			viewController.ShuffleViewHelper.MoveShuffledElements();
 		}
 
@@ -100,58 +100,5 @@ namespace Core.PuzzleLevels {
 
 		// Getters
 		public PuzzleGrid GetPuzzleGrid() => puzzleGrid;
-	}
-
-	public class TargetManager {
-		private readonly PuzzleElementTarget[] elementTargets;
-		private readonly ScoreTarget scoreTarget;
-
-		public TargetManager(PuzzleElementTarget[] elementTargets, ScoreTarget scoreTarget) {
-			this.elementTargets = elementTargets;
-			this.scoreTarget = scoreTarget;
-		}
-
-		public void CheckForElementTargets(Link link) {
-			PuzzleElementDefinition elementDefinition = link.GetElementDefinition();
-
-			for (int i = 0; i < elementTargets.Length; i++) {
-				PuzzleElementTarget target = elementTargets[i];
-				PuzzleElementDefinition targetDefinition = target.GetElementDefinition();
-				PuzzleElementDefinition linkDefinition = link.GetElementDefinition();
-				if (targetDefinition != linkDefinition)
-					continue;
-
-				target.IncreaseCurrentAmount(link.GetElements().Count);
-			}
-		}
-
-		public void CheckForScoreTarget(Link link) {
-			scoreTarget.IncreaseCurrentScore(link);
-		}
-
-		public bool IsAllTargetsCompleted() {
-			for (int i = 0; i < elementTargets.Length; i++)
-				if (!elementTargets[i].IsTargetCompleted())
-					return false;
-
-			return scoreTarget.IsTargetCompleted();
-		}
-	}
-
-	public class TurnManager {
-		private readonly int maxMoveCount;
-		private int currentMoveCount;
-
-		public TurnManager(int maxMoveCount) {
-			this.maxMoveCount = maxMoveCount;
-		}
-
-		public void OnTurnMade() {
-			currentMoveCount++;
-		}
-
-		public bool IsTurnsLeft() {
-			return maxMoveCount - currentMoveCount > 0;
-		}
 	}
 }

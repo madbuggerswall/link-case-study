@@ -8,7 +8,7 @@ namespace Core.UI {
 		[SerializeField] private PuzzleElementTargetView targetViewPrefab;
 		[SerializeField] private HorizontalLayoutGroup layoutGroup;
 
-		private Dictionary<PuzzleElementTarget, PuzzleElementTargetView> targetViewsByTarget = new();
+		private readonly Dictionary<PuzzleElementTarget, PuzzleElementTargetView> targetViewsByTarget = new();
 
 		public void Initialize(PuzzleElementTarget[] targets) {
 			for (int i = 0; i < targets.Length; i++) {
@@ -20,11 +20,8 @@ namespace Core.UI {
 		}
 
 		public void UpdateTargetView(PuzzleElementTarget target) {
-			if (!targetViewsByTarget.TryGetValue(target, out PuzzleElementTargetView targetView))
-				return;
-
-			int remainingAmount = Mathf.Max(target.GetTargetAmount() - target.GetCurrentAmount(), 0);
-			targetView.UpdateRemainingAmount(remainingAmount);
+			if (targetViewsByTarget.TryGetValue(target, out PuzzleElementTargetView targetView))
+				targetView.UpdateRemainingAmount(target);
 		}
 	}
 }

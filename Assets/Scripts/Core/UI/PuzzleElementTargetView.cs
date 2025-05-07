@@ -13,7 +13,8 @@ namespace Core.UI {
 			remainingTargetText.text = target.GetTargetAmount().ToString();
 		}
 
-		public void UpdateRemainingAmount(int remainingAmount) {
+		public void UpdateRemainingAmount(PuzzleElementTarget target) {
+			int remainingAmount = Mathf.Max(target.GetTargetAmount() - target.GetCurrentAmount(), 0);
 			remainingTargetText.text = remainingAmount.ToString();
 		}
 	}

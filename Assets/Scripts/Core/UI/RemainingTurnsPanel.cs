@@ -2,11 +2,10 @@ using TMPro;
 using UnityEngine;
 
 namespace Core.UI {
-	public class RemainingMovesPanel : MonoBehaviour {
+	public class RemainingTurnsPanel : MonoBehaviour {
 		[SerializeField] private TextMeshProUGUI remainingMovesText;
-
-
-		public void UpdateRemainingMoves(int remainingMoves) {
+		
+		public void UpdateRemainingTurns(int remainingMoves) {
 			remainingMovesText.text = remainingMoves.ToString();
 		}
 	}

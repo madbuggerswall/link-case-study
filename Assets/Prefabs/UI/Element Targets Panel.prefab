@@ -116,5 +116,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8a85b0371d99d1cc80cc2fc85953db8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetViewPrefab: {fileID: 0}
+  targetViewPrefab: {fileID: 916178188219695384, guid: 4b9949aa686a47aba99a52537abee56d, type: 3}
   layoutGroup: {fileID: 112700743663343042}

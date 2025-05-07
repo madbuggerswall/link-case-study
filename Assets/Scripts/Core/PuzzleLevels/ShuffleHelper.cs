@@ -5,13 +5,13 @@ using Core.PuzzleGrids;
 using UnityEngine;
 
 namespace Core.PuzzleLevels {
-	public class ShuffleManager {
+	public class ShuffleHelper {
 		private readonly PuzzleLevelManager levelManager;
 		private readonly LinkFinder linkFinder;
 
 		private readonly Dictionary<ColorChipDefinition, HashSet<PuzzleElement>> elementsByDefinition = new();
 
-		public ShuffleManager(PuzzleLevelManager levelManager) {
+		public ShuffleHelper(PuzzleLevelManager levelManager) {
 			this.levelManager = levelManager;
 			linkFinder = new LinkFinder(levelManager.GetPuzzleGrid());
 		}

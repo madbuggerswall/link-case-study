@@ -4,32 +4,33 @@ using Core.PuzzleGrids;
 using UnityEngine;
 
 namespace Core.PuzzleLevels {
-	public class FallManager {
+	public class FillHelper {
 		private readonly PuzzleLevelManager levelManager;
-		private readonly HashSet<PuzzleElement> fallenElements = new();
+		private readonly HashSet<PuzzleElement> filledElements = new();
 
-		public FallManager(PuzzleLevelManager levelManager) {
+		public FillHelper(PuzzleLevelManager levelManager) {
 			this.levelManager = levelManager;
 		}
 
-		public void ApplyFall() {
+		public void ApplyFill() {
 			PuzzleGrid puzzleGrid = levelManager.GetPuzzleGrid();
 			Vector2Int gridSize = puzzleGrid.GetGridSizeInCells();
-			fallenElements.Clear();
+			filledElements.Clear();
 
+			// Assumes that a fall operation has already resolved empty spaces
 			for (int columnIndex = 0; columnIndex < gridSize.x; columnIndex++) {
 				for (int rowIndex = 0; rowIndex < gridSize.y; rowIndex++) {
 					PuzzleCell columnCell = puzzleGrid.GetCell(rowIndex * gridSize.x + columnIndex);
-					if (!columnCell.TryGetPuzzleElement(out PuzzleElement puzzleElement))
+					if (columnCell.TryGetPuzzleElement(out _))
 						continue;
 
-					puzzleElement.Fall(puzzleGrid);
-					fallenElements.Add(puzzleElement);
+					ColorChip colorChip = levelManager.CreateRandomColorChip();
+					columnCell.SetPuzzleElement(colorChip);
+					filledElements.Add(colorChip);
 				}
 			}
 		}
 
-		// Getters
-		public HashSet<PuzzleElement> GetFallenElements() => fallenElements;
+		public HashSet<PuzzleElement> GetFilledElements() => filledElements;
 	}
 }
