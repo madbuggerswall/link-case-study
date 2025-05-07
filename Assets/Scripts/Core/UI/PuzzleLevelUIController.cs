@@ -2,7 +2,8 @@ using Core.Contexts;
 using Core.PuzzleLevels;
 using Core.PuzzleLevels.Targets;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Core.UI {
 	public class PuzzleLevelUIController : MonoBehaviour, IInitializable {
@@ -11,6 +12,7 @@ namespace Core.UI {
 		[SerializeField] private ElementTargetsPanel elementTargetsPanel;
 		[SerializeField] private ScoreTargetPanel scoreTargetPanel;
 		[SerializeField] private RemainingTurnsPanel remainingTurnsPanel;
+		[SerializeField] private Button restartButton;
 
 		// Dependencies
 		private TargetManager targetManager;
@@ -23,6 +25,8 @@ namespace Core.UI {
 			elementTargetsPanel.Initialize(targetManager.GetElementTargets());
 			scoreTargetPanel.UpdateRemainingScore(targetManager.GetScoreTarget());
 			remainingTurnsPanel.UpdateRemainingTurns(turnManager.GetRemainingTurnCount());
+			
+			restartButton.onClick.AddListener(OnRestartButtonClick);
 		}
 
 		public void ShowLevelSuccessPanel() {
@@ -43,6 +47,11 @@ namespace Core.UI {
 
 		public void UpdateRemainingTurnsPanel(int remainingMoves) {
 			remainingTurnsPanel.UpdateRemainingTurns(remainingMoves);
+		}
+
+		private void OnRestartButtonClick() {
+			Scene activeScene = SceneManager.GetActiveScene();
+			SceneManager.LoadScene(activeScene.buildIndex);
 		}
 	}
 }
