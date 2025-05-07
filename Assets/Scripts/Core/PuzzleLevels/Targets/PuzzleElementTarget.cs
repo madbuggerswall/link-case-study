@@ -19,6 +19,7 @@ namespace Core.PuzzleLevels.Targets {
 
 		// Getters
 		public int GetTargetAmount() => targetAmount;
+		public int GetCurrentAmount() => currentAmount;
 		public PuzzleElementDefinition GetElementDefinition() => elementDefinition;
 	}
 }

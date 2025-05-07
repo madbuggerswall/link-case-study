@@ -9,7 +9,7 @@ namespace Core.DataTransfer.Definitions.PuzzleElements {
 
 		[SerializeField] private Sprite sprite;
 
-		public Sprite GetSprite() => sprite;
+		public override Sprite GetSprite() => sprite;
 		public override PuzzleElement CreateElement() => new ColorChip(this);
 	}
 }

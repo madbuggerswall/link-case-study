@@ -12,7 +12,8 @@ namespace Core.DataTransfer.Definitions.PuzzleElements {
 		[SerializeField] private Sprite rightRocketSprite;
 
 		public override PuzzleElement CreateElement() => new Rocket(this);
-		
+		public override Sprite GetSprite() => leftRocketSprite;
+
 		public ColorChipDefinition GetColorChipDefinition() => colorChipDefinition;
 		public Sprite GetLeftRocketSprite() => leftRocketSprite;
 		public Sprite GetRightRocketSprite() => rightRocketSprite;

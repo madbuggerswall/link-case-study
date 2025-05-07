@@ -14,7 +14,7 @@ namespace Core.DataTransfer.Definitions.PuzzleElements {
 
 		public override PuzzleElement CreateElement() => new Vase(this);
 		
-		public Sprite GetSprite() => sprite;
+		public override Sprite GetSprite() => sprite;
 		public int GetDurability() => durability;
 	}
 }

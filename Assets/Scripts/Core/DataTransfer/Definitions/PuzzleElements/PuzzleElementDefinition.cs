@@ -7,6 +7,7 @@ namespace Core.DataTransfer.Definitions.PuzzleElements {
 		[SerializeField] private PuzzleElementBehaviour prefab;
 
 		public abstract PuzzleElement CreateElement();
+		public abstract Sprite GetSprite();
 
 		public PuzzleElementBehaviour GetPrefab() => prefab;
 	}
