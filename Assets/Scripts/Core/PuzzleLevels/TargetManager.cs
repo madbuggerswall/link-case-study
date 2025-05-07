@@ -20,6 +20,11 @@ namespace Core.PuzzleLevels {
 			this.scoreTarget = levelInitializer.GetScoreTarget();
 		}
 
+		public void CheckForTargets(Link link) {
+			CheckForElementTargets(link);
+			CheckForScoreTarget(link);
+		}
+
 		public void CheckForElementTargets(Link link) {
 			PuzzleElementDefinition linkDefinition = link.GetElementDefinition();
 

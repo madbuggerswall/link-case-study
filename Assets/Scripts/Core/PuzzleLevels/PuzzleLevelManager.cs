@@ -14,6 +14,7 @@ namespace Core.PuzzleLevels {
 		// Dependencies
 		private PuzzleLevelInitializer levelInitializer;
 		private PuzzleLevelViewController viewController;
+		private PuzzleLevelUIController uiController;
 		private ChipDefinitionManager chipDefinitionManager;
 		private TurnManager turnManager;
 		private TargetManager targetManager;
@@ -28,8 +29,9 @@ namespace Core.PuzzleLevels {
 
 		public void Initialize() {
 			levelInitializer = SceneContext.GetInstance().Get<PuzzleLevelInitializer>();
-			viewController = SceneContext.GetInstance().Get<PuzzleLevelViewController>();
 			chipDefinitionManager = SceneContext.GetInstance().Get<ChipDefinitionManager>();
+			viewController = SceneContext.GetInstance().Get<PuzzleLevelViewController>();
+			uiController = SceneContext.GetInstance().Get<PuzzleLevelUIController>();
 			turnManager = SceneContext.GetInstance().Get<TurnManager>();
 			targetManager = SceneContext.GetInstance().Get<TargetManager>();
 
@@ -65,8 +67,7 @@ namespace Core.PuzzleLevels {
 
 			link.Explode(puzzleGrid);
 			turnManager.OnTurnMade();
-			targetManager.CheckForElementTargets(link);
-			targetManager.CheckForScoreTarget(link);
+			targetManager.CheckForTargets(link);
 
 			fallHelper.ApplyFall();
 			fillHelper.ApplyFill();
@@ -86,6 +87,22 @@ namespace Core.PuzzleLevels {
 			}
 
 			viewController.ViewReadyNotifier.OnViewReady.AddListener(command.InvokeCompletionHandlers);
+			viewController.ViewReadyNotifier.OnViewReady.AddListener(CheckLevelSuccess);
+			viewController.ViewReadyNotifier.OnViewReady.AddListener(CheckLevelFail);
+		}
+
+		private void CheckLevelSuccess() {
+			if (!targetManager.IsAllTargetsCompleted())
+				return;
+
+			uiController.ShowLevelSuccessPanel();
+		}
+
+		private void CheckLevelFail() {
+			if (turnManager.IsTurnsLeft() || targetManager.IsAllTargetsCompleted())
+				return;
+
+			uiController.ShowLevelFailPanel();
 		}
 
 		private void OnReadyForShuffle() {
